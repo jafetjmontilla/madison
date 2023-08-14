@@ -2,185 +2,55 @@
 import { useEffect, useRef, useState } from "react";
 import MUIDataTable from "mui-datatables";
 import { useMounted } from "../hooks/useMounted";
+import { LoadingContextProvider } from "../context/LoadingContext";
 
 
-export const DataTable = () => {
-  useMounted()
+export const DataTable = ({ data }) => {
+  const { setLoading, properties, component } = LoadingContextProvider()
+  // useMounted()
   const refDataTable = useRef(null)
   const refDivTable = useRef(null)
+  const [columns, setColumns] = useState([])
 
-  const columns = [
-    {
-      name: "name",
-      label: "Name",
-      options: {
-        filter: true,
-        sort: true,
-        // customHeadRender: (columnMeta, handleToggleColumn, sortOrder) => {
-        //   return (
-        //     <TableCell className="m-0 p-0 " align="center">
-        //       Last Modified
-        //       {/* <TableSortLabel onClick={handleToggleColumn}> Last Modified </TableSortLabel> */}
-        //     </TableCell>
-        //   );
-        // },
-        setCellProps: (value) => {
-          return {
-            style: {
-              // borderRight: '2px solid blue',
-              textDecoration: 'underline',
-              fontSize: '12px',
-              padding: "0px",
-              //margin: "0px",
-              //      height: "0px"
+  useEffect(() => {
+    console.log(data)
+    if (data) {
+      const c = []
+      for (const property in data?.results[0]) {
+        const k = `${property}`
+        const p = properties?.filter(elem => elem.tag === k)[0]
+        c.push({
+          name: `${p?.tag}`,
+          label: `${p?.title}`,
+          options: {
+            display: true,
+            filter: true,
+            sort: true,
+            setCellProps: (value) => {
+              return {
+                style: {
+                  fontSize: '12px',
+                  padding: "0px",
+                },
+              };
             },
-          };
-        },
-        setCellHeaderProps: (value) => {
-          return {
-            className: "p-0 md:p-0",
-            // style: {
-            //   borderRight: '2px solid blue',
-            //   textDecoration: 'underline',
-            //   fontSize: '10px',
-            //   padding: "0px",
-            //   //margin: "0px",
-            //   //      height: "0px"
-            // },
-          };
-        }
+            setCellHeaderProps: (value) => {
+              return {
+                style: {
+                  padding: "0px",
+                  textTransform: "uppercase",
+                },
+              };
+            }
+          }
+        },)
       }
-    },
-    {
-      name: "name1",
-      label: "Name1",
-      options: {
-        filter: true,
-        sort: true,
-        // customHeadRender: (columnMeta, handleToggleColumn, sortOrder) => {
-        //   return (
-        //     <TableCell className="m-0 p-0 " align="center">
-        //       Last Modified
-        //       {/* <TableSortLabel onClick={handleToggleColumn}> Last Modified </TableSortLabel> */}
-        //     </TableCell>
-        //   );
-        // },
-        setCellProps: (value) => {
-          return {
-            style: {
-              // borderRight: '2px solid blue',
-              textDecoration: 'underline',
-              fontSize: '12px',
-              padding: "0px",
-              //margin: "0px",
-              //      height: "0px"
-            },
-          };
-        },
-        setCellHeaderProps: (value) => {
-          return {
-            className: "p-0 md:p-0",
-            // style: {
-            //   borderRight: '2px solid blue',
-            //   textDecoration: 'underline',
-            //   fontSize: '10px',
-            //   padding: "0px",
-            //   //margin: "0px",
-            //   //      height: "0px"
-            // },
-          };
-        }
-      }
-    },
-    {
-      name: "name2",
-      label: "Name2",
-      options: {
-        filter: true,
-        sort: true,
-        // customHeadRender: (columnMeta, handleToggleColumn, sortOrder) => {
-        //   return (
-        //     <TableCell className="m-0 p-0 " align="center">
-        //       Last Modified
-        //       {/* <TableSortLabel onClick={handleToggleColumn}> Last Modified </TableSortLabel> */}
-        //     </TableCell>
-        //   );
-        // },
-        setCellProps: (value) => {
-          return {
-            style: {
-              // borderRight: '2px solid blue',
-              textDecoration: 'underline',
-              fontSize: '12px',
-              padding: "0px",
-              //margin: "0px",
-              //      height: "0px"
-            },
-          };
-        },
-        setCellHeaderProps: (value) => {
-          return {
-            className: "p-0 md:p-0",
-            // style: {
-            //   borderRight: '2px solid blue',
-            //   textDecoration: 'underline',
-            //   fontSize: '10px',
-            //   padding: "0px",
-            //   //margin: "0px",
-            //   //      height: "0px"
-            // },
-          };
-        }
-      }
-    },
-    {
-      name: "name3",
-      label: "Name3",
-      options: {
-        filter: true,
-        sort: true,
-        // customHeadRender: (columnMeta, handleToggleColumn, sortOrder) => {
-        //   return (
-        //     <TableCell className="m-0 p-0 " align="center">
-        //       Last Modified
-        //       {/* <TableSortLabel onClick={handleToggleColumn}> Last Modified </TableSortLabel> */}
-        //     </TableCell>
-        //   );
-        // },
-        setCellProps: (value) => {
-          return {
-            style: {
-              // borderRight: '2px solid blue',
-              textDecoration: 'underline',
-              fontSize: '12px',
-              padding: "0px",
-              //margin: "0px",
-              //      height: "0px"
-            },
-          };
-        },
-        setCellHeaderProps: (value) => {
-          return {
-            className: "p-0 md:p-0",
-            // style: {
-            //   borderRight: '2px solid blue',
-            //   textDecoration: 'underline',
-            //   fontSize: '10px',
-            //   padding: "0px",
-            //   //margin: "0px",
-            //   //      height: "0px"
-            // },
-          };
-        }
-      }
-    },
-  ];
+      setColumns(c)
+      setLoading(false)
+      console.log("paso")
+    }
+  }, [data])
 
-
-  const data = [
-    { name: "Joe James", name1: "Joe James", name2: "Joe James", name3: "Joe James" },
-    { name: "Joe James", name1: "Joe James", name2: "Joe James", name3: "Joe James" }, { name: "Joe James", name1: "Joe James", name2: "Joe James", name3: "Joe James" }, { name: "Joe James", name1: "Joe James", name2: "Joe James", name3: "Joe James" }, { name: "Joe James", name1: "Joe James", name2: "Joe James", name3: "Joe James" }, { name: "Joe James", name1: "Joe James", name2: "Joe James", name3: "Joe James" }, { name: "Joe James", name1: "Joe James", name2: "Joe James", name3: "Joe James" }, { name: "Joe James", name1: "Joe James", name2: "Joe James", name3: "Joe James" },
-  ];
 
   const options = {
     filter: false,
@@ -223,24 +93,23 @@ export const DataTable = () => {
     },
   };
 
-  useEffect(() => {
-    if (refDivTable) {
-      console.log(555, refDivTable.current.clientHeight)
-    }
-    if (refDataTable) {
-      console.log(556, refDataTable.current.getTableContentRef())
-      console.log(557, refDataTable.current.getTableContentRef().clientHeight)
-    }
-  }, [])
-
+  // useEffect(() => {
+  //   if (refDivTable) {
+  //     console.log(555, refDivTable.current.clientHeight)
+  //   }
+  //   if (refDataTable) {
+  //     console.log(556, refDataTable.current.getTableContentRef())
+  //     console.log(557, refDataTable.current.getTableContentRef().clientHeight)
+  //   }
+  // }, [])
 
   return (
 
     <div ref={refDivTable} className="">
       <MUIDataTable
         ref={refDataTable}
-        title={"Employee List"}
-        data={data}
+        title={<span className={"uppercase font-bold text-gray-700"}>{`Listado ${component}`}</span>}
+        data={data?.results}
         columns={columns}
         options={options}
         className={"*h-[80%] overflow-auto"}

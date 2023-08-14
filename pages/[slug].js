@@ -3,33 +3,48 @@ import { useEffect, useState } from "react";
 import { DataTable } from "../components/DataTable";
 import { CreaAndEdit } from "../components/CreaAndEdit";
 import { LoadingContextProvider } from "../context/LoadingContext"
-import { useMounted } from "../hooks/useMounted";
 import { BodyStaticAPP } from "../utils/schemas"
-
+import { fetchApi, queries } from "../utils/Fetching"
 
 const Slug = ({ slug }) => {
+
   const { setLoading, setComponent, component } = LoadingContextProvider()
   const [stage, setStage] = useState("viewTable")
-  //  useMounted()
+  const [data, setData] = useState()
+  const [isMounted, setIsMounted] = useState(false)
   useEffect(() => {
-    setStage("viewTable")
-    setLoading(false)
-    setComponent(BodyStaticAPP.filter(elem => elem.slug === `/${slug}`)[0]?.title)
-    console.log(30012, slug, component)
-  }, [slug]);
+    if (!isMounted) {
+      setIsMounted(true)
+    }
+    return () => {
+      setIsMounted(false)
+    }
+  }, [])
 
-
-  const stages = {
-    viewTable: <DataTable />,
-    creaAndEdit: <CreaAndEdit />
-  }
+  useEffect(() => {
+    console.log("cambio slug")
+    if (isMounted) {
+      setStage("viewTable")
+      setComponent(BodyStaticAPP.filter(elem => elem.slug === `/${slug}`)[0]?.title)
+      fetchApi({
+        query: BodyStaticAPP.filter(elem => elem.slug === `/${slug}`)[0]?.getData,
+        variables: {
+          args: {},
+          sort: {},
+          limit: 0,
+          skip: 0,
+        },
+        type: "json"
+      }).then(result => setData(result))
+    }
+  }, [slug, isMounted]);
 
   return (
     <div className="bg-blue-200 w-full h-full flex items-center justify-center">
       <div className="flex flex-col relative h-[100%] w-[95%] overflow-auto">
         <div className="w-[100%] h-[8%] flex items-center justify-left">
           <div onClick={() => {
-            setLoading(true)
+            // setLoading(true)
             setStage(stage == "viewTable" ? "creaAndEdit" : "viewTable")
           }} >
             <div className="bg-green-500 w-32 h-10 rounded-lg flex cursor-pointer hover:bg-green-600 border-1 text-white items-center justify-center capitalize">
@@ -38,10 +53,8 @@ const Slug = ({ slug }) => {
           </div>
         </div>
         <div className="bg-gray-100 rounded-lg w-[100%] h-[90%] overflow-auto">
-
-          {/* {stages[stage]} */}
           {stage == "creaAndEdit" && <CreaAndEdit />}
-          <DataTable />
+          <DataTable data={data} />
         </div>
       </div>
     </div>

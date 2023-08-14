@@ -94,7 +94,13 @@ type queries = {
   createTasaBCV: String,
   getTasaBCV: String,
   deleteTasaBCV: String,
-  getLog: string
+  getLog: string,
+  getProperties: string,
+  getSections: string,
+  getEquipments: string,
+  getEquipmentsMasters: string,
+  getReplacementsMasters: string,
+
 };
 
 export const queries: queries = {
@@ -160,4 +166,100 @@ export const queries: queries = {
       }
     }
   }`,
+  getProperties: `query ( $args:inputProperty, $sort:sortCriteriaProperty, $skip:Int, $limit:Int )
+  {
+    getProperty(args:$args, sort:$sort, skip:$skip, limit:$limit ){
+      total
+      results{
+        _id
+        tag
+        type
+        title
+        createdAt
+        updatedAt
+      }
+    }
+  }`,
+  getSections: `query ( $args:inputSection, $sort:sortCriteriaSection, $skip:Int, $limit:Int )
+  {
+    getSection(args:$args, sort:$sort, skip:$skip, limit:$limit ){
+      total
+      results{
+        _id
+        tag
+        title
+        createdAt
+        updatedAt
+      }
+    }
+  }`,
+  getEquipments: `query ( $args:inputEquipment, $sort:sortCriteriaEquipment, $skip:Int, $limit:Int )
+  {
+    getEquipment(args:$args, sort:$sort, skip:$skip, limit:$limit ){
+      total
+      results{
+        _id
+        tag
+        title
+        createdAt
+        updatedAt
+      }
+    }
+  }`,
+  getEquipmentsMasters: `query ( $args:inputEquipmentsMaster, $sort:sortCriteriaEquipmentsMaster, $skip:Int, $limit:Int )
+  {
+    getEquipmentsMaster(args:$args, sort:$sort, skip:$skip, limit:$limit ){
+      total
+      results{
+        _id
+        tag_cod
+        title
+        funcion
+        horas_servicio_teorico
+        fecha_ult_mtto
+        marca
+        modelo
+        ubicacion
+        largo
+        alto
+        ancho
+        potencia
+        voltaje
+        amperaje_a
+        corriente
+        rpm
+        frecuencia
+        rodamiento_1
+        rodamiento_2
+        estopera
+        capacidad
+        material
+        espesor_lamina
+        peso_kg
+        tipo
+        serial
+        observaciones
+        grasa_lubricante
+        createdAt
+        updatedAt
+      }
+    }
+  }`,
+  getReplacementsMasters: `query ( $args:inputReplacementsMaster, $sort:sortCriteriaReplacementsMaster, $skip:Int, $limit:Int )
+  {
+    getReplacementsMaster(args:$args, sort:$sort, skip:$skip, limit:$limit ){
+      total
+      results{
+        _id
+        cod
+        title
+        descripcion
+        componente
+        tag_cod
+        cantidad
+        createdAt
+        updatedAt
+      }
+    }
+  }`
 };

@@ -7,7 +7,6 @@ interface props {
   showMenu: boolean
   setShowMenu: Dispatch<boolean>
 }
-console.log(BodyStaticAPP)
 export const Menu: FC<props> = ({ showMenu, setShowMenu }) => {
   const { component, setComponent, setLoading } = LoadingContextProvider()
   const route = useRouter()
