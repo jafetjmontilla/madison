@@ -5,10 +5,14 @@ import { CreaAndEdit } from "../components/CreaAndEdit";
 import { LoadingContextProvider } from "../context/LoadingContext"
 import { BodyStaticAPP } from "../utils/schemas"
 import { fetchApi, queries } from "../utils/Fetching"
+import { AppContextProvider } from "../context/AppContext"
+
 
 const Slug = ({ slug }) => {
 
-  const { setLoading, setComponent, component } = LoadingContextProvider()
+  const { setLoading } = LoadingContextProvider()
+  const { component, setComponent, } = AppContextProvider()
+
   const [stage, setStage] = useState("viewTable")
   const [data, setData] = useState()
   const [isMounted, setIsMounted] = useState(false)

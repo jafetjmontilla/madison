@@ -3,6 +3,29 @@ import { queries } from "./Fetching";
 
 export const BodyStaticAPP = [
   {
+    icon: <Icons.IconHome className="w-8 h-8 text-gray-500" />,
+    title: "inicio",
+    roles: ["all"],
+    slug: "/",
+    //getData: queries.getSections,
+    //getByID: FetchGraphQL.business.getOneBusiness,
+    //createEntry: FetchGraphQL.business.createBusiness,
+    //updateEntry: FetchGraphQL.business.updateBusiness,
+    //deleteEntry: FetchGraphQL.business.deleteBusiness,
+    schema: [
+      {
+        Header: "ID",
+        accessor: "_id",
+      },
+      {
+        Header: "Nombre de empresa",
+        accessor: "businessName",
+        type: "textareaSizable",
+        required: true,
+      }
+    ]
+  },
+  {
     icon: <Icons.IconSetions className="w-8 h-8 text-gray-500" />,
     title: "secciones de la planta",
     roles: ["all"],

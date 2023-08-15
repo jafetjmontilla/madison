@@ -2,19 +2,22 @@ import { Dispatch, FC, useEffect, useRef } from "react"
 import { BodyStaticAPP } from "../utils/schemas"
 import { LoadingContextProvider } from "../context/LoadingContext"
 import { useRouter } from "next/router"
+import { AppContextProvider } from "../context/AppContext"
 
 interface props {
   showMenu: boolean
   setShowMenu: Dispatch<boolean>
 }
 export const Menu: FC<props> = ({ showMenu, setShowMenu }) => {
-  const { component, setComponent, setLoading } = LoadingContextProvider()
+  const { setLoading } = LoadingContextProvider()
+  const { component, setComponent, } = AppContextProvider()
   const route = useRouter()
+  console.log(1001, route)
 
   const handleClick = (elem) => {
     setShowMenu(false)
     if (component !== elem.title) {
-      setLoading(true)
+      elem?.route != route && setLoading(true)
       setComponent(elem.title)
       route.push(elem.slug)
     }

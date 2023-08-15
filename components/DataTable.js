@@ -3,11 +3,13 @@ import { useEffect, useRef, useState } from "react";
 import MUIDataTable from "mui-datatables";
 import { useMounted } from "../hooks/useMounted";
 import { LoadingContextProvider } from "../context/LoadingContext";
+import { AppContextProvider } from "../context/AppContext"
 
 
 export const DataTable = ({ data }) => {
-  const { setLoading, properties, component } = LoadingContextProvider()
+  const { setLoading, } = LoadingContextProvider()
   // useMounted()
+  const { component, properties, } = AppContextProvider()
   const refDataTable = useRef(null)
   const refDivTable = useRef(null)
   const [columns, setColumns] = useState([])
