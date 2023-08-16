@@ -21,9 +21,10 @@ export const CreaAndEdit = () => {
   }, [isMounted])
 
 
+
   return (
     <div className="bg-green-100 flex w-[100%] h-[100%]">
-      algo
+      Sección en contrucción!!
     </div>
   );
 };
