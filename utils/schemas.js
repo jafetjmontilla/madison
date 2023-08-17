@@ -1,6 +1,11 @@
 import * as Icons from "../icons";
 import { queries } from "./Fetching";
 
+
+export const defaultVisibleColumns = [
+  "tag", "title", "cod", "tag_cod", "descripcion", "funcion"
+]
+
 export const BodyStaticAPP = [
   {
     icon: <Icons.IconHome className="w-8 h-8 text-gray-500" />,

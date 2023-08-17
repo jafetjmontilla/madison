@@ -6,14 +6,13 @@ import { LoadingContextProvider } from "../context/LoadingContext"
 import { BodyStaticAPP } from "../utils/schemas"
 import { fetchApi, queries } from "../utils/Fetching"
 import { AppContextProvider } from "../context/AppContext"
-
+import { ButtonBasic } from "../components/ButtonBasic"
 
 const Slug = ({ slug }) => {
 
   const { setLoading } = LoadingContextProvider()
-  const { component, setComponent, } = AppContextProvider()
+  const { component, setComponent, stage, setStage } = AppContextProvider()
 
-  const [stage, setStage] = useState("viewTable")
   const [data, setData] = useState()
   const [isMounted, setIsMounted] = useState(false)
   useEffect(() => {
@@ -28,7 +27,7 @@ const Slug = ({ slug }) => {
   useEffect(() => {
     console.log("cambio slug")
     if (isMounted) {
-      setStage("viewTable")
+      setStage({ action: "viewTable" })
       setComponent(BodyStaticAPP.filter(elem => elem.slug === `/${slug}`)[0]?.title)
       fetchApi({
         query: BodyStaticAPP.filter(elem => elem.slug === `/${slug}`)[0]?.getData,
@@ -44,20 +43,22 @@ const Slug = ({ slug }) => {
   }, [slug, isMounted]);
 
   return (
-    <div className="bg-blue-200 w-full h-full flex items-center justify-center">
+    <div className="bg-blue-200 w-full h-full flex items-center justify-center relative">
       <div className="flex flex-col relative h-[100%] w-[95%] overflow-auto">
         <div className="w-[100%] h-[8%] flex items-center justify-left">
-          <div onClick={() => {
-            // setLoading(true)
-            setStage(stage == "viewTable" ? "creaAndEdit" : "viewTable")
-          }} >
-            <div className="bg-green-500 w-32 h-10 rounded-lg flex cursor-pointer hover:bg-green-600 border-1 text-white items-center justify-center capitalize">
-              {stage == "viewTable" ? "crear registro" : "guardar registro"}
-            </div>
-          </div>
+          <ButtonBasic
+            className={`${stage.action == "viewTable" ? "bg-green-500 hover:bg-green-600" : "bg-red-500 hover:bg-red-700"}`}
+            onClick={
+              () => {
+                // setLoading(true)
+                setStage(stage.action == "viewTable" ? { action: "creaAndEdit" } : { action: "viewTable" })
+              }
+            }
+            caption={stage.action == "viewTable" ? "crear registro" : "cancelar"}
+          />
         </div>
         <div className="bg-gray-100 rounded-lg w-[100%] h-[90%] overflow-auto">
-          {stage == "creaAndEdit" && <CreaAndEdit />}
+          {stage.action == "creaAndEdit" && <CreaAndEdit />}
           <DataTable data={data} />
         </div>
       </div>

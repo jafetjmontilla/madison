@@ -4,15 +4,20 @@ import MUIDataTable from "mui-datatables";
 import { useMounted } from "../hooks/useMounted";
 import { LoadingContextProvider } from "../context/LoadingContext";
 import { AppContextProvider } from "../context/AppContext"
+import { defaultVisibleColumns } from "../utils/schemas"
 
 
 export const DataTable = ({ data }) => {
   const { setLoading, } = LoadingContextProvider()
+  const { stage, setStage } = AppContextProvider()
+
   // useMounted()
   const { component, properties, } = AppContextProvider()
   const refDataTable = useRef(null)
   const refDivTable = useRef(null)
   const [columns, setColumns] = useState([])
+
+
 
   useEffect(() => {
     console.log(data)
@@ -25,7 +30,7 @@ export const DataTable = ({ data }) => {
           name: `${p?.tag}`,
           label: `${p?.title}`,
           options: {
-            display: true,
+            display: defaultVisibleColumns.includes(p?.tag),
             filter: true,
             sort: true,
             setCellProps: (value) => {
@@ -54,6 +59,10 @@ export const DataTable = ({ data }) => {
   }, [data])
 
 
+  const handleonRowSelectionChange = (values) => {
+    setStage({ action: "creaAndEdit", payload: values })
+  }
+
   const options = {
     filter: false,
     filterType: 'checkbox',
@@ -72,6 +81,8 @@ export const DataTable = ({ data }) => {
 
 
 
+    onRowSelectionChange: (array) => { handleonRowSelectionChange(data.results[array[0].index]) },
+    //onCellClick: (colData, cellMeta) => { console.log(colData, cellMeta) },
 
     //isRowSelectable: (dataIndex, selectedRows, data) => { console.log("algo") }
 
@@ -107,7 +118,7 @@ export const DataTable = ({ data }) => {
 
   return (
 
-    <div ref={refDivTable} className="">
+    <div ref={refDivTable} className={``} >
       <MUIDataTable
         ref={refDataTable}
         title={<span className={"uppercase font-bold text-gray-700"}>{`Listado ${component}`}</span>}

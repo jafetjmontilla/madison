@@ -51,8 +51,8 @@ export const DefaultLayout = ({ children }) => {
                 <div className="*bg-white absolute md:hidden w-[14%] h-10 md:h-16 mx-2 md:mx-6 flex items-center justify-center">
                   <IconMenu className="w-6 h-6" onClick={() => { setShowMenu(true) }} />
                 </div>
-                <div style={innerWidth < 768 ? showMenu ? transitionLeftOpen : transitionLeftClose : { height: `${innerHeight}px` }} className="bg-gray-200 flex flex-col w-[100%] absolute md:relative">
-                  <div className="bg-red-100 h-28 md:h-0">
+                <div style={innerWidth < 768 ? showMenu ? transitionLeftOpen : transitionLeftClose : { height: `${innerHeight}px` }} className="bg-gray-200 flex flex-col w-[100%] absolute md:relative  shadow-md">
+                  <div className="bg-red-100 h-28 md:h-0 ">
                     <IconArrowLeft className="md:hidden w-6 h-6 mt-2 ml-4" onClick={() => { setShowMenu(false) }} />
                   </div>
                   <Menu setShowMenu={setShowMenu} showMenu={showMenu} />

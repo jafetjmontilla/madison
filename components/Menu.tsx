@@ -12,7 +12,6 @@ export const Menu: FC<props> = ({ showMenu, setShowMenu }) => {
   const { setLoading } = LoadingContextProvider()
   const { component, setComponent, } = AppContextProvider()
   const route = useRouter()
-  console.log(1001, route)
 
   const handleClick = (elem) => {
     setShowMenu(false)

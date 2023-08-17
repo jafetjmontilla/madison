@@ -11,11 +11,18 @@ interface Property {
   updatedAt: Date
 }
 
+interface Stage {
+  action: string,
+  payload: any
+}
+
 type Context = {
   component: string;
   setComponent: Dispatch<SetStateAction<string>>
   properties: Property | undefined
   setProperties: Dispatch<SetStateAction<Property | undefined>>
+  stage: Stage
+  setStage: Dispatch<SetStateAction<Stage>>
 };
 
 const initialContext: Context = {
@@ -23,6 +30,8 @@ const initialContext: Context = {
   setComponent: () => { },
   properties: undefined,
   setProperties: undefined,
+  stage: { action: "viewTable", payload: {} },
+  setStage: () => { return { stage: "viewTable", payload: {} } },
 };
 
 const AppContext = createContext<Context>(initialContext);
@@ -31,6 +40,7 @@ const AppProvider: FC<any> = ({ children }): JSX.Element => {
   const [component, setComponent] = useState<string>(initialContext.component);
   const [properties, setProperties] = useState<Property>(undefined);
   const [isMounted, setIsMounted] = useState(false)
+  const [stage, setStage] = useState({ action: "viewTable", payload: {} })
 
 
   useEffect(() => {
@@ -59,7 +69,7 @@ const AppProvider: FC<any> = ({ children }): JSX.Element => {
 
 
   return (
-    <AppContext.Provider value={{ component, setComponent, properties, setProperties }}>
+    <AppContext.Provider value={{ component, setComponent, properties, setProperties, stage, setStage }}>
       {children}
     </AppContext.Provider>
   );

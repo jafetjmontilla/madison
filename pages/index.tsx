@@ -1,7 +1,15 @@
 import Image from "next/image";
 import { useMounted } from "../hooks/useMounted";
+import { useEffect } from "react";
+import { AppContextProvider } from "../context/AppContext";
 
 export default function Home() {
+  const { setComponent } = AppContextProvider()
+
+  useEffect(() => {
+    setComponent("inicio")
+  }, [])
+
   useMounted()
   return (
     <>
