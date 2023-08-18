@@ -1,15 +1,22 @@
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import MUIDataTable from "mui-datatables";
 import { useMounted } from "../hooks/useMounted";
 import { LoadingContextProvider } from "../context/LoadingContext";
 import { AppContextProvider } from "../context/AppContext";
 import { ButtonBasic } from "./ButtonBasic";
 import { IconDelete, PlusIcon } from "../icons";
+import { useToast } from '../hooks/useToast';
+import { CSSTransition, TransitionGroup } from "react-transition-group";
+
+
 
 
 export const CreaAndEdit = () => {
+  const nodeRef = useRef(null);
   const { stage, setStage } = AppContextProvider()
+  const toast = useToast()
+  const [valir, setValir] = useState(false)
 
   const { setLoading } = LoadingContextProvider()
   const [isMounted, setIsMounted] = useState(false)
@@ -28,6 +35,18 @@ export const CreaAndEdit = () => {
   const handleOnClick = () => {
     setStage({ action: "viewTable" })
   }
+
+  const transitionLeftOpen = {
+    transition: `opacity 2s`,
+    opacity: `50%`,
+  }
+  const transitionLeftClose = {
+    transition: "opacity 2s",
+    opacity: `-50%`,
+  }
+
+
+
 
   return (
     <div className="bg-gray-200 bg-opacity-50 flex items-center justify-center w-[100%] h-[90%] absolute z-10">
@@ -68,11 +87,12 @@ export const CreaAndEdit = () => {
         <div className={`bg-gray-300 flex h-20 items-center ${stage.payload ? "justify-start" : "justify-end"}`}>
 
           <ButtonBasic
-            className={`m-4 ${!stage.payload ? "bg-green-500 hover:bg-green-600 w-36" : "bg-red-500 hover:bg-red-700 w-40 h-6"}`}
+            className={`m-4 ${!stage.payload ? "bg-green-500 hover:bg-green-600 w-36" : "bg-red-500 hover:bg-red-700 w-48 h-6"}`}
             onClick={
               () => {
                 // setLoading(true)
                 setStage(stage.action == "viewTable" ? { action: "creaAndEdit" } : { action: "viewTable" })
+                toast("success", "result")
               }
             }
             caption={
