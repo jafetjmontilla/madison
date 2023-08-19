@@ -66,7 +66,7 @@ export const DefaultLayout = ({ children }) => {
                   </div>
                 </div>
               </ClickAwayListener>
-              <div style={{ height: `${innerHeight}px` }} className="bg-green-300 flex flex-col w-[100%] md:w-[96%]">
+              <div style={{ height: `${innerHeight}px` }} className="flex flex-col w-[100%] md:w-[96%]">
                 <div className="bg-gray-50 w-full h-[40px] md:h-[64px] flex">
                   <div className="ml-14 w-[64%] md:w-[88%] h-10 md:h-16 mx-2 md:mx-6 flex items-center justify-center">
                     <Title />

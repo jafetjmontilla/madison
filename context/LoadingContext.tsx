@@ -34,7 +34,7 @@ const LoadingProvider: FC<any> = ({ children }): JSX.Element => {
     <LoadingContext.Provider value={{ loading, setLoading }}>
       <CSSTransition
         in={loading ? true : !valir}
-        classNames="alert"
+        classNames="fadeLoadin"
         unmountOnExit
         onEnter={() => { }} //al comienzo de la transición
         timeout={300} //tiempo para demontar el componente
