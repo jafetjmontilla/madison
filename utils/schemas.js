@@ -12,23 +12,6 @@ export const BodyStaticAPP = [
     title: "inicio",
     roles: ["all"],
     slug: "/",
-    //getData: queries.getSections,
-    //getByID: FetchGraphQL.business.getOneBusiness,
-    //createEntry: FetchGraphQL.business.createBusiness,
-    //updateEntry: FetchGraphQL.business.updateBusiness,
-    //deleteEntry: FetchGraphQL.business.deleteBusiness,
-    schema: [
-      {
-        Header: "ID",
-        accessor: "_id",
-      },
-      {
-        Header: "Nombre de empresa",
-        accessor: "businessName",
-        type: "textareaSizable",
-        required: true,
-      }
-    ]
   },
   {
     icon: <Icons.IconSetions className="w-8 h-8 text-gray-500" />,
@@ -37,19 +20,28 @@ export const BodyStaticAPP = [
     slug: "/plantSections",
     getData: queries.getSections,
     //getByID: FetchGraphQL.business.getOneBusiness,
-    //createEntry: FetchGraphQL.business.createBusiness,
+    createEntry: queries.createSections,
     //updateEntry: FetchGraphQL.business.updateBusiness,
     //deleteEntry: FetchGraphQL.business.deleteBusiness,
     schema: [
       {
-        Header: "ID",
-        accessor: "_id",
+        Header: "tag",
+        accessor: "tag",
+        type: "text",
+        required: true,
+        size: 1
       },
       {
-        Header: "Nombre de empresa",
-        accessor: "businessName",
-        type: "textareaSizable",
+        Header: "nombre",
+        accessor: "title",
+        type: "text",
         required: true,
+        size: 3
+      },
+      {
+        Header: "id",
+        accessor: "_id",
+        type: "id",
       }
     ]
   },
@@ -61,14 +53,23 @@ export const BodyStaticAPP = [
     getData: queries.getEquipments,
     schema: [
       {
-        Header: "ID",
-        accessor: "_id",
+        Header: "tag",
+        accessor: "tag",
+        type: "text",
+        required: true,
+        size: 1
       },
       {
-        Header: "Nombre de empresa",
-        accessor: "businessName",
-        type: "textareaSizable",
+        Header: "nombre",
+        accessor: "title",
+        type: "text",
         required: true,
+        size: 3
+      },
+      {
+        Header: "id",
+        accessor: "_id",
+        type: "id",
       }
     ]
   },
@@ -80,14 +81,51 @@ export const BodyStaticAPP = [
     getData: queries.getReplacementsMasters,
     schema: [
       {
-        Header: "ID",
-        accessor: "_id",
+        Header: "código",
+        accessor: "cod",
+        type: "text",
+        required: true,
+        size: 1
       },
       {
-        Header: "Nombre de empresa",
-        accessor: "businessName",
-        type: "textareaSizable",
+        Header: "nombre",
+        accessor: "title",
+        type: "text",
         required: true,
+        size: 3
+      },
+      {
+        Header: "descripcion",
+        accessor: "descripcion",
+        type: "text",
+        required: true,
+        size: 3
+      },
+      {
+        Header: "componente",
+        accessor: "componente",
+        type: "text",
+        required: true,
+        size: 1
+      },
+      {
+        Header: "tag_cod",
+        accessor: "tag_cod",
+        type: "text",
+        required: true,
+        size: 1
+      },
+      {
+        Header: "cantidad",
+        accessor: "cantidad",
+        type: "number",
+        required: true,
+        size: 1
+      },
+      {
+        Header: "id",
+        accessor: "_id",
+        type: "id",
       }
     ]
   },
@@ -99,15 +137,216 @@ export const BodyStaticAPP = [
     getData: queries.getEquipmentsMasters,
     schema: [
       {
-        Header: "ID",
-        accessor: "_id",
+        Header: "tag_cod",
+        accessor: "tag_cod",
+        type: "text",
+        required: true,
+        size: 1
       },
       {
-        Header: "Nombre de empresa",
-        accessor: "businessName",
-        type: "textareaSizable",
+        Header: "title",
+        accessor: "title",
+        type: "text",
         required: true,
+        size: 3
+      },
+      {
+        Header: "funcion",
+        accessor: "funcion",
+        type: "text",
+        required: true,
+        size: 3
+      },
+      {
+        Header: "ubicacion",
+        accessor: "ubicacion",
+        type: "select",
+        ref: {
+          table: "plantSections",
+          accesor: "title"
+        },
+        required: true,
+        size: 2
+      },
+      {
+        Header: "horas_servicio_teorico",
+        accessor: "horas_servicio_teorico",
+        type: "number",
+        required: true,
+        size: 1
+      },
+      {
+        Header: "fecha_ult_mtto",
+        accessor: "fecha_ult_mtto",
+        type: "datetime-local",
+        required: true,
+        size: 1
+      },
+      {
+        Header: "marca",
+        accessor: "marca",
+        type: "text",
+        required: true,
+        size: 1
+      },
+      {
+        Header: "modelo",
+        accessor: "modelo",
+        type: "text",
+        required: true,
+        size: 1
+      },
+
+      {
+        Header: "tipo",
+        accessor: "tipo",
+        type: "select",
+        ref: {
+          table: "processEquipment",
+          accessor: "title"
+        },
+        required: true,
+        size: 1
+      },
+      {
+        Header: "largo",
+        accessor: "largo",
+        type: "number",
+        required: true,
+        size: 1
+      },
+      {
+        Header: "alto",
+        accessor: "alto",
+        type: "number",
+        required: true,
+        size: 1
+      },
+      {
+        Header: "ancho",
+        accessor: "ancho",
+        type: "number",
+        required: true,
+        size: 1
+      },
+      {
+        Header: "potencia",
+        accessor: "potencia",
+        type: "number",
+        required: true,
+        size: 1
+      },
+      {
+        Header: "voltaje",
+        accessor: "voltaje",
+        type: "number",
+        required: true,
+        size: 1
+      },
+      {
+        Header: "amperaje (a)",
+        accessor: "amperaje_a",
+        type: "number",
+        required: true,
+        size: 1
+      },
+      {
+        Header: "corriente",
+        accessor: "corriente",
+        type: "number",
+        required: true,
+        size: 1
+      },
+      {
+        Header: "rpm",
+        accessor: "rpm",
+        type: "number",
+        required: true,
+        size: 1
+      },
+      {
+        Header: "frecuencia",
+        accessor: "frecuencia",
+        type: "number",
+        required: true,
+        size: 1
+      },
+      {
+        Header: "rodamiento 1",
+        accessor: "rodamiento_1",
+        type: "text",
+        required: true,
+        size: 1
+      },
+      {
+        Header: "rodamiento 2",
+        accessor: "rodamiento_2",
+        type: "text",
+        required: true,
+        size: 1
+      },
+      {
+        Header: "estopera",
+        accessor: "estopera",
+        type: "text",
+        required: true,
+        size: 1
+      },
+      {
+        Header: "capacidad",
+        accessor: "capacidad",
+        type: "text",
+        required: true,
+        size: 1
+      },
+      {
+        Header: "material",
+        accessor: "material",
+        type: "text",
+        required: true,
+        size: 1
+      },
+      {
+        Header: "espesor lamina",
+        accessor: "espesor_lamina",
+        type: "text",
+        required: true,
+        size: 1
+      },
+      {
+        Header: "peso (kg)",
+        accessor: "peso_kg",
+        type: "number",
+        required: true,
+        size: 1
+      },
+      {
+        Header: "serial",
+        accessor: "serial",
+        type: "text",
+        required: true,
+        size: 1
+      },
+      {
+        Header: "grasa o lubricante",
+        accessor: "grasa_lubricante",
+        type: "text",
+        required: true,
+        size: 1
+      },
+      {
+        Header: "observaciones",
+        accessor: "observaciones",
+        type: "text",
+        required: true,
+        size: 3
+      },
+      {
+        Header: "id",
+        accessor: "_id",
+        type: "id",
       }
     ]
   },
 ]
+

@@ -59,7 +59,8 @@ export const DataTable = ({ data }) => {
   }, [data])
 
 
-  const handleonRowSelectionChange = (values) => {
+  const handleonRowClick = (values) => {
+    //console.log(20003, values)
     setStage({ action: "creaAndEdit", payload: values })
   }
 
@@ -68,7 +69,7 @@ export const DataTable = ({ data }) => {
     filterType: 'checkbox',
     selectableRows: "single",
     selectableRowsHideCheckboxes: false,
-    selectableRowsOnClick: true,
+    selectableRowsOnClick: false,
     selectToolbarPlacement: "replace",
     sort: true,
     sortOrder: {
@@ -79,10 +80,16 @@ export const DataTable = ({ data }) => {
     //tableBodyHeight: "400px",
     //tableBodyMaxHeight: "400px",
 
+    onRowClick: (_, rowMeta) => {
+      handleonRowClick(data.results[rowMeta.dataIndex])
+    },
 
+    // onRowSelectionChange: (array, asd, dr) => {
 
-    onRowSelectionChange: (array) => { handleonRowSelectionChange(data.results[array[0].index]) },
-    //onCellClick: (colData, cellMeta) => { console.log(colData, cellMeta) },
+    //   handleonRowSelectionChange(data.results[array[0].index])
+    // },
+
+    //onCellClick: (colData, cellMeta) => { console.log(20003, colData, cellMeta) },
 
     //isRowSelectable: (dataIndex, selectedRows, data) => { console.log("algo") }
 

@@ -97,6 +97,7 @@ type queries = {
   getLog: string,
   getProperties: string,
   getSections: string,
+  createSections: string,
   getEquipments: string,
   getEquipmentsMasters: string,
   getReplacementsMasters: string,
@@ -183,6 +184,19 @@ export const queries: queries = {
   getSections: `query ( $args:inputSection, $sort:sortCriteriaSection, $skip:Int, $limit:Int )
   {
     getSection(args:$args, sort:$sort, skip:$skip, limit:$limit ){
+      total
+      results{
+        _id
+        tag
+        title
+        createdAt
+        updatedAt
+      }
+    }
+  }`,
+  createSections: `mutation ( $args:inputSection )
+  {
+    createSection(args:$args ){
       total
       results{
         _id
