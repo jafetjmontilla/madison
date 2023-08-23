@@ -98,28 +98,28 @@ export const BodyStaticAPP = [
         Header: "descripcion",
         accessor: "descripcion",
         type: "text",
-        required: true,
+        required: false,
         size: 3
       },
       {
         Header: "componente",
         accessor: "componente",
         type: "text",
-        required: true,
+        required: false,
         size: 1
       },
       {
         Header: "tag_cod",
         accessor: "tag_cod",
         type: "text",
-        required: true,
+        required: false,
         size: 1
       },
       {
         Header: "cantidad",
         accessor: "cantidad",
         type: "number",
-        required: true,
+        required: false,
         size: 1
       },
       {
@@ -154,7 +154,7 @@ export const BodyStaticAPP = [
         Header: "funcion",
         accessor: "funcion",
         type: "text",
-        required: true,
+        required: false,
         size: 3
       },
       {
@@ -165,35 +165,35 @@ export const BodyStaticAPP = [
           table: "plantSections",
           accesor: "title"
         },
-        required: true,
+        required: false,
         size: 2
       },
       {
         Header: "horas_servicio_teorico",
         accessor: "horas_servicio_teorico",
         type: "number",
-        required: true,
+        required: false,
         size: 1
       },
       {
         Header: "fecha_ult_mtto",
         accessor: "fecha_ult_mtto",
         type: "datetime-local",
-        required: true,
+        required: false,
         size: 1
       },
       {
         Header: "marca",
         accessor: "marca",
         type: "text",
-        required: true,
+        required: false,
         size: 1
       },
       {
         Header: "modelo",
         accessor: "modelo",
         type: "text",
-        required: true,
+        required: false,
         size: 1
       },
 
@@ -205,140 +205,140 @@ export const BodyStaticAPP = [
           table: "processEquipment",
           accessor: "title"
         },
-        required: true,
+        required: false,
         size: 1
       },
       {
         Header: "largo",
         accessor: "largo",
         type: "number",
-        required: true,
+        required: false,
         size: 1
       },
       {
         Header: "alto",
         accessor: "alto",
         type: "number",
-        required: true,
+        required: false,
         size: 1
       },
       {
         Header: "ancho",
         accessor: "ancho",
         type: "number",
-        required: true,
+        required: false,
         size: 1
       },
       {
         Header: "potencia",
         accessor: "potencia",
         type: "number",
-        required: true,
+        required: false,
         size: 1
       },
       {
         Header: "voltaje",
         accessor: "voltaje",
         type: "number",
-        required: true,
+        required: false,
         size: 1
       },
       {
         Header: "amperaje (a)",
         accessor: "amperaje_a",
         type: "number",
-        required: true,
+        required: false,
         size: 1
       },
       {
         Header: "corriente",
         accessor: "corriente",
         type: "number",
-        required: true,
+        required: false,
         size: 1
       },
       {
         Header: "rpm",
         accessor: "rpm",
         type: "number",
-        required: true,
+        required: false,
         size: 1
       },
       {
         Header: "frecuencia",
         accessor: "frecuencia",
         type: "number",
-        required: true,
+        required: false,
         size: 1
       },
       {
         Header: "rodamiento 1",
         accessor: "rodamiento_1",
         type: "text",
-        required: true,
+        required: false,
         size: 1
       },
       {
         Header: "rodamiento 2",
         accessor: "rodamiento_2",
         type: "text",
-        required: true,
+        required: false,
         size: 1
       },
       {
         Header: "estopera",
         accessor: "estopera",
         type: "text",
-        required: true,
+        required: false,
         size: 1
       },
       {
         Header: "capacidad",
         accessor: "capacidad",
         type: "text",
-        required: true,
+        required: false,
         size: 1
       },
       {
         Header: "material",
         accessor: "material",
         type: "text",
-        required: true,
+        required: false,
         size: 1
       },
       {
         Header: "espesor lamina",
         accessor: "espesor_lamina",
         type: "text",
-        required: true,
+        required: false,
         size: 1
       },
       {
         Header: "peso (kg)",
         accessor: "peso_kg",
         type: "number",
-        required: true,
+        required: false,
         size: 1
       },
       {
         Header: "serial",
         accessor: "serial",
         type: "text",
-        required: true,
+        required: false,
         size: 1
       },
       {
         Header: "grasa o lubricante",
         accessor: "grasa_lubricante",
         type: "text",
-        required: true,
+        required: false,
         size: 1
       },
       {
         Header: "observaciones",
         accessor: "observaciones",
         type: "text",
-        required: true,
+        required: false,
         size: 3
       },
       {

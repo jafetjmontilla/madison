@@ -5,8 +5,10 @@ import { useEffect, useRef, useState } from "react";
 import Select from 'react-select'
 import { BodyStaticAPP } from "../utils/schemas";
 import { fetchApi } from '../utils/Fetching';
+import { AppContextProvider } from '../context/AppContext';
 
-export const InputField = ({ label, ...props }) => {
+export const InputField = ({ label, isSelect, required, ...props }) => {
+  const { stage } = AppContextProvider()
   const [field, meta, helpers] = useField(props);
   const [isClearable, setIsClearable] = useState(true);
   const [isSearchable, setIsSearchable] = useState(false);
@@ -15,7 +17,6 @@ export const InputField = ({ label, ...props }) => {
   const refSelet = useRef(null)
   const [isMounted, setIsMounted] = useState(false)
   const [options, setOptions] = useState()
-
 
   useEffect(() => {
     if (!isMounted) {
@@ -34,11 +35,11 @@ export const InputField = ({ label, ...props }) => {
   }
 
   useEffect(() => {
-    if (!!props?.isSelect && isMounted) {
+    if (!!isSelect && isMounted) {
       //table, accessor
-      const query = BodyStaticAPP.find(elem => elem.slug == `/${props?.isSelect?.table}`).getData
+      const query = BodyStaticAPP.find(elem => elem.slug == `/${isSelect?.table}`).getData
       fetchApi({
-        query: BodyStaticAPP.find(elem => elem.slug == `/${props?.isSelect?.table}`).getData,
+        query: BodyStaticAPP.find(elem => elem.slug == `/${isSelect?.table}`).getData,
         variables: {
           args: {},
           sort: {},
@@ -91,9 +92,10 @@ export const InputField = ({ label, ...props }) => {
 
 
   return (
-    <div className='relatiw-full text-xs'>
+    <div className='relatiw-full text-xs relative'>
+      {/* <span className='bg-red-500 translate-x-[100px] translate-y-[-24px] absolute'>{!required && "disabled"}</span> */}
       {["id", "text", "number", "datetime-local", "date"].includes(props?.type) &&
-        <input {...field}  {...props} disabled={props?.type == "id"} className="h-[30px] rounded-[6px] border-[1px] border-gray-300 text-sm w-[100%]" />}
+        <input {...field}  {...props} disabled={props?.type == "id" || (!stage?.payload && !required)} className="h-[30px] rounded-[6px] border-[1px] border-gray-300 text-sm w-[100%]" />}
       {/* {meta.touched && meta.error && <span>{`${label} ${meta.error} `}</span>} */}
       {props?.type == "select" &&
         <div>
