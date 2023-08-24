@@ -11,9 +11,8 @@ import { CSSTransition } from "react-transition-group";
 
 const Slug = ({ slug }) => {
   const { setLoading } = LoadingContextProvider()
-  const { component, setComponent, stage, setStage } = AppContextProvider()
+  const { component, setComponent, stage, setStage, data, setData } = AppContextProvider()
 
-  const [data, setData] = useState()
   const [isMounted, setIsMounted] = useState(false)
   useEffect(() => {
     if (!isMounted) {
@@ -55,14 +54,14 @@ const Slug = ({ slug }) => {
       <div className="flex flex-col relative h-[100%] w-[95%] overflow-auto">
         <div className="w-[100%] h-[8%] flex items-center justify-left">
           <ButtonBasic
-            className={`${stage.action == "viewTable" ? "bg-green-500 hover:bg-green-600" : "bg-red-500 hover:bg-red-700"}`}
+            className={`${stage.action == "viewTable" ? "bg-green-500 hover:bg-green-600" : "bg-gray-300 hover:bg-gray-500"}`}
             onClick={
               () => {
                 // setLoading(true)
                 setStage(stage.action == "viewTable" ? { action: "creaAndEdit" } : { action: "viewTable" })
               }
             }
-            caption={stage.action == "viewTable" ? "crear registro" : "cancelar"}
+            caption={stage.action == "viewTable" ? "crear registro" : "volver"}
           />
         </div>
         <div className="bg-gray-100 rounded-lg w-[100%] h-[90%] overflow-auto">
@@ -77,7 +76,7 @@ const Slug = ({ slug }) => {
           >
             <CreaAndEdit />
           </CSSTransition>
-          <DataTable data={data} />
+          <DataTable data={data} setData={setData} />
         </div>
       </div>
     </div>

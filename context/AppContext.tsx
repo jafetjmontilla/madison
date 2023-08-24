@@ -14,6 +14,12 @@ interface Property {
 interface Stage {
   action: string,
   payload: any
+  dataIndex: number
+}
+
+interface Data {
+  total: number,
+  results: any[]
 }
 
 type Context = {
@@ -23,6 +29,8 @@ type Context = {
   setProperties: Dispatch<SetStateAction<Property | undefined>>
   stage: Stage
   setStage: Dispatch<SetStateAction<Stage>>
+  data: Data
+  setData: Dispatch<SetStateAction<Data>>
 };
 
 const initialContext: Context = {
@@ -30,8 +38,10 @@ const initialContext: Context = {
   setComponent: () => { },
   properties: undefined,
   setProperties: undefined,
-  stage: { action: "viewTable", payload: {} },
+  stage: { action: "viewTable", payload: {}, dataIndex: 0 },
   setStage: () => { return { stage: "viewTable", payload: {} } },
+  data: { total: 0, results: [] },
+  setData: () => { return { total: 0, results: [] } },
 };
 
 const AppContext = createContext<Context>(initialContext);
@@ -40,7 +50,8 @@ const AppProvider: FC<any> = ({ children }): JSX.Element => {
   const [component, setComponent] = useState<string>(initialContext.component);
   const [properties, setProperties] = useState<Property>(undefined);
   const [isMounted, setIsMounted] = useState(false)
-  const [stage, setStage] = useState({ action: "viewTable", payload: {} })
+  const [stage, setStage] = useState({ action: "viewTable", payload: {}, dataIndex: 0 })
+  const [data, setData] = useState({ total: 0, results: [] })
 
 
   useEffect(() => {
@@ -69,7 +80,7 @@ const AppProvider: FC<any> = ({ children }): JSX.Element => {
 
 
   return (
-    <AppContext.Provider value={{ component, setComponent, properties, setProperties, stage, setStage }}>
+    <AppContext.Provider value={{ component, setComponent, properties, setProperties, stage, setStage, data, setData }}>
       {children}
     </AppContext.Provider>
   );

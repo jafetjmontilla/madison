@@ -7,7 +7,7 @@ import { AppContextProvider } from "../context/AppContext"
 import { defaultVisibleColumns } from "../utils/schemas"
 
 
-export const DataTable = ({ data }) => {
+export const DataTable = ({ data, setData }) => {
   const { setLoading, } = LoadingContextProvider()
   const { stage, setStage } = AppContextProvider()
 
@@ -21,7 +21,7 @@ export const DataTable = ({ data }) => {
 
   useEffect(() => {
     console.log(data)
-    if (data) {
+    if (data?.results?.length > 0) {
       const c = []
       for (const property in data?.results[0]) {
         const k = `${property}`
@@ -59,9 +59,9 @@ export const DataTable = ({ data }) => {
   }, [data])
 
 
-  const handleonRowClick = (values) => {
+  const handleonRowClick = (values, dataIndex) => {
     //console.log(20003, values)
-    setStage({ action: "creaAndEdit", payload: values })
+    setStage({ action: "creaAndEdit", payload: values, dataIndex })
   }
 
   const options = {
@@ -81,7 +81,8 @@ export const DataTable = ({ data }) => {
     //tableBodyMaxHeight: "400px",
 
     onRowClick: (_, rowMeta) => {
-      handleonRowClick(data.results[rowMeta.dataIndex])
+      console.log(30005, rowMeta)
+      handleonRowClick(data.results[rowMeta.dataIndex], rowMeta.dataIndex)
     },
 
     // onRowSelectionChange: (array, asd, dr) => {
