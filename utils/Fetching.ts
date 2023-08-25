@@ -97,10 +97,13 @@ type queries = {
   getLog: string,
   getProperties: string,
   getSections: string,
-  createSections: string,
   getEquipments: string,
   getEquipmentsMasters: string,
   getReplacementsMasters: string,
+  createSections: string,
+  createEquipments: string
+  createEquipmentsMasters: string
+  createReplacementsMasters: string
 
 };
 
@@ -194,19 +197,6 @@ export const queries: queries = {
       }
     }
   }`,
-  createSections: `mutation ( $args:inputSection )
-  {
-    createSection(args:$args ){
-      total
-      results{
-        _id
-        tag
-        title
-        createdAt
-        updatedAt
-      }
-    }
-  }`,
   getEquipments: `query ( $args:inputEquipment, $sort:sortCriteriaEquipment, $skip:Int, $limit:Int )
   {
     getEquipment(args:$args, sort:$sort, skip:$skip, limit:$limit ){
@@ -275,5 +265,88 @@ export const queries: queries = {
         updatedAt
       }
     }
-  }`
+  }`,
+  createSections: `mutation ( $args:[inputSection] )
+  {
+    createSection(args:$args ){
+      total
+      results{
+        _id
+        tag
+        title
+        createdAt
+        updatedAt
+      }
+    }
+  }`,
+  createEquipments: `mutation ( $args:[inputEquipment] )
+  {
+    createEquipment(args:$args ){
+      total
+      results{
+        _id
+        tag
+        title
+        createdAt
+        updatedAt
+      }
+    }
+  }`,
+  createEquipmentsMasters: `query ( $args:[inputEquipmentsMaster] )
+  {
+    createEquipmentsMaster(args:$args ){
+      total
+      results{
+        _id
+        tag_cod
+        title
+        funcion
+        horas_servicio_teorico
+        fecha_ult_mtto
+        marca
+        modelo
+        ubicacion
+        largo
+        alto
+        ancho
+        potencia
+        voltaje
+        amperaje_a
+        corriente
+        rpm
+        frecuencia
+        rodamiento_1
+        rodamiento_2
+        estopera
+        capacidad
+        material
+        espesor_lamina
+        peso_kg
+        tipo
+        serial
+        observaciones
+        grasa_lubricante
+        createdAt
+        updatedAt
+      }
+    }
+  }`,
+  createReplacementsMasters: `query ( $args:[inputReplacementsMaster] )
+  {
+    createReplacementsMaster(args:$args ){
+      total
+      results{
+        _id
+        cod
+        title
+        descripcion
+        componente
+        tag_cod
+        cantidad
+        createdAt
+        updatedAt
+      }
+    }
+  }`,
 };
+

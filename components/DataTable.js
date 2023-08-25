@@ -81,7 +81,6 @@ export const DataTable = ({ data, setData }) => {
     //tableBodyMaxHeight: "400px",
 
     onRowClick: (_, rowMeta) => {
-      console.log(30005, rowMeta)
       handleonRowClick(data.results[rowMeta.dataIndex], rowMeta.dataIndex)
     },
 

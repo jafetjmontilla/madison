@@ -51,6 +51,7 @@ export const BodyStaticAPP = [
     roles: ["all"],
     slug: "/processEquipment",
     getData: queries.getEquipments,
+    createEntry: queries.createEquipments,
     schema: [
       {
         Header: "tag",
@@ -79,6 +80,7 @@ export const BodyStaticAPP = [
     roles: ["all"],
     slug: "/replacementsMasters",
     getData: queries.getReplacementsMasters,
+    createEntry: queries.createReplacementsMasters,
     schema: [
       {
         Header: "código",
@@ -135,6 +137,7 @@ export const BodyStaticAPP = [
     roles: ["all"],
     slug: "/equipmentsMasters",
     getData: queries.getEquipmentsMasters,
+    createEntry: queries.createEquipmentsMasters,
     schema: [
       {
         Header: "tag_cod",
@@ -348,5 +351,47 @@ export const BodyStaticAPP = [
       }
     ]
   },
+  {
+    icon: <Icons.IconEquipment className="w-8 h-8 text-gray-500" />,
+    title: "configuración",
+    roles: ["all"],
+  },
+  {
+    icon: <Icons.IconEquipment className="w-8 h-8 text-gray-500" />,
+    title: "secciones",
+    roles: ["all"],
+    slug: "/setup-sections",
+  },
+  {
+    icon: <Icons.IconEquipment className="w-8 h-8 text-gray-500" />,
+    title: "equipos",
+    roles: ["all"],
+    slug: "/setup-equipments",
+  },
+  {
+    icon: <Icons.IconEquipment className="w-8 h-8 text-gray-500" />,
+    title: "componentes",
+    roles: ["all"],
+    slug: "/setup-components",
+  },
+  {
+    icon: <Icons.IconEquipment className="w-8 h-8 text-gray-500" />,
+    title: "partes",
+    roles: ["all"],
+    slug: "/setup-parts",
+  },
+  {
+    icon: <Icons.IconEquipment className="w-8 h-8 text-gray-500" />,
+    title: "propiedades",
+    roles: ["all"],
+    slug: "/setup-porperties",
+  },
+  {
+    icon: <Icons.IconEquipment className="w-8 h-8 text-gray-500" />,
+    title: "caracteristicas",
+    roles: ["all"],
+    slug: "/setup-characteristics",
+  },
+
 ]
 

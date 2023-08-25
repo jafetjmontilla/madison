@@ -12,6 +12,7 @@ import { BodyStaticAPP } from "../utils/schemas";
 import { Formik } from "formik";
 import { InputField } from "./InputField";
 import * as yup from 'yup'
+import { fetchApi } from "../utils/Fetching";
 
 
 export const CreaAndEdit = () => {
@@ -24,8 +25,6 @@ export const CreaAndEdit = () => {
   const [requiredValues, setRequiredValues] = useState()
   const [edition] = useState(!!stage?.payload)
   const [resetForm, setResetForm] = useState()
-
-
 
 
   const { setLoading } = LoadingContextProvider()
@@ -46,7 +45,7 @@ export const CreaAndEdit = () => {
   const handleOnClick = () => {
     setStage({ ...stage, action: "viewTable" })
   }
-  const handleOnBlur = (target) => {
+  const handleOnBlur = async (target) => {
     try {
       const qwe = { ...target }
       if (qwe.value == "") target.value = null
@@ -79,9 +78,15 @@ export const CreaAndEdit = () => {
             return { total: old.total + 1, results: old.results }
           })
           setStage({ ...stage, payload: { ...stage.payload, ...requiredValues }, dataIndex: 0 })
-          ///////
-
-          console.log("guardo nuevo registro", requiredValues)
+          ///////guarda nuevo registro
+          await fetchApi({
+            query: BodyStaticAPP.find(elem => elem?.title == component).createEntry,
+            variables: {
+              args: { ...requiredValues },
+            },
+            type: "json"
+          })
+          console.log("*guardo nuevo registro", requiredValues)
         }
       }
     } catch (error) {
@@ -101,7 +106,7 @@ export const CreaAndEdit = () => {
 
   useEffect(() => {
     if (stage?.action == "creaAndEdit") {
-      const varSchema = BodyStaticAPP.filter(elem => elem?.title == component)[0]
+      const varSchema = BodyStaticAPP.find(elem => elem?.title == component)
       setSchema(varSchema?.schema)
       if (stage?.payload) {
         setDataValues(stage?.payload)
