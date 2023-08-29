@@ -13,12 +13,12 @@ export const Menu: FC<props> = ({ showMenu, setShowMenu }) => {
   const { component, setComponent, } = AppContextProvider()
   const route = useRouter()
 
-  const handleClick = (elem) => {
+  const handleClick = async (elem) => {
     setShowMenu(false)
     if (component !== elem.title) {
       elem?.route != route && setLoading(true)
       setComponent(elem.title)
-      route?.push(elem.slug)
+      await route?.push(elem.slug)
     }
   }
 
@@ -27,9 +27,9 @@ export const Menu: FC<props> = ({ showMenu, setShowMenu }) => {
       <div className="w-[100%] h-[calc(100%-112px)] md:h-[calc(100%-64px)] flex flex-col md:items-center md:mt-16">
         {BodyStaticAPP.map((elem, idx) => {
           return (
-            <>
+            <div key={idx}>
               {!elem?.slug && <div className="w-full h-20 md:h-60 bg-gray-200" />}
-              <div key={idx} onClick={() => { elem?.slug && handleClick(elem) }} className={`${component === elem.title ? "bg-white" : ""} group flex flex-col relative ${elem?.slug && "md:cursor-pointer hover:bg-gray-100"} md:rounded-lg`}>
+              <div onClick={() => { elem?.slug && handleClick(elem) }} className={`${component === elem.title ? "bg-white" : ""} group flex flex-col relative ${elem?.slug && "md:cursor-pointer hover:bg-gray-100"} md:rounded-lg`}>
                 <div className="m-2 flex items-center truncate">
                   {elem.icon}
                   <span className="md:hidden text-gray-500 uppercase ml-2 text-sm font-bold">{elem.title}</span>
@@ -37,7 +37,7 @@ export const Menu: FC<props> = ({ showMenu, setShowMenu }) => {
                 </div>
               </div>
               {!elem?.slug && <div className="w-full border-t-2 border-gray-400 mb-2" />}
-            </>
+            </div>
           )
         })}
       </div>

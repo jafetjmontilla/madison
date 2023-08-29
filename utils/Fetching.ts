@@ -89,6 +89,9 @@ export const fetchApi: CallableFunction = async ({
 
 
 type queries = {
+  auth: string
+  getUser: string
+  authStatus: string
   fileUpload: string;
   getUploadFiles: string,
   createTasaBCV: String,
@@ -108,6 +111,30 @@ type queries = {
 };
 
 export const queries: queries = {
+  auth: `mutation ($idToken : String){
+    auth(idToken: $idToken){
+      sessionCookie
+    }
+  }`,
+  getUser: `query ($uid: ID) {
+        getUser(uid:$uid){
+          phoneNumber
+          role
+          typeRole
+          city
+          country
+          weddingDate
+          signUpProgress
+          status
+          createdAt
+          updatedAt
+        }
+      }`,
+  authStatus: `mutation ($sessionCookie : String){
+        status(sessionCookie: $sessionCookie){
+          customToken
+        }
+      }`,
   fileUpload: `mutation($file:Upload!)
   {
     fileUpload(file:$file){
