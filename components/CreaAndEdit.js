@@ -1,14 +1,12 @@
 
 import { useEffect, useRef, useState } from "react";
-import MUIDataTable from "mui-datatables";
 import { useMounted } from "../hooks/useMounted";
 import { LoadingContextProvider } from "../context/LoadingContext";
 import { AppContextProvider } from "../context/AppContext";
 import { ButtonBasic } from "./ButtonBasic";
 import { IconDelete, PlusIcon } from "../icons";
 import { useToast } from '../hooks/useToast';
-import { CSSTransition, TransitionGroup } from "react-transition-group";
-import { BodyStaticAPP } from "../utils/schemas";
+import { CSSTransition } from "react-transition-group";
 import { Formik } from "formik";
 import { InputField } from "./InputField";
 import * as yup from 'yup'
@@ -16,15 +14,13 @@ import { fetchApi } from "../utils/Fetching";
 
 
 export const CreaAndEdit = () => {
-  const nodeRef = useRef(null);
-  const { stage, setStage, slug, properties, data, setData } = AppContextProvider()
+  const { stage, setStage, setData, itemSchema } = AppContextProvider()
   const toast = useToast()
   const [schema, setSchema] = useState()
   const [dataValues, setDataValues] = useState()
   const [initialValues, setInitialValues] = useState()
   const [requiredValues, setRequiredValues] = useState()
   const [edition] = useState(!!stage?.payload)
-  const [resetForm, setResetForm] = useState()
 
 
   const { setLoading } = LoadingContextProvider()
@@ -80,7 +76,7 @@ export const CreaAndEdit = () => {
           setStage({ ...stage, payload: { ...stage.payload, ...requiredValues }, dataIndex: 0 })
           ///////guarda nuevo registro
           await fetchApi({
-            query: BodyStaticAPP.find(elem => elem?.slug == slug).createEntry,
+            query: itemSchema.createEntry,
             variables: {
               args: { ...requiredValues },
             },
@@ -106,20 +102,20 @@ export const CreaAndEdit = () => {
 
   useEffect(() => {
     if (stage?.action == "creaAndEdit") {
-      const varSchema = BodyStaticAPP.find(elem => elem?.slug == slug)
+      const varSchema = itemSchema
       setSchema(varSchema?.schema)
       if (stage?.payload) {
         setDataValues(stage?.payload)
         setValir(true)
       } else {
-        const values = varSchema?.schema.reduce((acc, item) => {
+        const values = varSchema?.schema?.reduce((acc, item) => {
           acc.initialValues = { ...acc.initialValues, [`${item.accessor}`]: "" }
           if (item?.required) acc.requiredValues = { ...acc.requiredValues, [`${item.accessor}`]: null }
           return acc
         }, { initialValues: {}, requiredValues: {} })
         setDataValues(values?.initialValues)
-        setInitialValues({ ...values.initialValues })
-        setRequiredValues(values.requiredValues)
+        setInitialValues({ ...values?.initialValues })
+        setRequiredValues(values?.requiredValues)
         setValir(true)
       }
     }

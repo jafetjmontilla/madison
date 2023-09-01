@@ -370,6 +370,41 @@ export const BodyStaticAPP = [
         slug: "/setup/users",
         getData: queries.getUser,
         createEntry: queries.createUsers,
+        schema: [
+          {
+            Header: "nombre",
+            accessor: "name",
+            type: "text",
+            required: true,
+            size: 3
+          },
+          {
+            Header: "Correo",
+            accessor: "email",
+            type: "text",
+            required: true,
+            size: 3
+          },
+          {
+            Header: "Permisos",
+            accessor: "roles",
+            type: "text",
+            required: true,
+            size: 3
+          },
+          {
+            Header: "teléfono",
+            accessor: "phone",
+            type: "text",
+            required: true,
+            size: 3
+          },
+          {
+            Header: "id",
+            accessor: "_id",
+            type: "id",
+          }
+        ]
       },
       {
         icon: <Icons.IconEquipment className="w-8 h-8 text-gray-500" />,
@@ -408,41 +443,7 @@ export const BodyStaticAPP = [
         slug: "/setup/characteristics",
       },
     ],
-    schema: [
-      {
-        Header: "nombre",
-        accessor: "name",
-        type: "text",
-        required: true,
-        size: 3
-      },
-      {
-        Header: "Correo",
-        accessor: "email",
-        type: "text",
-        required: true,
-        size: 3
-      },
-      {
-        Header: "Permisos",
-        accessor: "roles",
-        type: "text",
-        required: true,
-        size: 3
-      },
-      {
-        Header: "teléfono",
-        accessor: "phone",
-        type: "text",
-        required: true,
-        size: 3
-      },
-      {
-        Header: "id",
-        accessor: "_id",
-        type: "id",
-      }
-    ]
+
   },
 
 

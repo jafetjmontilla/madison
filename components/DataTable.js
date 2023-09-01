@@ -9,7 +9,7 @@ import { defaultVisibleColumns } from "../utils/schemas"
 
 export const DataTable = ({ data, setData }) => {
   const { setLoading, } = LoadingContextProvider()
-  const { stage, setStage, itemSchema, properties } = AppContextProvider()
+  const { setStage, itemSchema, properties } = AppContextProvider()
 
   // useMounted()
 

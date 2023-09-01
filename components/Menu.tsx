@@ -9,7 +9,7 @@ interface props {
   setShowMenu: Dispatch<boolean>
 }
 
-export const Menu: FC<props> = ({ showMenu, setShowMenu }) => {
+export const Menu: FC<props> = ({ setShowMenu }) => {
   const router = useRouter()
   const { setItemSchema, setSlug } = AppContextProvider()
 

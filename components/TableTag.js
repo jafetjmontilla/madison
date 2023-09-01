@@ -3,8 +3,7 @@ import { useEffect, useState } from "react";
 import { DataTable } from "./DataTable";
 import { CreaAndEdit } from "./CreaAndEdit";
 import { LoadingContextProvider } from "../context/LoadingContext"
-import { BodyStaticAPP } from "../utils/schemas"
-import { fetchApi, queries } from "../utils/Fetching"
+import { fetchApi } from "../utils/Fetching"
 import { AppContextProvider } from "../context/AppContext"
 import { ButtonBasic } from "./ButtonBasic"
 import { CSSTransition } from "react-transition-group";
@@ -16,7 +15,6 @@ export const TableTag = () => {
   const { setLoading } = LoadingContextProvider()
   const { slug, setSlug, itemSchema, setItemSchema, stage, setStage, data, setData } = AppContextProvider()
   const [showSelect, setShowSelect] = useState(false)
-  const [select, setSelect] = useState()
 
   const subMenu = itemSchema?.father?.subMenu || itemSchema?.subMenu
 
@@ -80,8 +78,8 @@ export const TableTag = () => {
             <span>      {itemSchema?.father?.title}</span> */}
           </div>
         }
-        <div className="w-[100%] h-[8%] flex items-center justify-left">
-          <ButtonBasic
+        <div className={`w-[100%] ${itemSchema?.father || itemSchema?.subMenu ? "h-[40px]" : "h-[84px]"} flex items-end justify-left mb-2`}>
+          {itemSchema?.schema && <ButtonBasic
             className={`${stage.action == "viewTable" ? "bg-green-500 hover:bg-green-600" : "bg-gray-300 hover:bg-gray-500"}`}
             onClick={
               () => {
@@ -90,9 +88,9 @@ export const TableTag = () => {
               }
             }
             caption={stage.action == "viewTable" ? "crear registro" : "volver"}
-          />
+          />}
         </div>
-        <div className="bg-gray-100 rounded-lg w-[100%] h-[90%] overflow-auto">
+        <div className="bg-gray-100 rounded-lg w-[100%] h-[calc(100%-120px)] overflow-auto">
           <CSSTransition
             in={stage.action == "creaAndEdit"}
             //nodeRef={nodeRef}
