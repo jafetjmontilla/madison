@@ -8,13 +8,12 @@ import { AppContextProvider } from "../context/AppContext"
 import { ButtonBasic } from "./ButtonBasic"
 import { CSSTransition } from "react-transition-group";
 import { useRouter } from "next/router";
-import { IconArrowLeft } from "../icons";
 import { MdKeyboardArrowDown } from "react-icons/md"
 
 export const TableTag = () => {
   const router = useRouter()
   const { setLoading } = LoadingContextProvider()
-  const { slug, setSlug, itemSchema, setItemSchema, stage, setStage, data, setData } = AppContextProvider()
+  const { slug, itemSchema, setItemSchema, stage, setStage, data, setData } = AppContextProvider()
   const [showSelect, setShowSelect] = useState(false)
 
   const subMenu = itemSchema?.father?.subMenu || itemSchema?.subMenu
@@ -32,7 +31,7 @@ export const TableTag = () => {
   }, [])
 
   useEffect(() => {
-    if (isMounted) {
+    if (isMounted && !!itemSchema?.getData) {
       setStage({ action: "viewTable" })
       fetchApi({
         query: itemSchema?.getData,
@@ -50,8 +49,8 @@ export const TableTag = () => {
   const handleClick = async (elem) => {
     setShowSelect(false)
     if (slug !== elem.slug) {
-      setSlug(elem.slug)
       setItemSchema({ ...elem, father: itemSchema?.father || itemSchema })
+      setLoading(true)
       await router?.push(elem.slug)
     }
   }
@@ -65,16 +64,16 @@ export const TableTag = () => {
             <div onClick={() => { setShowSelect(!showSelect) }} className="bg-white flex px-2 border-2 rounded-lg w-[60%] h-8 md:hidden justify-between items-center">
               <div className="flex items-center mr-2 my-2">
                 <div className="w-4 h-4">
-                  {subMenu?.find(elem => elem.slug === router?.asPath)?.icon && cloneElement(subMenu?.find(elem => elem.slug === router?.asPath)?.icon, { className: "w-full h-full text-gray-700" })}
+                  {subMenu?.find(elem => elem.slug === itemSchema?.slug)?.icon && cloneElement(subMenu?.find(elem => elem.slug === itemSchema?.slug)?.icon, { className: "w-full h-full text-gray-700" })}
                 </div>
-                <span className="capitalize text-sm ml-1">{subMenu?.find(elem => elem.slug === router?.asPath)?.title}</span>
+                <span className="capitalize text-sm ml-1">{subMenu?.find(elem => elem.slug === itemSchema?.slug)?.title}</span>
               </div>
               <MdKeyboardArrowDown className="w-6 h-6 text-gray-700" />
             </div>
-            <div className={` ${!showSelect ? "hidden" : "flex"} bg-red-500  flex-col md:flex md:flex-row absolute z-10 md:static translate-y-[calc(50%+16px)] md:translate-y-0 w-[calc(60%-40px)] md:w-fit h-fit md:h-10 m-2 md:m-0 shadow-md rounded-b-lg md:rounded-none truncate`}>
+            <div className={` ${!showSelect ? "hidden" : "flex"} bg-red-500  flex-col md:flex md:flex-row absolute z-[5] md:static translate-y-[calc(50%+16px)] md:translate-y-0 w-[calc(60%-40px)] md:w-fit h-fit md:h-10 m-2 md:m-0 shadow-md rounded-b-lg md:rounded-none truncate`}>
               {subMenu?.map((elem, idx) => {
                 return (
-                  <div key={idx} onClick={() => { handleClick(elem) }} className={`${router?.asPath === elem.slug ? "bg-gray-100" : "bg-gray-300"} flex h-8 md:h-10 items-center md:justify-center cursor-pointer`}>
+                  <div key={idx} onClick={() => { handleClick(elem) }} className={`${itemSchema?.slug === elem.slug ? "bg-gray-100" : "bg-gray-300"} flex h-8 md:h-10 items-center md:justify-center cursor-pointer`}>
                     <div className="flex items-center mx-3 my-2">
                       <div className="w-4 h-4">
                         {cloneElement(elem?.icon, { className: "w-full h-full text-gray-700" })}

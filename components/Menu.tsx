@@ -10,8 +10,6 @@ interface props {
 }
 
 export const Menu: FC<props> = ({ setShowMenu }) => {
-  const router = useRouter()
-  const { setItemSchema, setSlug } = AppContextProvider()
 
   const [isMounted, setIsMounted] = useState(false)
   useEffect(() => {
@@ -23,14 +21,6 @@ export const Menu: FC<props> = ({ setShowMenu }) => {
     }
   }, [isMounted])
 
-  useEffect(() => {
-    if (isMounted) {
-      setSlug(router?.asPath)
-      const father = BodyStaticAPP.find(elem => elem?.slug === `/${router?.asPath.split("/")[1]}`)
-      const item = father?.subMenu?.find(el => el.slug === router?.asPath)
-      setItemSchema({ ...item, father: father && father })
-    }
-  }, [isMounted])
 
   const menus = {
     top: BodyStaticAPP.filter(elem => elem?.postition !== "bottom"),
@@ -66,21 +56,22 @@ interface propsItemMenu {
 export const ItemMenu: FC<propsItemMenu> = ({ elem, setShowMenu }) => {
   const router = useRouter()
   const { setLoading } = LoadingContextProvider()
-  const { itemSchema, setItemSchema, slug, setSlug } = AppContextProvider()
+  const { itemSchema, setItemSchema } = AppContextProvider()
 
   const handleClick = async (elem, elemFather?) => {
     setShowMenu(!setShowMenu)
-    if (slug !== elem.slug) {
-      setSlug(elem.slug)
+    if (itemSchema?.slug !== elem.slug) {
       setItemSchema({ ...elem, father: elemFather && elemFather })
+      setLoading(true)
       await router?.push(elem.slug)
+
     }
   }
 
   return (
     <>
       {false && <div className="w-full h-20 md:h-60 bg-gray-200" />}
-      <div className={`${itemSchema?.father?.slug === elem.slug || slug === elem.slug ? "bg-gray-100" : "bg-none"} group flex flex-col relative ${elem?.slug && "md:cursor-pointer hover:bg-gray-300"} md:rounded-lg md:hover:rounded-r-none`}>
+      <div className={`${itemSchema?.father?.slug === elem.slug || itemSchema?.slug === elem.slug ? "bg-gray-100" : "bg-none"} group flex flex-col relative ${elem?.slug && "md:cursor-pointer hover:bg-gray-300"} md:rounded-lg md:hover:rounded-r-none`}>
         <div className="flex items-center truncate">
           <div onClick={() => { elem?.slug && handleClick(elem.subMenu ? elem.subMenu[0] : elem, elem.subMenu ? elem : null) }} className="flex py-2 px-4 w-full h-full">
             {elem.icon}

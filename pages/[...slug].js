@@ -1,21 +1,31 @@
 import { useRouter } from "next/router";
 import { TableTag } from "../components/TableTag";
+import { AppContextProvider } from "../context/AppContext";
+import { useEffect } from "react";
+import { BodyStaticAPP } from "../utils/schemas";
+import { LoadingContextProvider } from "../context/LoadingContext";
+
 
 const Slug = (params) => {
 
+  const { setItemSchema } = AppContextProvider()
+  const { setLoading } = LoadingContextProvider()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (router.query?.slug.length == 1) {
+      const asd = BodyStaticAPP.find(elem => elem.slug == router.asPath)
+      setItemSchema({ ...asd })
+    }
+    if (router.query?.slug.length == 2) {
+      const a = BodyStaticAPP.find(elem => elem.slug == `/${router.query?.slug[0]}`)
+      const asd = a?.subMenu?.find(elem => elem.slug == router.asPath)
+      setItemSchema({ ...asd, father: a })
+    }
+    setLoading(false)
+  }, [router.asPath])
+
   return (
-    // <div className="flex flex-col gap-4">
-    //   <p>{params?.slug?.toString()}</p>
-    //   <button className="bg-blue-100" onClick={() => { router.push("/listing/1/2/3/4/5/6") }} >/listing/1/2/3/4/5/6</button>
-    //   <button className="bg-blue-100" onClick={() => { router.push("/listing/1/2/3/4/5") }} >/listing/1/2/3/4/5</button>
-    //   <button className="bg-blue-100" onClick={() => { router.push("/listing/1/2/3/4") }} >/listing/1/2/3/4</button>
-    //   <button className="bg-blue-100" onClick={() => { router.push("/listing/1/2/3") }} >/listing/1/2/3</button>
-    //   <button className="bg-blue-100" onClick={() => { router.push("/listing/1/2") }} >/listing/1/2</button>
-    //   <button className="bg-blue-100" onClick={() => { router.push("/listing/1") }} >/listing/1</button>
-    //   <button className="bg-blue-100" onClick={() => { router.push("/listing") }} >/listing</button>
-
-
-    // </div>
     <TableTag />
   );
 };

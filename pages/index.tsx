@@ -12,13 +12,16 @@ import { CSSTransition } from "react-transition-group";
 
 
 export default function Home() {
-  const { loading } = LoadingContextProvider()
+  const { loading, setLoading } = LoadingContextProvider()
   const [showLogin, setShowLogin] = useState(false)
   const [showInicio, setShowInicio] = useState(false)
 
   const { user } = AuthContextProvider()
   const router = useRouter()
 
+  useEffect(() => {
+    setLoading(false)
+  }, [router.asPath])
 
   const handleOnClick = () => {
     console.log("aqui")
@@ -28,8 +31,8 @@ export default function Home() {
     }
     setShowInicio(!showInicio)
   }
-
-  useMounted()
+  //setLoading(false)
+  //useMounted()
   return (
     <div className="bg-blue-300 stick flex w-full h-full items-center justify-center">
       <CSSTransition in={showLogin} classNames="alert" unmountOnExit timeout={300} >

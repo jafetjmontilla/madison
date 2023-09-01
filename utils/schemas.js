@@ -462,8 +462,8 @@ export const BodyStaticAPP = [
         title: "grupos",
         roles: ["all"],
         slug: "/security/group",
-        getData: queries.getUser,
-        createEntry: queries.createUsers,
+        //getData: queries.getUser,
+        //createEntry: queries.createUsers,
         schema: [
           {
             Header: "nombre",

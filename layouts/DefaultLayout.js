@@ -3,7 +3,7 @@ import { cloneElement, useEffect, useState } from "react";
 import { IconArrowLeft, IconMenu } from "../icons";
 import ClickAwayListener from "react-click-away-listener";
 import { Menu } from "../components/Menu";
-import { LoadingProvider, LoadingContextProvider } from "../context/LoadingContext";
+import { LoadingProvider } from "../context/LoadingContext";
 import { AppProvider } from "../context/AppContext";
 import { AppContextProvider } from "../context/AppContext"
 import { ToastContextProvider } from "../context/ToastContext";

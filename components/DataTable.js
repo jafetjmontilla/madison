@@ -1,39 +1,42 @@
 
 import { useEffect, useRef, useState } from "react";
 import MUIDataTable from "mui-datatables";
-import { useMounted } from "../hooks/useMounted";
 import { LoadingContextProvider } from "../context/LoadingContext";
 import { AppContextProvider } from "../context/AppContext"
 import { defaultVisibleColumns } from "../utils/schemas"
+import { TextField } from "@mui/material";
 
 
 export const DataTable = ({ data, setData }) => {
-  const { setLoading, } = LoadingContextProvider()
   const { setStage, itemSchema, properties } = AppContextProvider()
-
-  // useMounted()
 
   const refDataTable = useRef(null)
   const refDivTable = useRef(null)
   const [columns, setColumns] = useState([])
-
-
 
   useEffect(() => {
     if (data?.results?.length > 0) {
       const c = []
       for (const property in data?.results[0]) {
         const k = `${property}`
-        const p = properties?.filter(elem => elem.tag === k)[0]
+        const p = properties?.find(elem => elem.tag === k)
         c.push({
           name: `${p?.tag}`,
           label: `${p?.title}`,
+
           options: {
             display: defaultVisibleColumns.includes(p?.tag),
             filter: true,
             sort: true,
+            // customBodyRender: (value) => {
+            //   return (
+            //     <div className="bg-red-500 w-10 h-10">hola</div>
+            //   )
+            // },
+
             setCellProps: (value) => {
               return {
+
                 style: {
                   fontSize: '12px',
                   padding: "0px",
@@ -48,11 +51,10 @@ export const DataTable = ({ data, setData }) => {
                 },
               };
             }
-          }
+          },
         },)
       }
       setColumns(c)
-      //setLoading(false)
     }
   }, [data])
 
@@ -80,7 +82,11 @@ export const DataTable = ({ data, setData }) => {
     onRowClick: (_, rowMeta) => {
       handleonRowClick(data.results[rowMeta.dataIndex], rowMeta.dataIndex)
     },
+    // customRowRender: (data, dataIndex, rowIndex) => {
+    //   console.log(data)
+    //   return <>algo</>
 
+    // },
     // onRowSelectionChange: (array, asd, dr) => {
 
     //   handleonRowSelectionChange(data.results[array[0].index])
@@ -130,6 +136,7 @@ export const DataTable = ({ data, setData }) => {
           data={data?.results}
           columns={columns}
           options={options}
+
           className={"*h-[80%] overflow-auto"}
         />}
     </div>
