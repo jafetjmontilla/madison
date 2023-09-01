@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { cloneElement, useEffect, useState } from "react";
 import { IconArrowLeft, IconMenu } from "../icons";
 import ClickAwayListener from "react-click-away-listener";
 import { Menu } from "../components/Menu";
@@ -31,10 +31,6 @@ export const DefaultLayout = ({ children }) => {
     window.addEventListener('resize', handleResize)
     return _ => window.removeEventListener('resize', handleResize)
   });
-
-  useEffect(() => {
-    console.log(innerHeight)
-  }, [innerHeight])
 
   const transitionLeftOpen = {
     transition: `left 0.4s`,
@@ -90,10 +86,16 @@ export const DefaultLayout = ({ children }) => {
   );
 };
 const Title = () => {
-  const { component, setComponent, } = AppContextProvider()
+  const { itemSchema } = AppContextProvider()
   return (
-    <div className="uppercase font-bold text-gray-600">
-      {component}
+    <div className=" flex w-full h-full text-gray-600 px-4 items-center md:items-center">
+      {itemSchema?.icon && cloneElement(itemSchema?.icon, { className: "w-9 h-9  md:w-14 md:h-14" })}
+      <div className="flex flex-col">
+        <span className="uppercase font-bold text-xs md:text-lg mb-[-4px] md:mb-[-8px]">
+          {itemSchema?.father ? `${itemSchema?.father?.title}` : itemSchema?.title}
+        </span>
+        <span className="text-xs md:text-sm">   Breve descripción</span>
+      </div>
     </div>
   )
 }

@@ -23,8 +23,10 @@ interface Data {
 }
 
 type Context = {
-  component: string;
-  setComponent: Dispatch<SetStateAction<string>>
+  slug: string;
+  setSlug: Dispatch<SetStateAction<string>>
+  itemSchema: any;
+  setItemSchema: Dispatch<SetStateAction<any>>
   properties: Property | undefined
   setProperties: Dispatch<SetStateAction<Property | undefined>>
   stage: Stage
@@ -34,8 +36,10 @@ type Context = {
 };
 
 const initialContext: Context = {
-  component: "",
-  setComponent: () => { },
+  slug: "",
+  setSlug: () => { },
+  itemSchema: undefined,
+  setItemSchema: () => { },
   properties: undefined,
   setProperties: undefined,
   stage: { action: "viewTable", payload: {}, dataIndex: 0 },
@@ -47,7 +51,8 @@ const initialContext: Context = {
 const AppContext = createContext<Context>(initialContext);
 
 const AppProvider: FC<any> = ({ children }): JSX.Element => {
-  const [component, setComponent] = useState<string>(initialContext.component);
+  const [slug, setSlug] = useState<string>(initialContext.slug);
+  const [itemSchema, setItemSchema] = useState<any>(initialContext.itemSchema);
   const [properties, setProperties] = useState<Property>(undefined);
   const [isMounted, setIsMounted] = useState(false)
   const [stage, setStage] = useState({ action: "viewTable", payload: {}, dataIndex: 0 })
@@ -80,7 +85,7 @@ const AppProvider: FC<any> = ({ children }): JSX.Element => {
 
 
   return (
-    <AppContext.Provider value={{ component, setComponent, properties, setProperties, stage, setStage, data, setData }}>
+    <AppContext.Provider value={{ slug: slug, setSlug: setSlug, itemSchema: itemSchema, setItemSchema: setItemSchema, properties, setProperties, stage, setStage, data, setData }}>
       {children}
     </AppContext.Provider>
   );

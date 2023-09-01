@@ -8,7 +8,7 @@ export const defaultVisibleColumns = [
 
 export const BodyStaticAPP = [
   {
-    icon: <Icons.IconHome className="w-8 h-8 text-gray-500" />,
+    icon: < Icons.IconHome className="w-8 h-8 text-gray-500" />,
     title: "inicio",
     roles: ["all"],
     slug: "/",
@@ -351,47 +351,100 @@ export const BodyStaticAPP = [
       }
     ]
   },
+  // {
+  //   icon: <Icons.IconEquipment className="w-8 h-8 text-gray-500" />,
+  //   title: "configuración",
+  //   roles: ["all"],
+  // },
   {
     icon: <Icons.IconEquipment className="w-8 h-8 text-gray-500" />,
     title: "configuración",
     roles: ["all"],
+    slug: "/setup",
+    postition: "bottom",
+    subMenu: [
+      {
+        icon: <Icons.IconEquipment className="w-8 h-8 text-gray-500" />,
+        title: "usuarios",
+        roles: ["all"],
+        slug: "/setup/users",
+        getData: queries.getUser,
+        createEntry: queries.createUsers,
+      },
+      {
+        icon: <Icons.IconEquipment className="w-8 h-8 text-gray-500" />,
+        title: "secciones",
+        roles: ["all"],
+        slug: "/setup/sections",
+      },
+      {
+        icon: <Icons.IconEquipment className="w-8 h-8 text-gray-500" />,
+        title: "equipos",
+        roles: ["all"],
+        slug: "/setup/equipments",
+      },
+      {
+        icon: <Icons.IconEquipment className="w-8 h-8 text-gray-500" />,
+        title: "componentes",
+        roles: ["all"],
+        slug: "/setup/components",
+      },
+      {
+        icon: <Icons.IconEquipment className="w-8 h-8 text-gray-500" />,
+        title: "partes",
+        roles: ["all"],
+        slug: "/setup/parts",
+      },
+      {
+        icon: <Icons.IconEquipment className="w-8 h-8 text-gray-500" />,
+        title: "propiedades",
+        roles: ["all"],
+        slug: "/setup/properties",
+      },
+      {
+        icon: <Icons.IconEquipment className="w-8 h-8 text-gray-500" />,
+        title: "caracteristicas",
+        roles: ["all"],
+        slug: "/setup/characteristics",
+      },
+    ],
+    schema: [
+      {
+        Header: "nombre",
+        accessor: "name",
+        type: "text",
+        required: true,
+        size: 3
+      },
+      {
+        Header: "Correo",
+        accessor: "email",
+        type: "text",
+        required: true,
+        size: 3
+      },
+      {
+        Header: "Permisos",
+        accessor: "roles",
+        type: "text",
+        required: true,
+        size: 3
+      },
+      {
+        Header: "teléfono",
+        accessor: "phone",
+        type: "text",
+        required: true,
+        size: 3
+      },
+      {
+        Header: "id",
+        accessor: "_id",
+        type: "id",
+      }
+    ]
   },
-  {
-    icon: <Icons.IconEquipment className="w-8 h-8 text-gray-500" />,
-    title: "secciones",
-    roles: ["all"],
-    slug: "/setup-sections",
-  },
-  {
-    icon: <Icons.IconEquipment className="w-8 h-8 text-gray-500" />,
-    title: "equipos",
-    roles: ["all"],
-    slug: "/setup-equipments",
-  },
-  {
-    icon: <Icons.IconEquipment className="w-8 h-8 text-gray-500" />,
-    title: "componentes",
-    roles: ["all"],
-    slug: "/setup-components",
-  },
-  {
-    icon: <Icons.IconEquipment className="w-8 h-8 text-gray-500" />,
-    title: "partes",
-    roles: ["all"],
-    slug: "/setup-parts",
-  },
-  {
-    icon: <Icons.IconEquipment className="w-8 h-8 text-gray-500" />,
-    title: "propiedades",
-    roles: ["all"],
-    slug: "/setup-porperties",
-  },
-  {
-    icon: <Icons.IconEquipment className="w-8 h-8 text-gray-500" />,
-    title: "caracteristicas",
-    roles: ["all"],
-    slug: "/setup-characteristics",
-  },
+
 
 ]
 

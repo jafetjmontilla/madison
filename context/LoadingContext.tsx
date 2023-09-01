@@ -17,7 +17,7 @@ const initialContext: Context = {
 const LoadingContext = createContext<Context>(initialContext);
 
 const LoadingProvider: FC<any> = ({ children }): JSX.Element => {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [valir, setValir] = useState(true);
 
   useEffect(() => {
@@ -25,7 +25,7 @@ const LoadingProvider: FC<any> = ({ children }): JSX.Element => {
       setValir(false)
       setTimeout(() => {
         setValir(true)
-      }, 800);
+      }, 10);
     }
   }, [loading])
 

@@ -54,7 +54,7 @@ export const useAuthentication = () => {
 
             return asdf
           } catch (error: any) {
-            setLoading(false);
+            //setLoading(false);
             const er = error.toString().split(".")[0].split(": Error ")[1]
             if (er == "(auth/account-exists-with-different-credential)") {
               toast("error", "El correo asociado a su provedor ya se encuentra registrado en bodasdehoy.com");
@@ -85,7 +85,7 @@ export const useAuthentication = () => {
             setUser({ ...res.user, ...moreInfo });
 
             /////// REDIRECIONES ///////
-            setLoading(true)
+            //setLoading(true)
             router.push(`${router.query?.d}`)
             ///////////////////////////
 
@@ -120,7 +120,7 @@ export const useAuthentication = () => {
         console.log("error", error)
         console.log("errorCode", error?.code ? error.code : error?.message)
       }
-      setLoading(false);
+      //setLoading(false);
     },
     [getSessionCookie, router, setLoading, setUser, toast]
   );

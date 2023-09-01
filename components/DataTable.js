@@ -9,10 +9,10 @@ import { defaultVisibleColumns } from "../utils/schemas"
 
 export const DataTable = ({ data, setData }) => {
   const { setLoading, } = LoadingContextProvider()
-  const { stage, setStage } = AppContextProvider()
+  const { stage, setStage, itemSchema, properties } = AppContextProvider()
 
   // useMounted()
-  const { component, properties, } = AppContextProvider()
+
   const refDataTable = useRef(null)
   const refDivTable = useRef(null)
   const [columns, setColumns] = useState([])
@@ -20,7 +20,6 @@ export const DataTable = ({ data, setData }) => {
 
 
   useEffect(() => {
-    console.log(data)
     if (data?.results?.length > 0) {
       const c = []
       for (const property in data?.results[0]) {
@@ -53,14 +52,12 @@ export const DataTable = ({ data, setData }) => {
         },)
       }
       setColumns(c)
-      setLoading(false)
-      console.log("paso")
+      //setLoading(false)
     }
   }, [data])
 
 
   const handleonRowClick = (values, dataIndex) => {
-    //console.log(20003, values)
     setStage({ action: "creaAndEdit", payload: values, dataIndex })
   }
 
@@ -126,14 +123,14 @@ export const DataTable = ({ data, setData }) => {
   return (
 
     <div ref={refDivTable} className={``} >
-      <MUIDataTable
+      {itemSchema?.getData && <MUIDataTable
         ref={refDataTable}
-        title={<span className={"uppercase font-bold text-gray-700"}>{`Listado ${component}`}</span>}
+        title={<span className={"uppercase font-bold text-gray-700"}>{`Listado ${itemSchema?.title}`}</span>}
         data={data?.results}
         columns={columns}
         options={options}
         className={"*h-[80%] overflow-auto"}
-      />
+      />}
     </div>
   );
 };

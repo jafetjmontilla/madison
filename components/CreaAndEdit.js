@@ -17,7 +17,7 @@ import { fetchApi } from "../utils/Fetching";
 
 export const CreaAndEdit = () => {
   const nodeRef = useRef(null);
-  const { stage, setStage, component, properties, data, setData } = AppContextProvider()
+  const { stage, setStage, slug, properties, data, setData } = AppContextProvider()
   const toast = useToast()
   const [schema, setSchema] = useState()
   const [dataValues, setDataValues] = useState()
@@ -37,7 +37,7 @@ export const CreaAndEdit = () => {
     }
     return () => {
       if (isMounted) {
-        setLoading(false)
+        //setLoading(false)
       }
     }
   }, [isMounted])
@@ -80,7 +80,7 @@ export const CreaAndEdit = () => {
           setStage({ ...stage, payload: { ...stage.payload, ...requiredValues }, dataIndex: 0 })
           ///////guarda nuevo registro
           await fetchApi({
-            query: BodyStaticAPP.find(elem => elem?.title == component).createEntry,
+            query: BodyStaticAPP.find(elem => elem?.slug == slug).createEntry,
             variables: {
               args: { ...requiredValues },
             },
@@ -106,7 +106,7 @@ export const CreaAndEdit = () => {
 
   useEffect(() => {
     if (stage?.action == "creaAndEdit") {
-      const varSchema = BodyStaticAPP.find(elem => elem?.title == component)
+      const varSchema = BodyStaticAPP.find(elem => elem?.slug == slug)
       setSchema(varSchema?.schema)
       if (stage?.payload) {
         setDataValues(stage?.payload)
@@ -117,7 +117,7 @@ export const CreaAndEdit = () => {
           if (item?.required) acc.requiredValues = { ...acc.requiredValues, [`${item.accessor}`]: null }
           return acc
         }, { initialValues: {}, requiredValues: {} })
-        setDataValues(values.initialValues)
+        setDataValues(values?.initialValues)
         setInitialValues({ ...values.initialValues })
         setRequiredValues(values.requiredValues)
         setValir(true)

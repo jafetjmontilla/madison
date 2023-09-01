@@ -16,12 +16,9 @@ export default function Home() {
   const [showLogin, setShowLogin] = useState(false)
   const [showInicio, setShowInicio] = useState(false)
 
-  const { setComponent } = AppContextProvider()
   const { user } = AuthContextProvider()
   const router = useRouter()
-  useEffect(() => {
-    setComponent("inicio")
-  }, [])
+
 
   const handleOnClick = () => {
     console.log("aqui")
@@ -37,8 +34,8 @@ export default function Home() {
     <div className="bg-blue-300 stick flex w-full h-full items-center justify-center">
       <CSSTransition in={showLogin} classNames="alert" unmountOnExit timeout={300} >
         <div className="w-full h-full absolute z-[7] top-0 left-0 flex items-center justify-center">
-          <div className="bg-white flex flex-col p-6 w-[350px] h-[450px] rounded-3xl shadow-lg items-center relative">
-            <div onClick={handleOnClick} className="bg-white opacity-70 w-7 h-7 absolute right-[-30px] top-[-30px] rounded-full text-center text-gray-700 font-semibold font-display cursor-pointer">
+          <div className="bg-white flex flex-col p-6 w-[90%] md:w-[350px] h-[450px] rounded-3xl shadow-lg items-center relative">
+            <div onClick={handleOnClick} className="bg-white opacity-70 w-7 h-7 right-2 top-2 absolute md:right-[-30px] md:top-[-30px] rounded-full text-center text-gray-700 font-semibold font-display cursor-pointer">
               X
             </div>
             <UserIcon className="w-20 h-20 text-gray-500" />

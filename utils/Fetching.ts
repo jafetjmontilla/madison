@@ -90,7 +90,6 @@ export const fetchApi: CallableFunction = async ({
 
 type queries = {
   auth: string
-  getUser: string
   authStatus: string
   fileUpload: string;
   getUploadFiles: string,
@@ -98,11 +97,13 @@ type queries = {
   getTasaBCV: String,
   deleteTasaBCV: String,
   getLog: string,
+  getUser: string
   getProperties: string,
   getSections: string,
   getEquipments: string,
   getEquipmentsMasters: string,
   getReplacementsMasters: string,
+  createUsers: string,
   createSections: string,
   createEquipments: string
   createEquipmentsMasters: string
@@ -116,21 +117,7 @@ export const queries: queries = {
       sessionCookie
     }
   }`,
-  getUser: `query ($uid: ID) {
-        getUser(uid:$uid){
-          phoneNumber
-          role
-          typeRole
-          city
-          country
-          weddingDate
-          signUpProgress
-          status
-          createdAt
-          updatedAt
-        }
-      }`,
-  authStatus: `mutation ($sessionCookie : String){
+   authStatus: `mutation ($sessionCookie : String){
         status(sessionCookie: $sessionCookie){
           customToken
         }
@@ -194,6 +181,23 @@ export const queries: queries = {
         smartOlt
         confirmation
         createdAt
+      }
+    }
+  }`,
+  getUser: `query ( $args:inputUser, $sort:sortCriteriaUser, $skip:Int, $limit:Int ) 
+  {
+    getUser(args:$args, sort:$sort, skip:$skip, limit:$limit){
+      total
+      results{
+        _id
+        uid
+        name
+        email
+        phone
+        roles
+        status
+        createdAt
+        updatedAt
       }
     }
   }`,
@@ -288,6 +292,23 @@ export const queries: queries = {
         componente
         tag_cod
         cantidad
+        createdAt
+        updatedAt
+      }
+    }
+  }`,
+  createUsers: `mutation ( $args:[inputUser] )
+  {
+    createUser(args:$args ){
+     total
+      results{
+        _id
+        uid
+        name
+        email
+        phone
+        roles
+        status
         createdAt
         updatedAt
       }

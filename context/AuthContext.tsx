@@ -42,8 +42,6 @@ const AuthProvider = ({ children }) => {
     if (isMounted) {
       try {
         firebaseClient = initializeApp(firebaseConfig);
-        // firebaseClient
-        console.log(8000041, getAuth())
       } catch (error) {
         console.log(90001, error)
       }
