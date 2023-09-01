@@ -1,9 +1,14 @@
 import * as Icons from "../icons";
+import { BsShieldLockFill, BsIntersect } from 'react-icons/bs';
+import { RiShieldUserLine } from 'react-icons/ri';
+import { HiUserGroup } from 'react-icons/hi';
+import { VscGroupByRefType } from 'react-icons/vsc';
+import { AiFillSetting } from 'react-icons/ai';
 import { queries } from "./Fetching";
 
 
 export const defaultVisibleColumns = [
-  "tag", "title", "cod", "tag_cod", "descripcion", "funcion"
+  "tag", "title", "cod", "tag_cod", "descripcion", "funcion", "name", "email", "phone", "roles"
 ]
 
 export const BodyStaticAPP = [
@@ -14,7 +19,7 @@ export const BodyStaticAPP = [
     slug: "/",
   },
   {
-    icon: <Icons.IconSetions className="w-8 h-8 text-gray-500" />,
+    icon: <BsIntersect className="w-8 h-8 text-gray-500" />,
     title: "secciones de la planta",
     roles: ["all"],
     slug: "/plantSections",
@@ -357,7 +362,7 @@ export const BodyStaticAPP = [
   //   roles: ["all"],
   // },
   {
-    icon: <Icons.IconEquipment className="w-8 h-8 text-gray-500" />,
+    icon: <AiFillSetting className="w-8 h-8 text-gray-500" />,
     title: "configuración",
     roles: ["all"],
     slug: "/setup",
@@ -365,9 +370,55 @@ export const BodyStaticAPP = [
     subMenu: [
       {
         icon: <Icons.IconEquipment className="w-8 h-8 text-gray-500" />,
+        title: "secciones",
+        roles: ["all"],
+        slug: "/setup/sections",
+      },
+      {
+        icon: <Icons.IconEquipment className="w-8 h-8 text-gray-500" />,
+        title: "equipos",
+        roles: ["all"],
+        slug: "/setup/equipments",
+      },
+      {
+        icon: <Icons.IconEquipment className="w-8 h-8 text-gray-500" />,
+        title: "componentes",
+        roles: ["all"],
+        slug: "/setup/components",
+      },
+      {
+        icon: <Icons.IconEquipment className="w-8 h-8 text-gray-500" />,
+        title: "partes",
+        roles: ["all"],
+        slug: "/setup/parts",
+      },
+      {
+        icon: <Icons.IconEquipment className="w-8 h-8 text-gray-500" />,
+        title: "propiedades",
+        roles: ["all"],
+        slug: "/setup/properties",
+      },
+      {
+        icon: <Icons.IconEquipment className="w-8 h-8 text-gray-500" />,
+        title: "caracteristicas",
+        roles: ["all"],
+        slug: "/setup/characteristics",
+      },
+    ],
+
+  },
+  {
+    icon: <BsShieldLockFill className="w-8 h-8 text-gray-500" />,
+    title: "seguridad",
+    roles: ["all"],
+    slug: "/security",
+    postition: "bottom",
+    subMenu: [
+      {
+        icon: <RiShieldUserLine className="w-8 h-8 text-gray-500" />,
         title: "usuarios",
         roles: ["all"],
-        slug: "/setup/users",
+        slug: "/security/users",
         getData: queries.getUser,
         createEntry: queries.createUsers,
         schema: [
@@ -407,40 +458,90 @@ export const BodyStaticAPP = [
         ]
       },
       {
-        icon: <Icons.IconEquipment className="w-8 h-8 text-gray-500" />,
-        title: "secciones",
+        icon: <HiUserGroup className="w-8 h-8 text-gray-500" />,
+        title: "grupos",
         roles: ["all"],
-        slug: "/setup/sections",
+        slug: "/security/group",
+        getData: queries.getUser,
+        createEntry: queries.createUsers,
+        schema: [
+          {
+            Header: "nombre",
+            accessor: "name",
+            type: "text",
+            required: true,
+            size: 3
+          },
+          {
+            Header: "Correo",
+            accessor: "email",
+            type: "text",
+            required: true,
+            size: 3
+          },
+          {
+            Header: "Permisos",
+            accessor: "roles",
+            type: "text",
+            required: true,
+            size: 3
+          },
+          {
+            Header: "teléfono",
+            accessor: "phone",
+            type: "text",
+            required: true,
+            size: 3
+          },
+          {
+            Header: "id",
+            accessor: "_id",
+            type: "id",
+          }
+        ]
       },
       {
-        icon: <Icons.IconEquipment className="w-8 h-8 text-gray-500" />,
-        title: "equipos",
+        icon: <VscGroupByRefType className="w-8 h-8 text-gray-500" />,
+        title: "permisos",
         roles: ["all"],
-        slug: "/setup/equipments",
-      },
-      {
-        icon: <Icons.IconEquipment className="w-8 h-8 text-gray-500" />,
-        title: "componentes",
-        roles: ["all"],
-        slug: "/setup/components",
-      },
-      {
-        icon: <Icons.IconEquipment className="w-8 h-8 text-gray-500" />,
-        title: "partes",
-        roles: ["all"],
-        slug: "/setup/parts",
-      },
-      {
-        icon: <Icons.IconEquipment className="w-8 h-8 text-gray-500" />,
-        title: "propiedades",
-        roles: ["all"],
-        slug: "/setup/properties",
-      },
-      {
-        icon: <Icons.IconEquipment className="w-8 h-8 text-gray-500" />,
-        title: "caracteristicas",
-        roles: ["all"],
-        slug: "/setup/characteristics",
+        slug: "/security/permission",
+        getData: queries.getUser,
+        createEntry: queries.createUsers,
+        schema: [
+          {
+            Header: "nombre",
+            accessor: "name",
+            type: "text",
+            required: true,
+            size: 3
+          },
+          {
+            Header: "Correo",
+            accessor: "email",
+            type: "text",
+            required: true,
+            size: 3
+          },
+          {
+            Header: "Permisos",
+            accessor: "roles",
+            type: "text",
+            required: true,
+            size: 3
+          },
+          {
+            Header: "teléfono",
+            accessor: "phone",
+            type: "text",
+            required: true,
+            size: 3
+          },
+          {
+            Header: "id",
+            accessor: "_id",
+            type: "id",
+          }
+        ]
       },
     ],
 

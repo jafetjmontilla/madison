@@ -89,8 +89,10 @@ const Title = () => {
   const { itemSchema } = AppContextProvider()
   return (
     <div className=" flex w-full h-full text-gray-600 px-4 items-center md:items-center">
-      {itemSchema?.icon && cloneElement(itemSchema?.icon, { className: "w-9 h-9  md:w-14 md:h-14" })}
-      <div className="flex flex-col">
+      <div className="w-9 h-9  md:w-12 md:h-12">
+        {itemSchema?.icon && cloneElement(itemSchema?.father ? itemSchema?.father?.icon : itemSchema?.icon, { className: "w-full h-full" })}
+      </div>
+      <div className="flex ml-2 flex-col">
         <span className="uppercase font-bold text-xs md:text-lg mb-[-4px] md:mb-[-8px]">
           {itemSchema?.father ? `${itemSchema?.father?.title}` : itemSchema?.title}
         </span>

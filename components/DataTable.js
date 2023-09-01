@@ -123,14 +123,15 @@ export const DataTable = ({ data, setData }) => {
   return (
 
     <div ref={refDivTable} className={``} >
-      {itemSchema?.getData && <MUIDataTable
-        ref={refDataTable}
-        title={<span className={"uppercase font-bold text-gray-700"}>{`Listado ${itemSchema?.title}`}</span>}
-        data={data?.results}
-        columns={columns}
-        options={options}
-        className={"*h-[80%] overflow-auto"}
-      />}
+      {itemSchema?.getData &&
+        <MUIDataTable
+          ref={refDataTable}
+          // title={<span className={"uppercase font-bold text-gray-700"}>{`${itemSchema?.title}`}</span>}
+          data={data?.results}
+          columns={columns}
+          options={options}
+          className={"*h-[80%] overflow-auto"}
+        />}
     </div>
   );
 };
