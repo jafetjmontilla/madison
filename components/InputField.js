@@ -1,14 +1,15 @@
 
 import React from 'react'
-import { useField } from "formik";
+import { Field, useField } from "formik";
 import { useEffect, useRef, useState } from "react";
 import Select from 'react-select'
 import { BodyStaticAPP } from "../utils/schemas";
 import { fetchApi } from '../utils/Fetching';
 import { AppContextProvider } from '../context/AppContext';
+import { Checkbox } from '@mui/material';
 
-export const InputField = ({ label, isSelect, required, ...props }) => {
-  const { stage } = AppContextProvider()
+export const InputField = ({ elem: params, isSelect, ...props }) => {
+  const { stage, setData, itemSchema } = AppContextProvider()
   const [field, meta, helpers] = useField(props);
   const [isClearable, setIsClearable] = useState(true);
   const [isSearchable, setIsSearchable] = useState(false);
@@ -29,10 +30,32 @@ export const InputField = ({ label, isSelect, required, ...props }) => {
     }
   }, [isMounted])
 
+  useEffect(() => {
+    if (!isMounted) {
+      if (params.type === "datetime-local") {
+        field.value = field?.value?.slice(0, 16)
+      }
+      if (params.type === "checkbox") {
+        fetchApi({
+          query: params?.getOptions,
+          variables: {
+            args: {},
+            sort: {},
+            limit: 0,
+            skip: 0,
+          },
+          type: "json"
+        }).then(result => {
+          setOptions(result.results.map(elem => {
+            return { ...elem, checked: field?.value?.includes(elem.title) }
+          }))
+        })
+        //console.log(field.value)
+      }
+    }
 
-  if (props.type === "datetime-local") {
-    field.value = field?.value?.slice(0, 16)
-  }
+  }, [params, isMounted])
+
 
   useEffect(() => {
     if (!!isSelect && isMounted) {
@@ -89,44 +112,98 @@ export const InputField = ({ label, isSelect, required, ...props }) => {
     }),
   }
 
+  useEffect(() => {
+    console.log(555111000, "cambio _id", field?.name)
+    if (field?.name === "_id") {
+      console.log("entro", stage?.payload?._id)
+      helpers.setValue(stage?.payload?._id)
+    }
+  }, [stage?.payload?._id])
 
+
+  const onChangeHandler = async (e) => {
+    const asd = options.map(elem => {
+      return elem.title === e.target.name ? { ...elem, checked: e.target.checked } : elem
+    })
+    setOptions(asd)
+    const asdReduce = asd.reduce((acc, item) => {
+      if (item.checked) {
+        acc.push(item.title)
+      }
+      return acc
+    }, [])
+    setData((old) => {
+      old.results.splice(stage.dataIndex, 1, { ...old.results[stage.dataIndex], [field.name]: asdReduce })
+      return { ...old, results: old.results }
+    })
+    await fetchApi({
+      query: itemSchema.updateEntry,
+      variables: {
+        args: { _id: stage.payload?._id, [field.name]: asdReduce },
+      },
+      type: "json"
+    })
+    console.log("actualizazo registro")
+  }
 
   return (
     <div className='relatiw-full text-xs relative'>
-      {/* <span className='bg-red-500 translate-x-[100px] translate-y-[-24px] absolute'>{!required && "disabled"}</span> */}
-      {["id", "text", "number", "datetime-local", "date"].includes(props?.type) &&
-        <input {...field}  {...props} disabled={props?.type == "id" || (!stage?.payload && !required)} className="h-[30px] rounded-[6px] border-[1px] border-gray-300 text-sm w-[100%]" />}
-      {/* {meta.touched && meta.error && <span>{`${label} ${meta.error} `}</span>} */}
-      {props?.type == "select" &&
-        <div>
-          {options && <Select
-            ref={refSelet}
-            onChange={(e) => {
-              // setIdxOptions(options.findIndex(elem => elem.value === e?.value))
-              // setValue(e?.value)
-            }}
-            //isOptionSelected={options[1]}
-            // placeholder={
-            //   "algo"
-            // }
-            styles={selectStyle}
-            defaultValue={() => {
-              //console.log(field)
-              options.find(elem => {
-                //console.log(elem.label, "||", field.value)
-                return elem.label === field.value
-              })
-            }}
-            isDisabled={isDisabled}
-            isLoading={isLoading}
-            isClearable={isClearable}
-            isSearchable={true}
-            options={options}
-            classNames={"w-full"}
-          />}
-        </div>
+      {
+        (() => {
 
+          if (["id", "text", "number", "datetime-local", "date"].includes(params?.type)) {
+            return <input {...field}  {...props} type={params?.type} disabled={["id"].includes(params?.type) || (!stage?.payload && !params?.required) || (stage?.payload && params?.readOnly)} className={`h-[30px] rounded-[6px] border-[1px] border-gray-300 text-sm w-[100%] uppercase ${stage?.payload && params?.readOnly && "cursor-not-allowed"}`} />
+          }
+
+          if (params?.type == "checkbox") {
+            return (
+              <div className='flex w-full'>
+                <div className='w-full grid md:grid-cols-4 lg:grid-cols-6' >
+                  {options?.map((elem, idx) => {
+                    return (
+                      <label key={idx} className={`text-sm uppercase items-center col-span-2 ${!stage?.payload && !params?.required ? "" : "cursor-pointer"}`}>
+                        <Checkbox id={idx} type="checkbox" defaultChecked={elem.checked} name={elem.title} onClick={(e) => onChangeHandler(e)} disabled={!stage?.payload && !params?.required} />
+                        {elem?.title}
+                      </label>
+                    )
+                  })}
+                </div>
+              </div>
+            )
+          }
+
+          if (params?.type == "select") {
+            return <div>
+              {options && <Select
+                ref={refSelet}
+                onChange={(e) => {
+                  // setIdxOptions(options.findIndex(elem => elem.value === e?.value))
+                  // setValue(e?.value)
+                }}
+                //isOptionSelected={options[1]}
+                // placeholder={
+                //   "algo"
+                // }
+                styles={selectStyle}
+                defaultValue={() => {
+                  //console.log(field)
+                  options.find(elem => {
+                    return elem?.Header === field.value
+                  })
+                }}
+                isDisabled={isDisabled}
+                isLoading={isLoading}
+                isClearable={isClearable}
+                isSearchable={true}
+                options={options}
+                classNames={"w-full"}
+              />}
+            </div>
+          }
+        })()
       }
+      {/* {meta.touched && meta.error && <span>{`${elem?.Header} ${meta.error} `}</span>} */}
+
     </div>
 
   );

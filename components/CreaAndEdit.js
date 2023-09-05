@@ -45,13 +45,14 @@ export const CreaAndEdit = () => {
     try {
       const qwe = { ...target }
       if (qwe.value == "") target.value = null
+      console.log(target.value, target.name)
       if (!target.value && schema.find(elem => elem.accessor == target.name).required) {
         toast("error", "este campo es requerido")
         document.getElementById(target.name).focus();
         return
       }
       if (`${dataValues[target.name]}` != target.value) {
-        console.log("cambio")
+        console.log("cambio", target)
         if (stage?.payload) {
           //dataValues[target.name] = target.value
           ///////
@@ -59,6 +60,13 @@ export const CreaAndEdit = () => {
             console.log(111, old)
             old.results.splice(stage.dataIndex, 1, { ...old.results[stage.dataIndex], [target.name]: target.value })
             return { ...old, results: old.results }
+          })
+          await fetchApi({
+            query: itemSchema.updateEntry,
+            variables: {
+              args: { _id: stage.payload._id, [target.name]: target.value },
+            },
+            type: "json"
           })
           console.log("actualizazo registro", dataValues)
           return
@@ -69,20 +77,22 @@ export const CreaAndEdit = () => {
           if (!requiredValues[`${key}`]) return valir = false
         });
         if (valir) {
-          setData((old) => {
-            old.results.splice(0, 0, requiredValues)
-            return { total: old.total + 1, results: old.results }
-          })
-          setStage({ ...stage, payload: { ...stage.payload, ...requiredValues }, dataIndex: 0 })
+
           ///////guarda nuevo registro
-          await fetchApi({
+          console.log(1002, itemSchema.createEntry)
+          const resp = await fetchApi({
             query: itemSchema.createEntry,
             variables: {
               args: { ...requiredValues },
             },
             type: "json"
           })
-          console.log("*guardo nuevo registro", requiredValues)
+          setData((old) => {
+            old.results.splice(0, 0, { ...requiredValues, _id: resp.results[0]._id })
+            return { total: old.total + 1, results: old.results }
+          })
+          setStage({ ...stage, payload: { ...stage.payload, ...requiredValues, _id: resp.results[0]._id }, dataIndex: 0 })
+          console.log("*guardo nuevo registro", { ...requiredValues, _id: resp.results[0]._id })
         }
       }
     } catch (error) {
@@ -137,8 +147,8 @@ export const CreaAndEdit = () => {
         {({ resetForm }) => {
           return (
 
-            <div className="bg-gray-200 bg-opacity-50 flex items-center justify-center w-[100%] h-[90%] absolute z-10">
-              <div className="bg-white w-full h-[100%] md:w-4/5 md:h-5/6 rounded-lg shadow-lg truncate">
+            <div className="bg-gray-200 bg-opacity-50 flex items-center justify-center w-[100%] h-[calc(90%-54px)] absolute z-10">
+              <div className="bg-white w-full h-[100%] md:w-[800px] md:h-[105%] md:translate-y-[-20px] rounded-lg shadow-lg truncate">
                 <div className="bg-gray-300 flex w-[100%] h-20 ">
                   <div className="w-[25%] h-[100%] flex justify-start items-center">
                     <span className="ml-4 text-xl uppercase font-semibold text-gray-700 ">
@@ -154,16 +164,17 @@ export const CreaAndEdit = () => {
                 <div className="h-[calc(100%-160px)] overflow-auto">
                   <div className="gap-2 grid grid-cols-3 p-4">
                     {schema?.map((elem, idx) => {
-                      return (
+
+                      return (elem.accessor !== "password" && stage.payload) || (!stage.payload) ? (
                         <div key={idx} className={`
-                    ${elem?.size == 1 && "col-span-1"} 
-                    ${elem?.size == 2 && "col-span-2"} 
-                    ${elem?.size == 3 && "col-span-3"} 
-                  `}>
+                          ${elem?.size == 1 && "col-span-1"} 
+                          ${elem?.size == 2 && "col-span-2"} 
+                          ${elem?.size == 3 && "col-span-3"} 
+                        `}>
                           <label className="uppercase text-xs">{elem.Header}</label>
-                          <InputField type={elem.type} label={elem.Header} name={elem.accessor} id={elem.accessor} isSelect={elem?.ref} required={elem?.required} onBlur={(e,) => { handleOnBlur(e.target) }} />
+                          <InputField elem={elem} name={elem.accessor} isSelect={elem?.ref} onBlur={(e,) => { handleOnBlur(e.target) }} />
                         </div>
-                      )
+                      ) : <></>
                     })}
                   </div>
                 </div>

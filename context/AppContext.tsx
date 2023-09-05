@@ -27,8 +27,8 @@ type Context = {
   setSlug: Dispatch<SetStateAction<string>>
   itemSchema: any;
   setItemSchema: Dispatch<SetStateAction<any>>
-  properties: Property | undefined
-  setProperties: Dispatch<SetStateAction<Property | undefined>>
+  variables: Property | undefined
+  setVariables: Dispatch<SetStateAction<Property | undefined>>
   stage: Stage
   setStage: Dispatch<SetStateAction<Stage>>
   data: Data
@@ -40,8 +40,8 @@ const initialContext: Context = {
   setSlug: () => { },
   itemSchema: undefined,
   setItemSchema: () => { },
-  properties: undefined,
-  setProperties: undefined,
+  variables: undefined,
+  setVariables: undefined,
   stage: { action: "viewTable", payload: {}, dataIndex: 0 },
   setStage: () => { return { stage: "viewTable", payload: {} } },
   data: { total: 0, results: [] },
@@ -53,7 +53,7 @@ const AppContext = createContext<Context>(initialContext);
 const AppProvider: FC<any> = ({ children }): JSX.Element => {
   const [slug, setSlug] = useState<string>(initialContext.slug);
   const [itemSchema, setItemSchema] = useState<any>(initialContext.itemSchema);
-  const [properties, setProperties] = useState<Property>(undefined);
+  const [variables, setVariables] = useState<Property>(undefined);
   const [isMounted, setIsMounted] = useState(false)
   const [stage, setStage] = useState({ action: "viewTable", payload: {}, dataIndex: 0 })
   const [data, setData] = useState({ total: 0, results: [] })
@@ -71,7 +71,7 @@ const AppProvider: FC<any> = ({ children }): JSX.Element => {
   useEffect(() => {
     if (isMounted) {
       fetchApi({
-        query: queries.getProperties,
+        query: queries.getVariables,
         variables: {
           args: {},
           sort: {},
@@ -79,13 +79,13 @@ const AppProvider: FC<any> = ({ children }): JSX.Element => {
           skip: 0,
         },
         type: "json"
-      }).then((result) => setProperties(result?.results))
+      }).then((result) => setVariables(result?.results))
     }
   }, [isMounted])
 
 
   return (
-    <AppContext.Provider value={{ slug: slug, setSlug: setSlug, itemSchema: itemSchema, setItemSchema: setItemSchema, properties, setProperties, stage, setStage, data, setData }}>
+    <AppContext.Provider value={{ slug: slug, setSlug: setSlug, itemSchema: itemSchema, setItemSchema: setItemSchema, variables, setVariables, stage, setStage, data, setData }}>
       {children}
     </AppContext.Provider>
   );

@@ -8,53 +8,54 @@ import { TextField } from "@mui/material";
 
 
 export const DataTable = ({ data, setData }) => {
-  const { setStage, itemSchema, properties } = AppContextProvider()
+  const { setStage, itemSchema, variables } = AppContextProvider()
 
   const refDataTable = useRef(null)
   const refDivTable = useRef(null)
   const [columns, setColumns] = useState([])
-
   useEffect(() => {
     if (data?.results?.length > 0) {
-      const c = []
+      const colummnas = []
       for (const property in data?.results[0]) {
-        const k = `${property}`
-        const p = properties?.find(elem => elem.tag === k)
-        c.push({
+        const key = `${property}`
+        const p = variables?.find(elem => elem.tag === key)
+        let options = {
+          display: defaultVisibleColumns.includes(p?.tag),
+          filter: true,
+          sort: true,
+          setCellProps: (value) => {
+            return {
+              style: {
+                fontSize: '12px',
+                padding: "0px",
+                textTransform: "uppercase",
+              },
+            };
+          },
+          setCellHeaderProps: (value) => {
+            return {
+              style: {
+                padding: "0px",
+                textTransform: "uppercase",
+              },
+            };
+          }
+        }
+        if (p?.type == "arraystring") {
+          const customBodyRender = (value) => {
+            return (
+              <p className="uppercase">{value?.map(elem => <li>{elem}</li>)}</p>
+            )
+          }
+          options = { ...options, customBodyRender }
+        }
+        colummnas.push({
           name: `${p?.tag}`,
           label: `${p?.title}`,
-
-          options: {
-            display: defaultVisibleColumns.includes(p?.tag),
-            filter: true,
-            sort: true,
-            // customBodyRender: (value) => {
-            //   return (
-            //     <div className="bg-red-500 w-10 h-10">hola</div>
-            //   )
-            // },
-
-            setCellProps: (value) => {
-              return {
-
-                style: {
-                  fontSize: '12px',
-                  padding: "0px",
-                },
-              };
-            },
-            setCellHeaderProps: (value) => {
-              return {
-                style: {
-                  padding: "0px",
-                  textTransform: "uppercase",
-                },
-              };
-            }
-          },
+          options
         },)
       }
-      setColumns(c)
+      setColumns(colummnas)
     }
   }, [data])
 

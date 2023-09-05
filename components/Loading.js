@@ -2,7 +2,7 @@ import React from "react";
 
 export const Loading = () => {
   return (
-    <div className="font-display fixed top-0 left-0 w-full h-screen z-10 bg-white flex flex-col justify-center items-center flex-wrap">
+    <div className="bg-white font-display fixed top-[132px] md:top-[156px] left-[10px] md:left-[99px] w-[calc(100%-20px)] md:w-[calc(100%-132px)] h-[calc(100%-160px)] md:h-[calc(100%-184px)] z-10 flex flex-col justify-center items-center flex-wrap rounded-lg">
       <div className="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12 mb-4"></div>
       <h2 className="text-center text-gray-300 text-xl font-semibold">
         Un momento, por favor

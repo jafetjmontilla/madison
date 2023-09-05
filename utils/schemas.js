@@ -4,11 +4,12 @@ import { RiShieldUserLine } from 'react-icons/ri';
 import { HiUserGroup } from 'react-icons/hi';
 import { VscGroupByRefType } from 'react-icons/vsc';
 import { AiFillSetting } from 'react-icons/ai';
+import { GrCodeSandbox } from 'react-icons/gr';
 import { queries } from "./Fetching";
 
 
 export const defaultVisibleColumns = [
-  "tag", "title", "cod", "tag_cod", "descripcion", "funcion", "name", "email", "phone", "roles"
+  "tag", "title", "cod", "tag_cod", "descripcion", "funcion", "name", "email", "phone", "roles", "permissions", "type", "groups"
 ]
 
 export const BodyStaticAPP = [
@@ -397,12 +398,48 @@ export const BodyStaticAPP = [
         title: "propiedades",
         roles: ["all"],
         slug: "/setup/properties",
+        getData: queries.getProperties,
       },
       {
         icon: <Icons.IconEquipment className="w-8 h-8 text-gray-500" />,
-        title: "caracteristicas",
+        title: "características",
         roles: ["all"],
         slug: "/setup/characteristics",
+      },
+      {
+        icon: <GrCodeSandbox className="w-6 h-8 text-gray-500" />,
+        title: "variables",
+        roles: ["all"],
+        slug: "/setup/variables",
+        getData: queries.getVariables,
+        createEntry: queries.createVariables,
+        updateEntry: queries.updateVariable,
+        schema: [
+          {
+            Header: "tag",
+            accessor: "tag",
+            type: "text",
+            required: true,
+            size: 3
+          }, {
+            Header: "nombre",
+            accessor: "title",
+            type: "text",
+            required: true,
+            size: 3
+          }, {
+            Header: "tipo",
+            accessor: "type",
+            type: "text",
+            required: false,
+            size: 3
+          },
+          {
+            Header: "id",
+            accessor: "_id",
+            type: "id",
+          }
+        ]
       },
     ],
 
@@ -421,34 +458,44 @@ export const BodyStaticAPP = [
         slug: "/security/users",
         getData: queries.getUser,
         createEntry: queries.createUsers,
+        updateEntry: queries.updateUser,
         schema: [
           {
             Header: "nombre",
             accessor: "name",
             type: "text",
             required: true,
-            size: 3
+            size: 2
           },
           {
-            Header: "Correo",
+            Header: "correo",
             accessor: "email",
             type: "text",
             required: true,
-            size: 3
+            readOnly: true,
+            size: 2
           },
           {
-            Header: "Permisos",
-            accessor: "roles",
+            Header: "contraseña",
+            accessor: "password",
             type: "text",
             required: true,
-            size: 3
+            size: 1
           },
           {
             Header: "teléfono",
             accessor: "phone",
             type: "text",
-            required: true,
-            size: 3
+            required: false,
+            size: 2
+          },
+          {
+            Header: "grupos de permisos",
+            accessor: "groups",
+            type: "checkbox",
+            required: false,
+            size: 3,
+            getOptions: queries.getGroups,
           },
           {
             Header: "id",
@@ -462,36 +509,31 @@ export const BodyStaticAPP = [
         title: "grupos",
         roles: ["all"],
         slug: "/security/group",
-        //getData: queries.getUser,
-        //createEntry: queries.createUsers,
+        getData: queries.getGroups,
+        createEntry: queries.createGroups,
+        updateEntry: queries.updateGroup,
         schema: [
           {
+            Header: "tag",
+            accessor: "tag",
+            type: "text",
+            required: true,
+            size: 3
+          },
+          {
             Header: "nombre",
-            accessor: "name",
+            accessor: "title",
             type: "text",
             required: true,
             size: 3
           },
           {
-            Header: "Correo",
-            accessor: "email",
-            type: "text",
-            required: true,
-            size: 3
-          },
-          {
-            Header: "Permisos",
-            accessor: "roles",
-            type: "text",
-            required: true,
-            size: 3
-          },
-          {
-            Header: "teléfono",
-            accessor: "phone",
-            type: "text",
-            required: true,
-            size: 3
+            Header: "permisos",
+            accessor: "permissions",
+            type: "checkbox",
+            required: false,
+            size: 3,
+            getOptions: queries.getPermissions,
           },
           {
             Header: "id",
@@ -505,33 +547,19 @@ export const BodyStaticAPP = [
         title: "permisos",
         roles: ["all"],
         slug: "/security/permission",
-        getData: queries.getUser,
-        createEntry: queries.createUsers,
+        getData: queries.getPermissions,
+        createEntry: queries.createPermissions,
         schema: [
           {
-            Header: "nombre",
-            accessor: "name",
+            Header: "tag",
+            accessor: "tag",
             type: "text",
             required: true,
             size: 3
           },
           {
-            Header: "Correo",
-            accessor: "email",
-            type: "text",
-            required: true,
-            size: 3
-          },
-          {
-            Header: "Permisos",
-            accessor: "roles",
-            type: "text",
-            required: true,
-            size: 3
-          },
-          {
-            Header: "teléfono",
-            accessor: "phone",
+            Header: "permiso",
+            accessor: "title",
             type: "text",
             required: true,
             size: 3

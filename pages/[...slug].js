@@ -22,7 +22,9 @@ const Slug = (params) => {
       const asd = a?.subMenu?.find(elem => elem.slug == router.asPath)
       setItemSchema({ ...asd, father: a })
     }
-    setLoading(false)
+    setTimeout(() => {
+      setLoading(false)
+    }, 250);
   }, [router.asPath])
 
   return (
