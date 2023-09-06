@@ -87,12 +87,15 @@ export const CreaAndEdit = () => {
             },
             type: "json"
           })
-          setData((old) => {
-            old.results.splice(0, 0, { ...requiredValues, _id: resp.results[0]._id })
-            return { total: old.total + 1, results: old.results }
-          })
-          setStage({ ...stage, payload: { ...stage.payload, ...requiredValues, _id: resp.results[0]._id }, dataIndex: 0 })
-          console.log("*guardo nuevo registro", { ...requiredValues, _id: resp.results[0]._id })
+          console.log(11144, resp)
+          if (resp) {
+            setData((old) => {
+              old?.results?.splice(0, 0, { ...requiredValues, _id: resp?.results[0]?._id })
+              return { total: old.total + 1, results: old?.results }
+            })
+            setStage({ ...stage, payload: { ...stage.payload, ...requiredValues, _id: resp?.results[0]?._id }, dataIndex: 0 })
+            console.log("*guardo nuevo registro", { ...requiredValues, _id: resp?.results[0]?._id })
+          }
         }
       }
     } catch (error) {
