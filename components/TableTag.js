@@ -58,7 +58,7 @@ export const TableTag = () => {
   }
 
   return (
-    <div className="bg-blue-200 w-full h-full flex items-center justify-center relative">
+    <div className="bg-[#0E356B] w-full h-full flex items-center justify-center relative">
 
       <div className="flex flex-col relative h-[100%] w-[95%] overflow-auto">
         {subMenu &&
@@ -92,7 +92,7 @@ export const TableTag = () => {
         }
         <div className={`w-[100%] ${itemSchema?.father || itemSchema?.subMenu ? "h-[40px]" : "h-[84px]"} flex items-end justify-left mb-2`}>
           {itemSchema?.schema && <ButtonBasic
-            className={`${stage.action == "viewTable" ? "bg-green-500 hover:bg-green-600" : "bg-gray-300 hover:bg-gray-500"}`}
+            className={`${stage.action == "viewTable" ? "bg-green-500 hover:bg-green-600" : "bg-gray-400 hover:bg-gray-500"}`}
             onClick={
               () => {
                 // setLoading(true)

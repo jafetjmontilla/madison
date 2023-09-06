@@ -204,6 +204,7 @@ export const queries: queries = {
         email
         phone
         groups
+        status
         createdAt
         updatedAt
       }

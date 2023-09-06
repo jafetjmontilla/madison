@@ -1,11 +1,13 @@
 import * as Icons from "../icons";
 import { BsShieldLockFill, BsIntersect } from 'react-icons/bs';
 import { RiShieldUserLine } from 'react-icons/ri';
-import { HiUserGroup } from 'react-icons/hi';
+import { HiUserGroup, HiUserCircle } from 'react-icons/hi';
 import { VscGroupByRefType } from 'react-icons/vsc';
 import { AiFillSetting } from 'react-icons/ai';
 import { GrCodeSandbox } from 'react-icons/gr';
+import { FiLogOut } from 'react-icons/fi';
 import { queries } from "./Fetching";
+
 
 
 export const defaultVisibleColumns = [
@@ -574,7 +576,34 @@ export const BodyStaticAPP = [
     ],
 
   },
-
+  {
+    icon: <HiUserCircle className="w-8 h-8 text-gray-500" />,
+    title: "profile",
+    roles: ["all"],
+    slug: "/profile",
+    postition: "bottom",
+    subMenu: [
+      {
+        icon: <FiLogOut className="w-8 h-8 text-gray-500" />,
+        title: "desconectar",
+        roles: ["all"],
+        logout: true,
+        // slug: "/security/users",
+        // getData: queries.getUser,
+        // createEntry: queries.createUsers,
+        // updateEntry: queries.updateUser,
+        schema: [
+          {
+            Header: "nombre",
+            accessor: "name",
+            type: "text",
+            required: true,
+            size: 2
+          },
+        ]
+      }
+    ]
+  }
 
 ]
 

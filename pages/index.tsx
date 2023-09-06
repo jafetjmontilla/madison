@@ -24,7 +24,6 @@ export default function Home() {
   }, [router.asPath])
 
   const handleOnClick = () => {
-    console.log("aqui")
     if (!user) {
       setShowLogin(!showLogin)
       return
@@ -34,7 +33,7 @@ export default function Home() {
   //setLoading(false)
   //useMounted()
   return (
-    <div className="bg-blue-300 stick flex w-full h-full items-center justify-center">
+    <div className="bg-[#0E356B] stick flex w-full h-full items-center justify-center">
       <CSSTransition in={showLogin} classNames="alert" unmountOnExit timeout={300} >
         <div className="w-full h-full absolute z-[7] top-0 left-0 flex items-center justify-center">
           <div className="bg-white flex flex-col p-6 w-[90%] md:w-[350px] h-[450px] rounded-3xl shadow-lg items-center relative">

@@ -7,10 +7,12 @@ import { fetchApi, queries } from "./Fetching";
 import { useToast } from "../hooks/useToast";
 import { LoadingContextProvider } from "../context/LoadingContext";
 import { AuthContextProvider } from "../context/AuthContext";
+import { AppContextProvider } from "../context/AppContext";
 
 export const useAuthentication = () => {
   const { setLoading } = LoadingContextProvider();
   const { setUser } = AuthContextProvider();
+  const { setItemSchema } = AppContextProvider()
   const toast = useToast();
   const router = useRouter();
 
@@ -70,23 +72,26 @@ export const useAuthentication = () => {
         if (res) {
 
           // Solicitar datos adicionales del usuario
-          const moreInfo = await fetchApi({
+          const asd = await fetchApi({
             query: queries.getUser,
-            variables: { uid: res.user.uid },
+            variables: { args: { uid: res.user.uid } },
             development: "madison"
-          });
+          })
+          const moreInfo = asd.results[0]
+          console.log(moreInfo)
           if (moreInfo?.status && res?.user?.email) {
             const token = (await res?.user?.getIdTokenResult())?.token;
             console.log(41001, token)
             const sessionCookie = await getSessionCookie(token)
-            console.log(41001, sessionCookie)
+            console.log(41002, sessionCookie)
             if (sessionCookie) { }
             // Actualizar estado con los dos datos
             setUser({ ...res.user, ...moreInfo });
 
             /////// REDIRECIONES ///////
             //setLoading(true)
-            router.push(`${router.query?.d}`)
+            router.push(`${"/"}`)
+            setItemSchema({ slug: "/" })
             ///////////////////////////
 
           } else {

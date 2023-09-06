@@ -61,7 +61,7 @@ const AuthProvider = ({ children }) => {
               console.info("Tengo user de contexto firebase");
               const moreInfo = await fetchApi({
                 query: queries.getUser,
-                variables: { uid: user?.uid },
+                variables: { args: { uid: user?.uid } },
                 development: "madison"
               });
               moreInfo && console.info("Tengo datos de la base de datos");

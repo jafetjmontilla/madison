@@ -44,7 +44,7 @@ export const DataTable = ({ data, setData }) => {
         if (p?.type == "arraystring") {
           const customBodyRender = (value) => {
             return (
-              <p className="uppercase">{value?.map(elem => <li>{elem}</li>)}</p>
+              <p className="uppercase">{value?.map((elem, idx) => <li key={idx}>{elem}</li>)}</p>
             )
           }
           options = { ...options, customBodyRender }

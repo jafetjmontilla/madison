@@ -53,18 +53,23 @@ interface propsItemMenu {
 }
 
 ////////////////////////////////otro componente
+import { AuthContextProvider } from "../context/AuthContext"
 export const ItemMenu: FC<propsItemMenu> = ({ elem, setShowMenu }) => {
+  const { setUser } = AuthContextProvider()
   const router = useRouter()
   const { setLoading } = LoadingContextProvider()
   const { itemSchema, setItemSchema } = AppContextProvider()
 
   const handleClick = async (elem, elemFather?) => {
     setShowMenu(!setShowMenu)
+    if (elem.logout) {
+      setUser(undefined)
+      return
+    }
     if (itemSchema?.slug !== elem.slug) {
       setItemSchema({ ...elem, father: elemFather && elemFather })
       setLoading(true)
       await router?.push(elem.slug)
-
     }
   }
 
@@ -85,7 +90,7 @@ export const ItemMenu: FC<propsItemMenu> = ({ elem, setShowMenu }) => {
               <div className="flex flex-col">
                 {elem?.subMenu && elem.subMenu.map((el, idx) => {
                   return (
-                    <li key={idx} className={`${itemSchema?.slug === el.slug ? "bg-white" : "bg-none"} list-none px-4 py-[12px] *bg-gray-500 hover:bg-gray-300`} onClick={() => { handleClick(el, elem) }}>
+                    <li key={idx} className={`${itemSchema?.slug === el.slug ? "bg-white" : "bg-none"} list-none px-4 py-[12px] *bg-gray-500 hover:bg-gray-300`} onClick={() => { handleClick(el, elem) }} >
 
                       <div className="flex items-center">
                         <div className="w-4 h-4">
