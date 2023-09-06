@@ -1,8 +1,10 @@
 import { LoadingProvider } from "../context/LoadingContext";
 import { AppProvider } from "../context/AppContext";
 import dynamic from "next/dynamic";
-import { AuthProvider } from "../context/AuthContext";
 
+const DynamicAuthProvider = dynamic(() =>
+  import("../context/AuthContext").then((mod) => mod.AuthProvider)
+);
 const DynamicToastProvider = dynamic(() =>
   import("../context/ToastContext").then((mod) => mod.ToastProvider)
 );
@@ -10,7 +12,7 @@ const DynamicToastProvider = dynamic(() =>
 export const DefaultLayout = ({ children }) => {
   return (
     <>
-      <AuthProvider>
+      <DynamicAuthProvider>
         <AppProvider>
           <LoadingProvider >
             <DynamicToastProvider>
@@ -18,7 +20,7 @@ export const DefaultLayout = ({ children }) => {
             </DynamicToastProvider>
           </LoadingProvider>
         </AppProvider>
-      </AuthProvider>
+      </DynamicAuthProvider>
     </>
   );
 };

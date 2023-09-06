@@ -7,12 +7,12 @@ import { useEffect } from "react";
 
 
 export const Login: FC<any> = ({ setShowLogin }) => {
-  const { user } = AuthContextProvider()
+  const { user, setUser } = AuthContextProvider()
   useEffect(() => {
-    if (user) {
-      setShowLogin(!user)
+    if (user?.uid) {
+      setShowLogin(false)
     }
-  }, [user])
+  }, [user?.uid])
 
   return (
     <div className="w-full h-full absolute z-[7] top-0 left-0 flex items-center justify-center">

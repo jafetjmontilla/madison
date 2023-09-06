@@ -54,6 +54,7 @@ interface propsItemMenu {
 
 ////////////////////////////////otro componente
 import { AuthContextProvider } from "../context/AuthContext"
+import Cookies from "js-cookie"
 export const ItemMenu: FC<propsItemMenu> = ({ elem, setShowMenu }) => {
   const { setUser } = AuthContextProvider()
   const router = useRouter()
@@ -64,6 +65,9 @@ export const ItemMenu: FC<propsItemMenu> = ({ elem, setShowMenu }) => {
     setShowMenu(!setShowMenu)
     if (elem.logout) {
       setUser(undefined)
+      setLoading(false)
+      Cookies.remove("sessionCookie", { domain: process.env.NEXT_PUBLIC_DIRECTORY ?? "" })
+      router.push(`${"/"}`)
       return
     }
     if (itemSchema?.slug !== elem.slug) {

@@ -9,9 +9,12 @@ import { ButtonBasic } from "./ButtonBasic"
 import { CSSTransition } from "react-transition-group";
 import { useRouter } from "next/router";
 import { MdKeyboardArrowDown } from "react-icons/md"
+import { AuthContextProvider } from "../context/AuthContext"
+
 
 export const TableTag = () => {
   const router = useRouter()
+  const { setUser } = AuthContextProvider()
   const { setLoading } = LoadingContextProvider()
   const { slug, itemSchema, setItemSchema, stage, setStage, data, setData } = AppContextProvider()
   const [showSelect, setShowSelect] = useState(false)
@@ -50,6 +53,12 @@ export const TableTag = () => {
 
   const handleClick = async (elem) => {
     setShowSelect(false)
+    if (elem.logout) {
+      setUser(undefined)
+      setLoading(false)
+      router.push(`${"/"}`)
+      return
+    }
     if (slug !== elem.slug) {
       setItemSchema({ ...elem, father: itemSchema?.father || itemSchema })
       setLoading(true)

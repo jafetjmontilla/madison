@@ -578,11 +578,47 @@ export const BodyStaticAPP = [
   },
   {
     icon: <HiUserCircle className="w-8 h-8 text-gray-500" />,
-    title: "profile",
+    title: "{{profile}}",
     roles: ["all"],
     slug: "/profile",
     postition: "bottom",
     subMenu: [
+      {
+        icon: <FiLogOut className="w-8 h-8 text-gray-500" />,
+        title: "preferencias",
+        roles: ["all"],
+        slug: "/profile/perfil",
+        // getData: queries.getUser,
+        // createEntry: queries.createUsers,
+        // updateEntry: queries.updateUser,
+        schema: [
+          {
+            Header: "nombre",
+            accessor: "name",
+            type: "text",
+            required: true,
+            size: 2
+          },
+        ]
+      },
+      {
+        icon: <FiLogOut className="w-8 h-8 text-gray-500" />,
+        title: "cambiar contraseña",
+        roles: ["all"],
+        slug: "/profile/passwords",
+        // getData: queries.getUser,
+        // createEntry: queries.createUsers,
+        // updateEntry: queries.updateUser,
+        schema: [
+          {
+            Header: "nombre",
+            accessor: "name",
+            type: "text",
+            required: true,
+            size: 2
+          },
+        ]
+      },
       {
         icon: <FiLogOut className="w-8 h-8 text-gray-500" />,
         title: "desconectar",

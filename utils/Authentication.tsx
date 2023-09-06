@@ -26,7 +26,7 @@ export const useAuthentication = () => {
       if (authResult?.sessionCookie) {
         const { sessionCookie } = authResult;
         // Setear en localStorage token JWT
-        Cookies.set("sessionCookie", sessionCookie, { domain: process.env.NEXT_PUBLIC_DIRECTORY ?? "" });
+        Cookies.set("sessionCookie", sessionCookie, { domain: process.env.NEXT_PUBLIC_DIRECTORY ?? "", expires: 7 });
         return sessionCookie
       } else {
         console.warn("No se pudo cargar la cookie de sesión por que hubo un problema")
@@ -41,14 +41,6 @@ export const useAuthentication = () => {
 
   const signIn = useCallback(
     async (type: keyof typeof types, payload: any) => {
-      //### Login por primera vez
-      //1.- Verificar tipo de login y tomar del diccionario el metodo
-      //2.- Obtener el tokenID del usuario
-      //3.- Enviar tokenID a API para recibir la sessionCookie
-      //4.- Almacenar en una cookie el token de la sessionCookie
-      //5.- Mutar el contexto User de React con los datos de Firebase + MoreInfo (API BODAS)
-
-
       const types = {
         provider: async () => {
           try {
@@ -78,20 +70,17 @@ export const useAuthentication = () => {
             development: "madison"
           })
           const moreInfo = asd.results[0]
-          console.log(moreInfo)
           if (moreInfo?.status && res?.user?.email) {
             const token = (await res?.user?.getIdTokenResult())?.token;
-            console.log(41001, token)
             const sessionCookie = await getSessionCookie(token)
-            console.log(41002, sessionCookie)
             if (sessionCookie) { }
             // Actualizar estado con los dos datos
             setUser({ ...res.user, ...moreInfo });
 
             /////// REDIRECIONES ///////
             //setLoading(true)
-            router.push(`${"/"}`)
-            setItemSchema({ slug: "/" })
+            // router.push(`${"/"}`)
+            // setItemSchema({ slug: "/" })
             ///////////////////////////
 
           } else {

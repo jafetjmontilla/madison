@@ -36,6 +36,7 @@ const AuthProvider = ({ children }) => {
     }
   }, [])
 
+
   let resp: any = undefined
   let firebaseClient: any
   useEffect(() => {
@@ -53,17 +54,18 @@ const AuthProvider = ({ children }) => {
       if (isMounted) {
         getAuth().onAuthStateChanged(async (user) => {
           const sessionCookie = Cookies.get("sessionCookie");
-          console.info("Verificando cookie", sessionCookie);
+          console.info("Verificando cookie");
           //setUser(user)
           if (sessionCookie) {
             console.info("Tengo cookie de sesion");
             if (user) {
               console.info("Tengo user de contexto firebase");
-              const moreInfo = await fetchApi({
+              const asd = await fetchApi({
                 query: queries.getUser,
                 variables: { args: { uid: user?.uid } },
                 development: "madison"
               });
+              const moreInfo = asd?.results[0]
               moreInfo && console.info("Tengo datos de la base de datos");
               setUser({ ...user, ...moreInfo });
               console.info("Guardo datos en contexto react");
@@ -88,20 +90,7 @@ const AuthProvider = ({ children }) => {
     } catch (error) {
       console.log(90002, error)
     }
-  }, []);
-
-  useEffect(() => {
-    if (user && user?.displayName !== "guest") {
-      console.info("getAuth().onIdTokenChanged");
-      getAuth().onIdTokenChanged(async user => {
-        const sessionCookie = Cookies.get("sessionCookie");
-        if (user && sessionCookie) {
-          Cookies.set("idToken", await user.getIdToken(), { domain: `.${process.env.NEXT_PUBLIC_DIRECTORY}` })
-        }
-      })
-    }
-  }, [])
-
+  }, [isMounted]);
 
   return (
     <AuthContext.Provider value={{ user, setUser, verificationDone, setVerificationDone }}>
