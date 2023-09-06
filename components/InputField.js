@@ -152,7 +152,7 @@ export const InputField = ({ elem: params, isSelect, ...props }) => {
         (() => {
 
           if (["id", "text", "number", "datetime-local", "date"].includes(params?.type)) {
-            return <input {...field}  {...props} type={params?.type} disabled={["id"].includes(params?.type) || (!stage?.payload && !params?.required) || (stage?.payload && params?.readOnly)} className={`h-[30px] rounded-[6px] border-[1px] border-gray-300 text-sm w-[100%] uppercase ${stage?.payload && params?.readOnly && "cursor-not-allowed"}`} />
+            return <input {...field}  {...props} type={params?.type} disabled={["id"].includes(params?.type) || (!stage?.payload && !params?.required) || (stage?.payload && params?.readOnly)} className={`h-[30px] rounded-[6px] border-[1px] border-gray-300 text-sm w-[100%] ${stage?.payload && params?.readOnly && "cursor-not-allowed"}`} />
           }
 
           if (params?.type == "checkbox") {

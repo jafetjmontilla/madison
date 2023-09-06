@@ -11,7 +11,7 @@ import { queries } from "./Fetching";
 
 
 export const defaultVisibleColumns = [
-  "tag", "title", "cod", "tag_cod", "descripcion", "funcion", "name", "email", "phone", "roles", "permissions", "type", "groups"
+  "tag", "title", "cod", "tag_cod", "descripcion", "funcion", "name", "email", "phone", "roles", "permissions", "type", "groups", "phone"
 ]
 
 export const BodyStaticAPP = [
@@ -463,13 +463,6 @@ export const BodyStaticAPP = [
         updateEntry: queries.updateUser,
         schema: [
           {
-            Header: "nombre",
-            accessor: "name",
-            type: "text",
-            required: true,
-            size: 2
-          },
-          {
             Header: "correo",
             accessor: "email",
             type: "text",
@@ -485,10 +478,16 @@ export const BodyStaticAPP = [
             size: 1
           },
           {
+            Header: "nombre",
+            accessor: "name",
+            type: "text",
+            required: true,
+            size: 2
+          }, {
             Header: "teléfono",
             accessor: "phone",
             type: "text",
-            required: false,
+            required: true,
             size: 2
           },
           {
