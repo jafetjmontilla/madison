@@ -10,16 +10,25 @@ import { CSSTransition } from "react-transition-group";
 import { useRouter } from "next/router";
 import { MdKeyboardArrowDown } from "react-icons/md"
 import { AuthContextProvider } from "../context/AuthContext"
+import { useAllowed } from "../hooks/useAllowed"
+import { useHasRole } from "../hooks/useHasRole"
 
 
 export const TableTag = () => {
   const router = useRouter()
-  const { setUser } = AuthContextProvider()
+  const { setUser, user } = AuthContextProvider()
   const { setLoading } = LoadingContextProvider()
   const { slug, itemSchema, setItemSchema, stage, setStage, data, setData } = AppContextProvider()
   const [showSelect, setShowSelect] = useState(false)
+  const [rights, setRights] = useState([])
+  const [isAllowed] = useAllowed()
+  const hasRole = useHasRole()
 
-  const subMenu = itemSchema?.father?.subMenu || itemSchema?.subMenu
+  const subMenu = hasRole(itemSchema?.groups) && itemSchema?.father?.subMenu || itemSchema?.subMenu
+
+
+
+
 
   const [isMounted, setIsMounted] = useState(false)
   useEffect(() => {
@@ -34,9 +43,7 @@ export const TableTag = () => {
   }, [])
 
   useEffect(() => {
-    console.log
-    if (isMounted && !!itemSchema?.getData) {
-      console.log(itemSchema.getData)
+    if (isMounted && !!itemSchema?.getData && hasRole(itemSchema?.groups)) {
       setStage({ action: "viewTable" })
       fetchApi({
         query: itemSchema?.getData,
@@ -83,16 +90,18 @@ export const TableTag = () => {
             </div>
             <div className={` ${!showSelect ? "hidden" : "flex"} flex-col md:flex md:flex-row absolute z-[15] md:static translate-y-[calc(50%+16px)] md:translate-y-0 w-[calc(60%-40px)] md:w-fit h-fit md:h-10 m-2 md:m-0 shadow-md rounded-b-lg md:rounded-none truncate`}>
               {subMenu?.map((elem, idx) => {
-                return (
-                  <div key={idx} onClick={() => { handleClick(elem) }} className={`${itemSchema?.slug === elem.slug ? "bg-gray-100" : "bg-gray-300"} flex h-8 md:h-10 items-center md:justify-center cursor-pointer`}>
-                    <div className="flex items-center mx-3 my-2">
-                      <div className="w-4 h-4">
-                        {cloneElement(elem?.icon, { className: "w-full h-full text-gray-700" })}
+                if (hasRole(elem?.groups)) {
+                  return (
+                    <div key={idx} onClick={() => { handleClick(elem) }} className={`${itemSchema?.slug === elem.slug ? "bg-gray-100" : "bg-gray-300"} flex h-8 md:h-10 items-center md:justify-center cursor-pointer`}>
+                      <div className="flex items-center mx-3 my-2">
+                        <div className="w-4 h-4">
+                          {cloneElement(elem?.icon, { className: "w-full h-full text-gray-700" })}
+                        </div>
+                        <span className="text-sm capitalize ml-1"> {elem.title}</span>
                       </div>
-                      <span className="text-sm capitalize ml-1"> {elem.title}</span>
                     </div>
-                  </div>
-                )
+                  )
+                }
               })}
             </div>
             {/* <span>      {slug}</span>
@@ -100,7 +109,7 @@ export const TableTag = () => {
           </div>
         }
         <div className={`w-[100%] ${itemSchema?.father || itemSchema?.subMenu ? "h-[40px]" : "h-[84px]"} flex items-end justify-left mb-2`}>
-          {itemSchema?.schema && <ButtonBasic
+          {(itemSchema?.schema && isAllowed("crear")) && <ButtonBasic
             className={`${stage.action == "viewTable" ? "bg-green-500 hover:bg-green-600" : "bg-gray-400 hover:bg-gray-500"}`}
             onClick={
               () => {

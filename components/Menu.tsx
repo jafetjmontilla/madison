@@ -3,6 +3,8 @@ import { BodyStaticAPP } from "../utils/schemas"
 import { LoadingContextProvider } from "../context/LoadingContext"
 import { useRouter } from "next/router"
 import { AppContextProvider } from "../context/AppContext"
+import { useHasRole } from "../hooks/useHasRole"
+
 
 interface props {
   showMenu: boolean
@@ -10,7 +12,7 @@ interface props {
 }
 
 export const Menu: FC<props> = ({ setShowMenu }) => {
-
+  const hasRole = useHasRole()
   const [isMounted, setIsMounted] = useState(false)
   useEffect(() => {
     if (!isMounted) {
@@ -21,7 +23,6 @@ export const Menu: FC<props> = ({ setShowMenu }) => {
     }
   }, [isMounted])
 
-
   const menus = {
     top: BodyStaticAPP.filter(elem => elem?.postition !== "bottom"),
     bottom: BodyStaticAPP.filter(elem => elem?.postition === "bottom")
@@ -31,16 +32,20 @@ export const Menu: FC<props> = ({ setShowMenu }) => {
       <div className="w-[100%] h-[calc(100%-112px)] md:h-[calc(100%-64px)] flex flex-col md:items-center md:mt-16 justify-between shadow-sm">
         <div className="">
           {menus.top.map((elem, idx) => {
-            return (
-              <ItemMenu key={idx} elem={elem} setShowMenu={setShowMenu} />
-            )
+            if (hasRole(elem?.groups)) {
+              return (
+                <ItemMenu key={idx} elem={elem} setShowMenu={setShowMenu} />
+              )
+            }
           })}
         </div>
         <div className="mb-10">
           {menus.bottom.map((elem, idx) => {
-            return (
-              <ItemMenu key={idx} elem={elem} setShowMenu={setShowMenu} />
-            )
+            if (hasRole(elem?.groups)) {
+              return (
+                <ItemMenu key={idx} elem={elem} setShowMenu={setShowMenu} />
+              )
+            }
           })}
         </div>
       </div>
@@ -55,8 +60,12 @@ interface propsItemMenu {
 ////////////////////////////////otro componente
 import { AuthContextProvider } from "../context/AuthContext"
 import Cookies from "js-cookie"
+
+
 export const ItemMenu: FC<propsItemMenu> = ({ elem, setShowMenu }) => {
-  const { setUser } = AuthContextProvider()
+  const hasRole = useHasRole()
+
+  const { setUser, user } = AuthContextProvider()
   const router = useRouter()
   const { setLoading } = LoadingContextProvider()
   const { itemSchema, setItemSchema } = AppContextProvider()
@@ -90,20 +99,25 @@ export const ItemMenu: FC<propsItemMenu> = ({ elem, setShowMenu }) => {
           </div>
           {elem?.slug &&
             <div className="group-hover:opacity-100 transition-opacity bottom-0 *ml-2 *2xl:ml-5 bg-gray-200 text-md text-gray-600  font-semibold rounded-r-lg hidden md:flex md:flex-col-reverse fixed group-hover:absolute z-0 left-[101%] opacity-0 truncate capitalize shadow-sm">
-              <li className={`list-none px-4 py-[12px] hover:bg-gray-300 ${true && "bg-gray-300 hover:text-gray-50"}`} onClick={() => { handleClick(elem) }}>{elem.title}</li>
+              <li className={`list-none px-4 py-[12px] hover:bg-gray-300 ${true && "bg-gray-300 hover:text-gray-50"}`} onClick={() => { handleClick(elem) }}>
+                {elem.title?.slice(0, 2) === "{{"
+                  ? user?.name
+                  : elem.title}
+              </li>
               <div className="flex flex-col">
                 {elem?.subMenu && elem.subMenu.map((el, idx) => {
-                  return (
-                    <li key={idx} className={`${itemSchema?.slug === el.slug ? "bg-white" : "bg-none"} list-none px-4 py-[12px] *bg-gray-500 hover:bg-gray-300`} onClick={() => { handleClick(el, elem) }} >
-
-                      <div className="flex items-center">
-                        <div className="w-4 h-4">
-                          {cloneElement(el?.icon, { className: "w-full h-full text-gray-700" })}
+                  if (hasRole(el?.groups)) {
+                    return (
+                      <li key={idx} className={`${itemSchema?.slug === el.slug ? "bg-white" : "bg-none"} list-none px-4 py-[12px] *bg-gray-500 hover:bg-gray-300`} onClick={() => { handleClick(el, elem) }} >
+                        <div className="flex items-center">
+                          <div className="w-4 h-4">
+                            {cloneElement(el?.icon, { className: "w-full h-full text-gray-700" })}
+                          </div>
+                          <span className="capitalize ml-1"> {el.title}</span>
                         </div>
-                        <span className="capitalize ml-1"> {el.title}</span>
-                      </div>
-                    </li>
-                  )
+                      </li>
+                    )
+                  }
                 })
                 }
               </div>

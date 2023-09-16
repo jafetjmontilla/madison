@@ -118,6 +118,7 @@ type queries = {
   updateUser: string
   updateVariable: string,
   updateGroup: string
+  getUserPermissions: string
 };
 
 export const queries: queries = {
@@ -182,14 +183,14 @@ export const queries: queries = {
     getLog( skip:$skip, limit:$limit, time:$time ){
       total
       results{
-        sn_onu
+        {sn_onu
         id_servicio
         estado
         estadoValir
         usuario
         smartOlt
         confirmation
-        createdAt
+        createdAt}
       }
     }
   }`,
@@ -345,6 +346,13 @@ export const queries: queries = {
         createdAt
         updatedAt
       }
+    }
+  }`,
+  getUserPermissions: `query ( $args:[String] )
+  {
+    getUserPermissions(args:$args ){
+     group
+     permissions
     }
   }`,
   createUsers: `mutation ( $args:[inputUser] )

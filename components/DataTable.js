@@ -5,10 +5,11 @@ import { LoadingContextProvider } from "../context/LoadingContext";
 import { AppContextProvider } from "../context/AppContext"
 import { defaultVisibleColumns } from "../utils/schemas"
 import { TextField } from "@mui/material";
-
+import { useAllowed } from "../hooks/useAllowed"
 
 export const DataTable = ({ data, setData }) => {
   const { setStage, itemSchema, variables } = AppContextProvider()
+  const [isAllowed] = useAllowed()
 
   const refDataTable = useRef(null)
   const refDivTable = useRef(null)
@@ -61,7 +62,7 @@ export const DataTable = ({ data, setData }) => {
 
 
   const handleonRowClick = (values, dataIndex) => {
-    setStage({ action: "creaAndEdit", payload: values, dataIndex })
+    isAllowed("actualizar") && setStage({ action: "creaAndEdit", payload: values, dataIndex })
   }
 
   const options = {

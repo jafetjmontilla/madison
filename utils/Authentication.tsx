@@ -70,12 +70,17 @@ export const useAuthentication = () => {
             development: "madison"
           })
           const moreInfo = asd.results[0]
+          const rights = await fetchApi({
+            query: queries.getUserPermissions,
+            variables: { args: moreInfo.groups },
+            development: "madison"
+          });
           if (moreInfo?.status && res?.user?.email) {
             const token = (await res?.user?.getIdTokenResult())?.token;
             const sessionCookie = await getSessionCookie(token)
             if (sessionCookie) { }
             // Actualizar estado con los dos datos
-            setUser({ ...res.user, ...moreInfo });
+            setUser({ ...res.user, ...moreInfo, rights });
 
             /////// REDIRECIONES ///////
             //setLoading(true)

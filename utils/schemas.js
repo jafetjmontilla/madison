@@ -18,13 +18,13 @@ export const BodyStaticAPP = [
   {
     icon: < Icons.IconHome className="w-8 h-8 text-gray-500" />,
     title: "inicio",
-    roles: ["all"],
+    groups: ["all"],
     slug: "/",
   },
   {
     icon: <BsIntersect className="w-8 h-8 text-gray-500" />,
     title: "secciones de la planta",
-    roles: ["all"],
+    groups: ["admin", "gerencia mantenimiento", "supervisor mantenimiento"],
     slug: "/plantSections",
     getData: queries.getSections,
     //getByID: FetchGraphQL.business.getOneBusiness,
@@ -56,7 +56,7 @@ export const BodyStaticAPP = [
   {
     icon: <Icons.IconEquipment className="w-8 h-8 text-gray-500" />,
     title: "equipos de proceso",
-    roles: ["all"],
+    groups: ["admin", "gerencia mantenimiento", "supervisor mantenimiento", "gerencia servicios"],
     slug: "/processEquipment",
     getData: queries.getEquipments,
     createEntry: queries.createEquipments,
@@ -85,7 +85,7 @@ export const BodyStaticAPP = [
   {
     icon: <Icons.IconScrewdriverWrench className="w-8 h-8 text-gray-500" />,
     title: "maestro de repuestos",
-    roles: ["all"],
+    groups: ["admin", "gerencia mantenimiento", "supervisor mantenimiento"],
     slug: "/replacementsMasters",
     getData: queries.getReplacementsMasters,
     createEntry: queries.createReplacementsMasters,
@@ -142,7 +142,7 @@ export const BodyStaticAPP = [
   {
     icon: <Icons.IconStateMachine className="w-8 h-8 text-gray-500" />,
     title: "maestro de equipos",
-    roles: ["all"],
+    groups: ["admin", "gerencia mantenimiento", "supervisor mantenimiento"],
     slug: "/equipmentsMasters",
     getData: queries.getEquipmentsMasters,
     createEntry: queries.createEquipmentsMasters,
@@ -362,56 +362,56 @@ export const BodyStaticAPP = [
   // {
   //   icon: <Icons.IconEquipment className="w-8 h-8 text-gray-500" />,
   //   title: "configuración",
-  //   roles: ["all"],
+  //   groups: ["admin"],
   // },
   {
     icon: <AiFillSetting className="w-8 h-8 text-gray-500" />,
     title: "configuración",
-    roles: ["all"],
+    groups: ["admin"],
     slug: "/setup",
     postition: "bottom",
     subMenu: [
       {
         icon: <Icons.IconEquipment className="w-8 h-8 text-gray-500" />,
         title: "secciones",
-        roles: ["all"],
+        groups: ["admin"],
         slug: "/setup/sections",
       },
       {
         icon: <Icons.IconEquipment className="w-8 h-8 text-gray-500" />,
         title: "equipos",
-        roles: ["all"],
+        groups: ["admin"],
         slug: "/setup/equipments",
       },
       {
         icon: <Icons.IconEquipment className="w-8 h-8 text-gray-500" />,
         title: "componentes",
-        roles: ["all"],
+        groups: ["admin"],
         slug: "/setup/components",
       },
       {
         icon: <Icons.IconEquipment className="w-8 h-8 text-gray-500" />,
         title: "partes",
-        roles: ["all"],
+        groups: ["admin"],
         slug: "/setup/parts",
       },
       {
         icon: <Icons.IconEquipment className="w-8 h-8 text-gray-500" />,
         title: "propiedades",
-        roles: ["all"],
+        groups: ["admin"],
         slug: "/setup/properties",
         getData: queries.getProperties,
       },
       {
         icon: <Icons.IconEquipment className="w-8 h-8 text-gray-500" />,
         title: "características",
-        roles: ["all"],
+        groups: ["admin"],
         slug: "/setup/characteristics",
       },
       {
         icon: <GrCodeSandbox className="w-6 h-8 text-gray-500" />,
         title: "variables",
-        roles: ["all"],
+        groups: ["admin"],
         slug: "/setup/variables",
         getData: queries.getVariables,
         createEntry: queries.createVariables,
@@ -449,14 +449,14 @@ export const BodyStaticAPP = [
   {
     icon: <BsShieldLockFill className="w-8 h-8 text-gray-500" />,
     title: "seguridad",
-    roles: ["all"],
+    groups: ["admin"],
     slug: "/security",
     postition: "bottom",
     subMenu: [
       {
         icon: <RiShieldUserLine className="w-8 h-8 text-gray-500" />,
         title: "usuarios",
-        roles: ["all"],
+        groups: ["admin"],
         slug: "/security/users",
         getData: queries.getUser,
         createEntry: queries.createUsers,
@@ -508,7 +508,7 @@ export const BodyStaticAPP = [
       {
         icon: <HiUserGroup className="w-8 h-8 text-gray-500" />,
         title: "grupos",
-        roles: ["all"],
+        groups: ["admin"],
         slug: "/security/group",
         getData: queries.getGroups,
         createEntry: queries.createGroups,
@@ -546,7 +546,7 @@ export const BodyStaticAPP = [
       {
         icon: <VscGroupByRefType className="w-8 h-8 text-gray-500" />,
         title: "permisos",
-        roles: ["all"],
+        groups: ["admin"],
         slug: "/security/permission",
         getData: queries.getPermissions,
         createEntry: queries.createPermissions,
@@ -577,15 +577,15 @@ export const BodyStaticAPP = [
   },
   {
     icon: <HiUserCircle className="w-8 h-8 text-gray-500" />,
-    title: "{{profile}}",
-    roles: ["all"],
+    title: "{{user.displayName}}",
+    groups: ["all"],
     slug: "/profile",
     postition: "bottom",
     subMenu: [
       {
         icon: <FiLogOut className="w-8 h-8 text-gray-500" />,
         title: "preferencias",
-        roles: ["all"],
+        groups: ["all"],
         slug: "/profile/perfil",
         // getData: queries.getUser,
         // createEntry: queries.createUsers,
@@ -603,7 +603,7 @@ export const BodyStaticAPP = [
       {
         icon: <FiLogOut className="w-8 h-8 text-gray-500" />,
         title: "cambiar contraseña",
-        roles: ["all"],
+        groups: ["all"],
         slug: "/profile/passwords",
         // getData: queries.getUser,
         // createEntry: queries.createUsers,
@@ -621,7 +621,7 @@ export const BodyStaticAPP = [
       {
         icon: <FiLogOut className="w-8 h-8 text-gray-500" />,
         title: "desconectar",
-        roles: ["all"],
+        groups: ["all"],
         logout: true,
         // slug: "/security/users",
         // getData: queries.getUser,

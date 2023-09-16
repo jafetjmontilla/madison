@@ -135,6 +135,7 @@ import { useRouter } from 'next/router';
 
 const Title = () => {
   const { itemSchema, setItemSchema } = AppContextProvider()
+  const { user } = AuthContextProvider()
 
   return (
     <div className=" flex w-full h-full text-gray-600 px-4 items-center md:items-center">
@@ -143,7 +144,9 @@ const Title = () => {
       </div>
       <div className="flex ml-2 flex-col">
         <span className="uppercase font-bold text-xs md:text-lg mb-[-4px] md:mb-[-8px]">
-          {itemSchema?.father ? `${itemSchema?.father?.title}` : itemSchema?.title}
+          {itemSchema?.father
+            ? itemSchema?.father?.title?.slice(0, 2) === "{{" ? user?.name : `${itemSchema?.father?.title}`
+            : itemSchema?.title?.slice(0, 2) === "{{" ? user?.name : itemSchema?.title}
         </span>
         <span className="text-xs md:text-sm">   Breve descripción</span>
       </div>

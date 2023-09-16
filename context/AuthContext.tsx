@@ -25,6 +25,7 @@ const AuthContext = createContext<Context>(initialContext);
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState<any>(initialContext.user);
   const [verificationDone, setVerificationDone] = useState<any>(false);
+  const [groupsAllowed, setGroupsAllowed] = useState()
   const [isMounted, setIsMounted] = useState<any>(false)
 
   useEffect(() => {
@@ -49,6 +50,12 @@ const AuthProvider = ({ children }) => {
     }
   }, [isMounted])
 
+  // useEffect(() => {
+  //   if (isMounted) {
+
+  //   }
+  // }, [user])
+
   useEffect(() => {
     try {
       if (isMounted) {
@@ -66,8 +73,13 @@ const AuthProvider = ({ children }) => {
                 development: "madison"
               });
               const moreInfo = asd?.results[0]
+              const rights = await fetchApi({
+                query: queries.getUserPermissions,
+                variables: { args: moreInfo.groups },
+                development: "madison"
+              });
               moreInfo && console.info("Tengo datos de la base de datos");
-              setUser({ ...user, ...moreInfo });
+              setUser({ ...user, ...moreInfo, rights });
               console.info("Guardo datos en contexto react");
             } else {
               console.info("NO tengo user de contexto de firebase");
