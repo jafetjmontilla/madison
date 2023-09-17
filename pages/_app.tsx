@@ -56,6 +56,10 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <>
+      <Head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+      </Head>
       <DefaultLayout>
         <Valir setShowLogin={setShowLogin} setValirVerificationDone={setValirVerificationDone} />
         <CSSTransition in={valirVerificationDone} classNames="fade" unmountOnExit timeout={300} >
@@ -130,6 +134,7 @@ export default MyApp
 import { AppContextProvider } from "../context/AppContext"
 import { cloneElement } from "react";
 import { useRouter } from 'next/router';
+import Head from 'next/head';
 
 
 
