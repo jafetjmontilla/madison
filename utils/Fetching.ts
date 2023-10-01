@@ -203,6 +203,7 @@ export const queries: queries = {
         uid
         name
         email
+        position
         phone
         groups
         status
@@ -363,6 +364,7 @@ export const queries: queries = {
         _id
         uid
         name
+        position
         email
         phone
         groups
@@ -512,6 +514,7 @@ export const queries: queries = {
       _id
       uid
       name
+      position
       email
       phone
       groups

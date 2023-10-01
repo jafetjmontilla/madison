@@ -88,7 +88,7 @@ export const TableTag = () => {
               </div>
               <MdKeyboardArrowDown className="w-6 h-6 text-gray-700" />
             </div>
-            <div className={` ${!showSelect ? "hidden" : "flex"} flex-col md:flex md:flex-row absolute z-[15] md:static translate-y-[calc(50%+16px)] md:translate-y-0 w-[calc(60%-40px)] md:w-fit h-fit md:h-10 m-2 md:m-0 shadow-md rounded-b-lg md:rounded-none truncate`}>
+            <div className={` ${!showSelect ? "hidden" : "flex"} flex-col md:flex md:flex-row absolute z-[0] md:static translate-y-[calc(50%+16px)] md:translate-y-0 w-[calc(60%-40px)] md:w-fit h-fit md:h-10 m-2 md:m-0 shadow-md rounded-b-lg md:rounded-none truncate`}>
               {subMenu?.map((elem, idx) => {
                 if (hasRole(elem?.groups)) {
                   return (

@@ -7,11 +7,15 @@ import { AiFillSetting } from 'react-icons/ai';
 import { GrCodeSandbox } from 'react-icons/gr';
 import { FiLogOut } from 'react-icons/fi';
 import { queries } from "./Fetching";
-
-
+import { MdOutlineManageAccounts, MdOutlineCleaningServices } from 'react-icons/md';
+import { PiPassword } from 'react-icons/pi';
+import { FaTasks } from 'react-icons/fa';
+import { TbChartInfographic, TbReportSearch } from 'react-icons/tb';
+import { BiTask } from 'react-icons/bi';
+import { LiaMedalSolid } from 'react-icons/lia';
 
 export const defaultVisibleColumns = [
-  "tag", "title", "cod", "tag_cod", "descripcion", "funcion", "name", "email", "phone", "roles", "permissions", "type", "groups", "phone"
+  "tag", "title", "cod", "tag_cod", "descripcion", "funcion", "name", "email", "phone", "roles", "permissions", "type", "groups", "phone", "position"
 ]
 
 export const BodyStaticAPP = [
@@ -21,38 +25,7 @@ export const BodyStaticAPP = [
     groups: ["all"],
     slug: "/",
   },
-  {
-    icon: <BsIntersect className="w-8 h-8 text-gray-500" />,
-    title: "secciones de la planta",
-    groups: ["admin", "gerencia mantenimiento", "supervisor mantenimiento"],
-    slug: "/plantSections",
-    getData: queries.getSections,
-    //getByID: FetchGraphQL.business.getOneBusiness,
-    createEntry: queries.createSections,
-    //updateEntry: FetchGraphQL.business.updateBusiness,
-    //deleteEntry: FetchGraphQL.business.deleteBusiness,
-    schema: [
-      {
-        Header: "tag",
-        accessor: "tag",
-        type: "text",
-        required: true,
-        size: 1
-      },
-      {
-        Header: "nombre",
-        accessor: "title",
-        type: "text",
-        required: true,
-        size: 3
-      },
-      {
-        Header: "id",
-        accessor: "_id",
-        type: "id",
-      }
-    ]
-  },
+
   {
     icon: <Icons.IconEquipment className="w-8 h-8 text-gray-500" />,
     title: "equipos de proceso",
@@ -363,19 +336,94 @@ export const BodyStaticAPP = [
   //   icon: <Icons.IconEquipment className="w-8 h-8 text-gray-500" />,
   //   title: "configuración",
   //   groups: ["admin"],
-  // },
+  // }, 
+  {
+    icon: <MdOutlineCleaningServices className="w-8 h-8 text-gray-500" />,
+    title: "limpieza",
+    groups: ["admin", "coordinacion mantenimiento", "supervisor limpieza", "obreros limpieza"],
+    slug: "/cleaning",
+    // schema: [
+    //   {
+    //     Header: "tag_cod",
+    //     accessor: "tag_cod",
+    //     type: "text",
+    //     required: true,
+    //     size: 1
+    //   },
+    // ],
+    subMenu: [
+      {
+        icon: <FaTasks className="w-8 h-8 text-gray-500" />,
+        title: "tareas departamento",
+        groups: ["admin", "coordinacion mantenimiento", "supervisor limpieza"],
+        slug: "/cleaning/alltasks",
+      },
+      {
+        icon: <TbChartInfographic className="w-8 h-8 text-gray-500" />,
+        title: "graficos",
+        groups: ["admin", "coordinacion mantenimiento"],
+        slug: "/cleaning/dashboards",
+      },
+      {
+        icon: <TbReportSearch className="w-8 h-8 text-gray-500" />,
+        title: "reportes",
+        groups: ["admin", "coordinacion mantenimiento", "supervisor limpieza"],
+        slug: "/cleaning/reports",
+      },
+      {
+        icon: <BiTask className="w-8 h-8 text-gray-500" />,
+        title: "tareas",
+        groups: ["admin", "supervisor limpieza", "obreros limpieza"],
+        filterUser: true,
+        slug: "/cleaning/tasks",
+      },
+      {
+        icon: <LiaMedalSolid className="w-8 h-8 text-gray-500" />,
+        title: "evaluación tareas",
+        groups: ["admin", "supervisor",],
+        slug: "/cleaning/evaluation",
+      },
+    ]
+  },
   {
     icon: <AiFillSetting className="w-8 h-8 text-gray-500" />,
     title: "configuración",
     groups: ["admin"],
     slug: "/setup",
-    postition: "bottom",
+    position: "bottom",
     subMenu: [
       {
-        icon: <Icons.IconEquipment className="w-8 h-8 text-gray-500" />,
-        title: "secciones",
+        icon: <BsIntersect className="w-8 h-8 text-gray-500" />,
+        title: "secciones de la planta",
         groups: ["admin"],
-        slug: "/setup/sections",
+        slug: "/setup/plantSections",
+        typeElement: "plantSections",
+        getData: queries.getSections,
+        //getByID: FetchGraphQL.business.getOneBusiness,
+        createEntry: queries.createSections,
+        //updateEntry: FetchGraphQL.business.updateBusiness,
+        //deleteEntry: FetchGraphQL.business.deleteBusiness,
+        schema: [
+          {
+            Header: "tag",
+            accessor: "tag",
+            type: "text",
+            required: true,
+            size: 1
+          },
+          {
+            Header: "nombre",
+            accessor: "title",
+            type: "text",
+            required: true,
+            size: 3
+          },
+          {
+            Header: "id",
+            accessor: "_id",
+            type: "id",
+          }
+        ]
       },
       {
         icon: <Icons.IconEquipment className="w-8 h-8 text-gray-500" />,
@@ -451,7 +499,7 @@ export const BodyStaticAPP = [
     title: "seguridad",
     groups: ["admin"],
     slug: "/security",
-    postition: "bottom",
+    position: "bottom",
     subMenu: [
       {
         icon: <RiShieldUserLine className="w-8 h-8 text-gray-500" />,
@@ -483,11 +531,19 @@ export const BodyStaticAPP = [
             type: "text",
             required: true,
             size: 2
-          }, {
+          },
+          {
+            Header: "cargo",
+            accessor: "position",
+            type: "text",
+            required: true,
+            size: 2
+          },
+          {
             Header: "teléfono",
             accessor: "phone",
             type: "text",
-            required: true,
+            required: false,
             size: 2
           },
           {
@@ -573,17 +629,16 @@ export const BodyStaticAPP = [
         ]
       },
     ],
-
   },
   {
     icon: <HiUserCircle className="w-8 h-8 text-gray-500" />,
     title: "{{user.displayName}}",
     groups: ["all"],
     slug: "/profile",
-    postition: "bottom",
+    position: "bottom",
     subMenu: [
       {
-        icon: <FiLogOut className="w-8 h-8 text-gray-500" />,
+        icon: <MdOutlineManageAccounts className="w-10 h-10 text-gray-500" />,
         title: "preferencias",
         groups: ["all"],
         slug: "/profile/perfil",
@@ -601,7 +656,7 @@ export const BodyStaticAPP = [
         ]
       },
       {
-        icon: <FiLogOut className="w-8 h-8 text-gray-500" />,
+        icon: <PiPassword className="w-8 h-8 text-gray-500" />,
         title: "cambiar contraseña",
         groups: ["all"],
         slug: "/profile/passwords",

@@ -24,8 +24,8 @@ export const Menu: FC<props> = ({ setShowMenu }) => {
   }, [isMounted])
 
   const menus = {
-    top: BodyStaticAPP.filter(elem => elem?.postition !== "bottom"),
-    bottom: BodyStaticAPP.filter(elem => elem?.postition === "bottom")
+    top: BodyStaticAPP.filter(elem => elem?.position !== "bottom"),
+    bottom: BodyStaticAPP.filter(elem => elem?.position === "bottom")
   }
   return (
     <>
@@ -98,7 +98,7 @@ export const ItemMenu: FC<propsItemMenu> = ({ elem, setShowMenu }) => {
             </span>
           </div>
           {elem?.slug &&
-            <div className="group-hover:opacity-100 transition-opacity bottom-0 *ml-2 *2xl:ml-5 bg-gray-200 text-md text-gray-600  font-semibold rounded-r-lg hidden md:flex md:flex-col-reverse fixed group-hover:absolute z-0 left-[101%] opacity-0 truncate capitalize shadow-sm">
+            <div className={`group-hover:opacity-100 transition-opacity ${elem?.position === "bottom" ? "bottom-0" : "top-0"} *ml-2 *2xl:ml-5 bg-gray-200 text-md text-gray-600  font-semibold rounded-r-lg hidden md:flex ${elem?.position === "bottom" ? "md:flex-col-reverse" : "md:flex-col"} fixed group-hover:absolute z-0 left-[101%] opacity-0 truncate capitalize shadow-sm`}>
               <li className={`list-none px-4 py-[12px] hover:bg-gray-300 ${true && "bg-gray-300 hover:text-gray-50"}`} onClick={() => { handleClick(elem) }}>
                 {elem.title?.slice(0, 2) === "{{"
                   ? user?.name
