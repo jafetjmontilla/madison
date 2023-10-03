@@ -119,6 +119,10 @@ type queries = {
   updateVariable: string,
   updateGroup: string
   getUserPermissions: string
+  createElements: string
+  getElements: string
+  updateElements: string
+  deleteElements: string
 };
 
 export const queries: queries = {
@@ -535,6 +539,71 @@ export const queries: queries = {
   updateGroup: `mutation ( $args:inputGroup )
   {
     updateGroup( args:$args ){
+      _id
+      tag
+      title
+      permissions
+      createdAt
+      updatedAt
+    }
+  }`,
+  createElements: `mutation ( $args:[inputElement] )
+  {
+    createElement(args:$args ){
+      total
+      results{
+        _id
+        tag
+        title
+        father{
+          _id
+          tag
+          title
+          typeElement
+        }
+        createdAt
+        updatedAt
+      }
+    }
+  }`,
+  getElements: `query ( $args:inputElement, $sort:sortCriteriaElement, $skip:Int, $limit:Int )
+  {
+    getElement(args:$args, sort:$sort, skip:$skip, limit:$limit ){
+      total
+      results{
+        _id
+        tag
+        father{
+          _id
+          tag
+          title
+          typeElement
+        }
+        title
+        createdAt
+        updatedAt
+      }
+    }
+  }`,
+  updateElements: `mutation ( $args:inputElement )
+  {
+    updateElement( args:$args ){
+      _id
+      tag
+      title
+      father{
+        _id
+        tag
+        title
+        typeElement
+      }
+      createdAt
+      updatedAt
+    }
+  }`,
+  deleteElements: `mutation ( $args:inputElemnt )
+  {
+    updateElemnt( args:$args ){
       _id
       tag
       title

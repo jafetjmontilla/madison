@@ -64,11 +64,14 @@ export const CreaAndEdit = () => {
           await fetchApi({
             query: itemSchema.updateEntry,
             variables: {
-              args: { _id: stage.payload._id, [target.name]: target.value },
+              args: {
+                _id: stage.payload._id,
+                [target.name]: target.value,
+              },
             },
             type: "json"
           })
-          console.log("actualizazo registro", dataValues)
+          console.log("actualizazo registro en CreaAndEdit", dataValues)
           return
         }
         let valir = true
@@ -83,7 +86,10 @@ export const CreaAndEdit = () => {
           const resp = await fetchApi({
             query: itemSchema.createEntry,
             variables: {
-              args: { ...requiredValues },
+              args: {
+                ...requiredValues,
+                ...itemSchema?.dataVariables
+              },
             },
             type: "json"
           })
@@ -103,8 +109,15 @@ export const CreaAndEdit = () => {
     }
   }
 
-  const handlerDelete = () => {
+  const handlerDelete = async () => {
     // setLoading(true)
+    await fetchApi({
+      query: itemSchema.updateEntry,
+      variables: {
+        args: { _id: stage.payload._id, status: false },
+      },
+      type: "json"
+    })
     setData((old) => {
       old.results.splice(stage.dataIndex, 1)
       return { total: old.total - 1, results: old.results }
@@ -139,6 +152,11 @@ export const CreaAndEdit = () => {
     _id: yup[`${"string"}`]().required("msgAuto_id"),
     title: yup.number().integer("msgAuto_title"),
   })
+
+  useEffect(() => {
+    console.log(60005, dataValues)
+  }, [dataValues])
+
 
   return (
     <>

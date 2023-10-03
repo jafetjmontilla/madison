@@ -2,20 +2,17 @@
 import React from 'react'
 import { Field, useField } from "formik";
 import { useEffect, useRef, useState } from "react";
-import Select from 'react-select'
 import { BodyStaticAPP } from "../utils/schemas";
-import { fetchApi } from '../utils/Fetching';
+import { fetchApi, queries } from '../utils/Fetching';
 import { AppContextProvider } from '../context/AppContext';
 import { Checkbox } from '@mui/material';
+import { InputSelect } from './InputSelect';
+import { InputDoubleSelect } from './inputDoubleSelect';
 
 export const InputField = ({ elem: params, isSelect, ...props }) => {
   const { stage, setData, itemSchema } = AppContextProvider()
   const [field, meta, helpers] = useField(props);
-  const [isClearable, setIsClearable] = useState(true);
-  const [isSearchable, setIsSearchable] = useState(false);
-  const [isDisabled, setIsDisabled] = useState(false);
-  const [isLoading, setIsLoading] = useState(false)
-  const refSelet = useRef(null)
+
   const [isMounted, setIsMounted] = useState(false)
   const [options, setOptions] = useState()
 
@@ -36,26 +33,29 @@ export const InputField = ({ elem: params, isSelect, ...props }) => {
         field.value = field?.value?.slice(0, 16)
       }
       if (params.type === "checkbox") {
-        fetchApi({
-          query: params?.getOptions,
-          variables: {
-            args: {},
-            sort: {},
-            limit: 0,
-            skip: 0,
-          },
-          type: "json"
-        }).then(result => {
-          setOptions(result.results.map(elem => {
-            return { ...elem, checked: field?.value?.includes(elem.title) }
-          }))
-        })
-        //console.log(field.value)
+        console.log(8004101, "params", params)
+        if (params?.getOptions) {
+          fetchApi({
+            query: params?.getOptions,
+            variables: {
+              args: {},
+              sort: {},
+              limit: 0,
+              skip: 0,
+            },
+            type: "json"
+          }).then(result => {
+            setOptions(result.results.map(elem => {
+              return { ...elem, checked: field?.value?.includes(elem.title) }
+            }))
+          })
+        }
+      }
+      if (params.type === "dobleSelect") {
+
       }
     }
-
   }, [params, isMounted])
-
 
   useEffect(() => {
     if (!!isSelect && isMounted) {
@@ -81,78 +81,53 @@ export const InputField = ({ elem: params, isSelect, ...props }) => {
     }
   }, [isMounted])
 
-  const selectStyle = {
-    control: (provided, state) => ({
-      ...provided,
-      backgroundColor: 'transparent',
-      borderColor: "rgb(209 213 219)",
-      cursor: "pointer",
-      selected: "none",
-      borderRadius: "6px",
-      height: '30px',
-      minHeight: '30px',
-      boxShadow: state.isFocused ? null : null
-    }),
-    valueContainer: (provided, state) => ({
-      ...provided,
-      height: '30px',
-      padding: '0 4px'
-    }),
-
-    input: (provided, state) => ({
-      ...provided,
-      margin: '0px',
-    }),
-    indicatorSeparator: state => ({
-      display: 'none',
-    }),
-    indicatorsContainer: (provided, state) => ({
-      ...provided,
-      height: '30px',
-    }),
-  }
 
   useEffect(() => {
-    console.log(555111000, "cambio _id", field?.name)
     if (field?.name === "_id") {
-      console.log("entro", stage?.payload?._id)
       helpers.setValue(stage?.payload?._id)
     }
   }, [stage?.payload?._id])
 
 
   const onChangeHandler = async (e) => {
-    const asd = options.map(elem => {
-      return elem.title === e.target.name ? { ...elem, checked: e.target.checked } : elem
-    })
-    setOptions(asd)
-    const asdReduce = asd.reduce((acc, item) => {
-      if (item.checked) {
-        acc.push(item.title)
-      }
-      return acc
-    }, [])
-    setData((old) => {
-      old.results.splice(stage.dataIndex, 1, { ...old.results[stage.dataIndex], [field.name]: asdReduce })
-      return { ...old, results: old.results }
-    })
-    await fetchApi({
-      query: itemSchema.updateEntry,
-      variables: {
-        args: { _id: stage.payload?._id, [field.name]: asdReduce },
-      },
-      type: "json"
-    })
-    console.log("actualizazo registro")
+    if (params?.getOptions) {
+      const asd = options.map(elem => {
+        return elem.title === e.target.name ? { ...elem, checked: e.target.checked } : elem
+      })
+      setOptions(asd)
+      const asdReduce = asd.reduce((acc, item) => {
+        if (item.checked) {
+          acc.push(item.title)
+        }
+        return acc
+      }, [])
+      setData((old) => {
+        old.results.splice(stage.dataIndex, 1, { ...old.results[stage.dataIndex], [field.name]: asdReduce })
+        return { ...old, results: old.results }
+      })
+      await fetchApi({
+        query: itemSchema.updateEntry,
+        variables: {
+          args: { _id: stage.payload?._id, [field.name]: asdReduce },
+        },
+        type: "json"
+      })
+      console.log("actualizazo registro en InputField")
+    }
   }
 
+  // useEffect(() => {
+  //   console.log(80000, "field", field.value)
+  // }, [field])
+
   return (
-    <div className='relatiw-full text-xs relative'>
+    <div className='w-full text-xs relative'>
       {
         (() => {
-
           if (["id", "text", "number", "datetime-local", "date"].includes(params?.type)) {
-            return <input {...field}  {...props} type={params?.type} disabled={["id"].includes(params?.type) || (!stage?.payload && !params?.required) || (stage?.payload && params?.readOnly)} className={`h-[30px] rounded-[6px] border-[1px] border-gray-300 text-sm w-[100%] ${stage?.payload && params?.readOnly && "cursor-not-allowed"}`} />
+            return (
+              <input {...field}  {...props} type={params?.type} disabled={["id"].includes(params?.type) || (!stage?.payload && !params?.required) || (stage?.payload && params?.readOnly)} className={`h-[30px] rounded-[6px] border-[1px] border-gray-300 text-sm w-[100%] ${stage?.payload && params?.readOnly && "cursor-not-allowed"}`} />
+            )
           }
 
           if (params?.type == "checkbox") {
@@ -172,33 +147,10 @@ export const InputField = ({ elem: params, isSelect, ...props }) => {
             )
           }
 
-          if (params?.type == "select") {
-            return <div>
-              {options && <Select
-                ref={refSelet}
-                onChange={(e) => {
-                  // setIdxOptions(options.findIndex(elem => elem.value === e?.value))
-                  // setValue(e?.value)
-                }}
-                //isOptionSelected={options[1]}
-                // placeholder={
-                //   "algo"
-                // }
-                styles={selectStyle}
-                defaultValue={() => {
-                  //console.log(field)
-                  options.find(elem => {
-                    return elem?.Header === field.value
-                  })
-                }}
-                isDisabled={isDisabled}
-                isLoading={isLoading}
-                isClearable={isClearable}
-                isSearchable={true}
-                options={options}
-                classNames={"w-full"}
-              />}
-            </div>
+          if (params?.type == "dobleSelect") {
+            return (
+              <InputDoubleSelect params={params} props={props} />
+            )
           }
         })()
       }

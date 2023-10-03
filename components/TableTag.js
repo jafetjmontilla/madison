@@ -1,4 +1,5 @@
 
+
 import { cloneElement, useEffect, useState } from "react";
 import { DataTable } from "./DataTable";
 import { CreaAndEdit } from "./CreaAndEdit";
@@ -44,11 +45,12 @@ export const TableTag = () => {
 
   useEffect(() => {
     if (isMounted && !!itemSchema?.getData && hasRole(itemSchema?.groups)) {
+      console.log(1041, itemSchema)
       setStage({ action: "viewTable" })
       fetchApi({
         query: itemSchema?.getData,
         variables: {
-          args: {},
+          args: { ...itemSchema?.dataVariables },
           sort: {},
           limit: 0,
           skip: 0,

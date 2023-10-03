@@ -13,6 +13,9 @@ import { FaTasks } from 'react-icons/fa';
 import { TbChartInfographic, TbReportSearch } from 'react-icons/tb';
 import { BiTask } from 'react-icons/bi';
 import { LiaMedalSolid } from 'react-icons/lia';
+import { BiCategory, BiAbacus } from 'react-icons/bi';
+import { elements } from "./schemaElements.js"
+
 
 export const defaultVisibleColumns = [
   "tag", "title", "cod", "tag_cod", "descripcion", "funcion", "name", "email", "phone", "roles", "permissions", "type", "groups", "phone", "position"
@@ -25,7 +28,38 @@ export const BodyStaticAPP = [
     groups: ["all"],
     slug: "/",
   },
-
+  {
+    icon: <BsIntersect className="w-8 h-8 text-gray-500" />,
+    title: "secciones de la planta",
+    groups: ["admin"],
+    slug: "/plantSections",
+    getData: queries.getSections,
+    //getByID: FetchGraphQL.business.getOneBusiness,
+    createEntry: queries.createSections,
+    //updateEntry: FetchGraphQL.business.updateBusiness,
+    //deleteEntry: FetchGraphQL.business.deleteBusiness,
+    schema: [
+      {
+        Header: "tag",
+        accessor: "tag",
+        type: "text",
+        required: true,
+        size: 1
+      },
+      {
+        Header: "nombre",
+        accessor: "title",
+        type: "text",
+        required: true,
+        size: 3
+      },
+      {
+        Header: "id",
+        accessor: "_id",
+        type: "id",
+      }
+    ]
+  },
   {
     icon: <Icons.IconEquipment className="w-8 h-8 text-gray-500" />,
     title: "equipos de proceso",
@@ -392,66 +426,16 @@ export const BodyStaticAPP = [
     slug: "/setup",
     position: "bottom",
     subMenu: [
+      ...elements,
       {
-        icon: <BsIntersect className="w-8 h-8 text-gray-500" />,
-        title: "secciones de la planta",
-        groups: ["admin"],
-        slug: "/setup/plantSections",
-        typeElement: "plantSections",
-        getData: queries.getSections,
-        //getByID: FetchGraphQL.business.getOneBusiness,
-        createEntry: queries.createSections,
-        //updateEntry: FetchGraphQL.business.updateBusiness,
-        //deleteEntry: FetchGraphQL.business.deleteBusiness,
-        schema: [
-          {
-            Header: "tag",
-            accessor: "tag",
-            type: "text",
-            required: true,
-            size: 1
-          },
-          {
-            Header: "nombre",
-            accessor: "title",
-            type: "text",
-            required: true,
-            size: 3
-          },
-          {
-            Header: "id",
-            accessor: "_id",
-            type: "id",
-          }
-        ]
-      },
-      {
-        icon: <Icons.IconEquipment className="w-8 h-8 text-gray-500" />,
-        title: "equipos",
-        groups: ["admin"],
-        slug: "/setup/equipments",
-      },
-      {
-        icon: <Icons.IconEquipment className="w-8 h-8 text-gray-500" />,
-        title: "componentes",
-        groups: ["admin"],
-        slug: "/setup/components",
-      },
-      {
-        icon: <Icons.IconEquipment className="w-8 h-8 text-gray-500" />,
-        title: "partes",
-        groups: ["admin"],
-        slug: "/setup/parts",
-      },
-      {
-        icon: <Icons.IconEquipment className="w-8 h-8 text-gray-500" />,
+        icon: <BiCategory className="w-8 h-8 text-gray-500" />,
         title: "propiedades",
         groups: ["admin"],
         slug: "/setup/properties",
         getData: queries.getProperties,
       },
       {
-        icon: <Icons.IconEquipment className="w-8 h-8 text-gray-500" />,
+        icon: <BiAbacus className="w-8 h-8 text-gray-500" />,
         title: "características",
         groups: ["admin"],
         slug: "/setup/characteristics",

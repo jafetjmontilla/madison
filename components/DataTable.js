@@ -20,10 +20,17 @@ export const DataTable = ({ data, setData }) => {
       for (const property in data?.results[0]) {
         const key = `${property}`
         const p = variables?.find(elem => elem.tag === key)
+        console.log(22222222, p?.type)
         let options = {
           display: defaultVisibleColumns.includes(p?.tag),
           filter: true,
           sort: true,
+          customToolbarSelect: selectedRows => (
+            <div
+              selectedRows={selectedRows}
+              onRowsDelete={this.deleteUsers}
+            />
+          ),
           setCellProps: (value) => {
             return {
               style: {
@@ -43,9 +50,18 @@ export const DataTable = ({ data, setData }) => {
           }
         }
         if (p?.type == "arraystring") {
+
           const customBodyRender = (value) => {
             return (
               <p className="uppercase">{value?.map((elem, idx) => <li key={idx}>{elem}</li>)}</p>
+            )
+          }
+          options = { ...options, customBodyRender }
+        }
+        if (p?.type == "object") {
+          const customBodyRender = (value) => {
+            return (
+              <p className="uppercase">{value?.title}</p>
             )
           }
           options = { ...options, customBodyRender }
@@ -77,10 +93,10 @@ export const DataTable = ({ data, setData }) => {
       name: 'name',
       direction: 'asc'
     },
+
     responsive: "standard",
     //tableBodyHeight: "400px",
     //tableBodyMaxHeight: "400px",
-
     onRowClick: (_, rowMeta) => {
       handleonRowClick(data.results[rowMeta.dataIndex], rowMeta.dataIndex)
     },
