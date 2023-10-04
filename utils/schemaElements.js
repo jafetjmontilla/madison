@@ -95,8 +95,7 @@ export const elements = schemaElement.map(elem => {
               }`
           }
         }),
-        required: true,
-        size: 2
+        size: 3
       },
       {
         Header: "id",

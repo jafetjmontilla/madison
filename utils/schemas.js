@@ -18,7 +18,7 @@ import { elements } from "./schemaElements.js"
 
 
 export const defaultVisibleColumns = [
-  "tag", "title", "cod", "tag_cod", "descripcion", "funcion", "name", "email", "phone", "roles", "permissions", "type", "groups", "phone", "position"
+  "tag", "title", "cod", "tag_cod", "descripcion", "funcion", "name", "email", "phone", "roles", "permissions", "type", "groups", "phone", "position", "father"
 ]
 
 export const BodyStaticAPP = [

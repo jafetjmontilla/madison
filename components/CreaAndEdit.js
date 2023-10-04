@@ -192,7 +192,7 @@ export const CreaAndEdit = () => {
                           ${elem?.size == 2 && "col-span-2"} 
                           ${elem?.size == 3 && "col-span-3"} 
                         `}>
-                          <label className="uppercase text-xs">{elem.Header}</label>
+                          {elem.accessor !== "_id" && <label className="uppercase text-xs">{elem.Header}</label>}
                           <InputField elem={elem} name={elem.accessor} isSelect={elem?.ref} onBlur={(e,) => { handleOnBlur(e.target) }} />
                         </div>
                       ) : <></>

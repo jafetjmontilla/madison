@@ -2,8 +2,10 @@ import { useEffect, useState } from "react"
 import { InputSelect } from "./InputSelect"
 import { fetchApi, queries } from "../utils/Fetching"
 import { useField } from "formik";
+import { AppContextProvider } from "../context/AppContext";
 
 export const InputDoubleSelect = ({ params, props }) => {
+  const { stage, setData, itemSchema } = AppContextProvider()
   const [field, meta, helpers] = useField(props);
   const [value, setValue] = useState(params?.options?.find(elem => elem?.value === field?.value?.typeElement))
   const [optiosSecondSelect, setOptiosSecondSelect] = useState()
@@ -48,35 +50,54 @@ export const InputDoubleSelect = ({ params, props }) => {
     // }
   }, [value])
 
-  const onChangeHandler = (secondValue) => {
+  const onChangeHandler = async (secondValue) => {
     setSecondValue(secondValue)
-    helpers.setValue({
+    const newValue = {
       title: secondValue?.label,
       typeElement: value?.value,
       _id: secondValue?.value
-    })
+    }
+    helpers.setValue(newValue)
+    if (stage?.payload) {
+      console.log(stage, field?.name)
+      setData((old) => {
+        console.log(111, old)
+        old.results.splice(stage.dataIndex, 1, { ...old.results[stage.dataIndex], [field?.name]: newValue })
+        return { ...old, results: old.results }
+      })
+      await fetchApi({
+        query: itemSchema.updateEntry,
+        variables: {
+          args: {
+            _id: stage.payload._id,
+            [field?.name]: newValue?._id,
+          },
+        },
+        type: "json"
+      })
+      console.log("actualizazo registro en CreaAndEdit", newValue)
+      return
+    }
     console.log("actualizazo registro en InputDouvledSelect")
   }
-  useEffect(() => {
-    console.log(80000, "field", field.value)
-  }, [field])
+  // useEffect(() => {
+  //   console.log(80000, "field", field.value)
+  // }, [field])
 
   return (
     <div className='w-full flex gap-2'>
-      <div className='w-[50%]'>
+      <div className='w-[34%]'>
         <InputSelect
           value={value}
           options={params?.options}
           onChange={setValue}
-        //defaultValue={params?.options && params?.options[params?.options?.findIndex(elem => elem?.value === field?.value?.typeElement)]} 
         />
       </div>
-      <div className='w-[50%]'>
+      <div className='w-[66%]'>
         <InputSelect
           value={secondValue}
           options={optiosSecondSelect}
           onChange={onChangeHandler}
-        //defaultValue={optiosSecondSelect && optiosSecondSelect[0]} 
         />
       </div>
     </div>

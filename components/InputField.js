@@ -33,7 +33,6 @@ export const InputField = ({ elem: params, isSelect, ...props }) => {
         field.value = field?.value?.slice(0, 16)
       }
       if (params.type === "checkbox") {
-        console.log(8004101, "params", params)
         if (params?.getOptions) {
           fetchApi({
             query: params?.getOptions,
@@ -74,7 +73,6 @@ export const InputField = ({ elem: params, isSelect, ...props }) => {
         const options = result.results?.map(elem => {
           return { value: elem?.tag, label: elem?.title }
         })
-        // console.log(options)
         setOptions(options)
       })
 
@@ -115,13 +113,8 @@ export const InputField = ({ elem: params, isSelect, ...props }) => {
       console.log("actualizazo registro en InputField")
     }
   }
-
-  // useEffect(() => {
-  //   console.log(80000, "field", field.value)
-  // }, [field])
-
   return (
-    <div className='w-full text-xs relative'>
+    <div className={`${params?.type !== "id" ? "w-full relative text-sm" : "w-[190px] absolute top-[74px] right-0 scale-[65%] md:scale-75 translate-x-8 md:translate-x-6 text-gray-500"}`}>
       {
         (() => {
           if (["id", "text", "number", "datetime-local", "date"].includes(params?.type)) {
