@@ -7,10 +7,11 @@ import { ButtonBasic } from "./ButtonBasic";
 import { IconDelete, PlusIcon } from "../icons";
 import { useToast } from '../hooks/useToast';
 import { CSSTransition } from "react-transition-group";
-import { Formik } from "formik";
+import { Formik, useFormikContext } from "formik";
 import { InputField } from "./InputField";
 import * as yup from 'yup'
 import { fetchApi } from "../utils/Fetching";
+import { tagsGroups } from "../utils/schemaCoordinations";
 
 
 export const CreaAndEdit = () => {
@@ -21,6 +22,8 @@ export const CreaAndEdit = () => {
   const [initialValues, setInitialValues] = useState()
   const [requiredValues, setRequiredValues] = useState()
   const [edition] = useState(!!stage?.payload)
+  const [values, setValues] = useState()
+  const [errors, setErrors] = useState()
 
 
   const { setLoading } = LoadingContextProvider()
@@ -41,32 +44,22 @@ export const CreaAndEdit = () => {
   const handleOnClick = () => {
     setStage({ ...stage, action: "viewTable" })
   }
-  const handleOnBlur = async (target) => {
+  const handleOnBlur = async (accesor) => {
     try {
-      const qwe = { ...target }
-      if (qwe.value == "") target.value = null
-      console.log(target.value, target.name)
-      if (!target.value && schema.find(elem => elem.accessor == target.name).required) {
-        toast("error", "este campo es requerido")
-        document.getElementById(target.name).focus();
-        return
-      }
-      if (`${dataValues[target.name]}` != target.value) {
-        console.log("cambio", target)
-        if (stage?.payload) {
-          //dataValues[target.name] = target.value
-          ///////
+      const keysErrors = Object.keys(errors)
+      if (!keysErrors.length && stage?.payload) {
+        if (`${dataValues[accesor]}` != values[accesor]) {
           setData((old) => {
-            console.log(111, old)
-            old.results.splice(stage.dataIndex, 1, { ...old.results[stage.dataIndex], [target.name]: target.value })
+            old.results.splice(stage.dataIndex, 1, { ...old.results[stage.dataIndex], [accesor]: values[accesor] })
             return { ...old, results: old.results }
           })
+          console.log(10004, itemSchema)
           await fetchApi({
             query: itemSchema.updateEntry,
             variables: {
               args: {
                 _id: stage.payload._id,
-                [target.name]: target.value,
+                [accesor]: values[accesor],
               },
             },
             type: "json"
@@ -74,34 +67,34 @@ export const CreaAndEdit = () => {
           console.log("actualizazo registro en CreaAndEdit", dataValues)
           return
         }
-        let valir = true
-        Object.entries(requiredValues).forEach(([key, value]) => {
-          if (key == target.name && target.value != "") requiredValues[`${key}`] = target.value
-          if (!requiredValues[`${key}`]) return valir = false
-        });
-        if (valir) {
+        return
+      }
 
-          ///////guarda nuevo registro
-          console.log(1002, itemSchema.createEntry)
-          const resp = await fetchApi({
-            query: itemSchema.createEntry,
-            variables: {
-              args: {
-                ...requiredValues,
-                ...itemSchema?.dataVariables
-              },
+      let valir = true
+      console.log(1001, requiredValues)
+      Object.entries(requiredValues).forEach(([key, value]) => {
+        if (key == accesor && values[accesor] != "") requiredValues[`${key}`] = values[accesor]
+        if (!requiredValues[`${key}`]) return valir = false
+      });
+      if (valir) {
+        ///////guarda nuevo registro
+        const resp = await fetchApi({
+          query: itemSchema.createEntry,
+          variables: {
+            args: {
+              ...requiredValues,
+              ...itemSchema?.dataVariables
             },
-            type: "json"
+          },
+          type: "json"
+        })
+        if (resp) {
+          setData((old) => {
+            old?.results?.splice(0, 0, { ...requiredValues, _id: resp?.results[0]?._id })
+            return { total: old.total + 1, results: old?.results }
           })
-          console.log(11144, resp)
-          if (resp) {
-            setData((old) => {
-              old?.results?.splice(0, 0, { ...requiredValues, _id: resp?.results[0]?._id })
-              return { total: old.total + 1, results: old?.results }
-            })
-            setStage({ ...stage, payload: { ...stage.payload, ...requiredValues, _id: resp?.results[0]?._id }, dataIndex: 0 })
-            console.log("*guardo nuevo registro", { ...requiredValues, _id: resp?.results[0]?._id })
-          }
+          setStage({ ...stage, payload: { ...stage.payload, ...requiredValues, _id: resp?.results[0]?._id }, dataIndex: 0 })
+          console.log("*guardo nuevo registro", { ...requiredValues, _id: resp?.results[0]?._id })
         }
       }
     } catch (error) {
@@ -147,16 +140,17 @@ export const CreaAndEdit = () => {
     }
   }, [stage])
 
+  const schemaReduce = schema?.reduce((acc, item) => {
+    let asd = {}
+    if (item.required) {
+      asd = {
+        [`${item.accessor}`]: yup[`${"string"}`]().test((value) => !!value)
+      }
+    }
+    return { ...acc, ...asd }
+  }, {})
 
-  const validationSchema = yup.object().shape({
-    _id: yup[`${"string"}`]().required("msgAuto_id"),
-    title: yup.number().integer("msgAuto_title"),
-  })
-
-  useEffect(() => {
-    console.log(60005, dataValues)
-  }, [dataValues])
-
+  const validationSchema = yup.object().shape(schemaReduce)
 
   return (
     <>
@@ -169,11 +163,12 @@ export const CreaAndEdit = () => {
           return (
 
             <div className="bg-gray-200 bg-opacity-50 flex items-center justify-center w-[100%] h-[calc(90%-54px)] absolute z-10">
+              <AutoSubmitToken setErrors={setErrors} setValues={setValues} />
               <div className="bg-white w-full h-[100%] md:w-[800px] md:h-[105%] md:translate-y-[-20px] rounded-lg shadow-lg truncate">
                 <div className="bg-gray-300 flex w-[100%] h-20 ">
                   <div className="w-[25%] h-[100%] flex justify-start items-center">
                     <span className="ml-4 text-xl uppercase font-semibold text-gray-700 ">
-                      {edition ? "editar registro" : "crear registro"}
+                      {edition ? `editar ${itemSchema?.title}` : `crear ${itemSchema?.title}`}
                     </span>
                   </div>
                   <div className="w-[50%] h-[100%] flex justify-center items-center">
@@ -192,8 +187,8 @@ export const CreaAndEdit = () => {
                           ${elem?.size == 2 && "col-span-2"} 
                           ${elem?.size == 3 && "col-span-3"} 
                         `}>
-                          {elem.accessor !== "_id" && <label className="uppercase text-xs">{elem.Header}</label>}
-                          <InputField elem={elem} name={elem.accessor} isSelect={elem?.ref} onBlur={(e,) => { handleOnBlur(e.target) }} />
+
+                          <InputField elem={elem} name={elem.accessor} isSelect={elem?.ref} tabindex={idx} onBlur={() => { handleOnBlur(elem.accessor) }} />
                         </div>
                       ) : <></>
                     })}
@@ -243,3 +238,16 @@ export const CreaAndEdit = () => {
   );
 };
 
+const AutoSubmitToken = ({ setErrors, setValues }) => {
+  const { values, errors } = useFormikContext();
+
+  useEffect(() => {
+    setErrors(errors)
+  }, [errors]);
+
+  useEffect(() => {
+    setValues(values)
+  }, [values]);
+
+  return null;
+};

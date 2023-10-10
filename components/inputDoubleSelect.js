@@ -41,13 +41,6 @@ export const InputDoubleSelect = ({ params, props }) => {
       setOptiosSecondSelect(undefined)
       setSecondValue([])
     }
-    // if (valir) {
-    //   helpers.setValue({
-    //     title: undefined,
-    //     typeElement: undefined,
-    //     _id: undefined,
-    //   })
-    // }
   }, [value])
 
   const onChangeHandler = async (secondValue) => {
@@ -61,7 +54,6 @@ export const InputDoubleSelect = ({ params, props }) => {
     if (stage?.payload) {
       console.log(stage, field?.name)
       setData((old) => {
-        console.log(111, old)
         old.results.splice(stage.dataIndex, 1, { ...old.results[stage.dataIndex], [field?.name]: newValue })
         return { ...old, results: old.results }
       })
@@ -75,14 +67,11 @@ export const InputDoubleSelect = ({ params, props }) => {
         },
         type: "json"
       })
-      console.log("actualizazo registro en CreaAndEdit", newValue)
+      console.log("actualizazo registro en InputDoubledSelect", newValue)
       return
     }
-    console.log("actualizazo registro en InputDouvledSelect")
+    console.log("actualizazo registro en InputDoubledSelect")
   }
-  // useEffect(() => {
-  //   console.log(80000, "field", field.value)
-  // }, [field])
 
   return (
     <div className='w-full flex gap-2'>

@@ -3,43 +3,19 @@ import Select from 'react-select'
 
 export const InputSelect = ({ options, defaultValue, onChange, value }) => {
   const [isClearable, setIsClearable] = useState(true);
-  const [isSearchable, setIsSearchable] = useState(false);
+  const [isSearchable, setIsSearchable] = useState(true);
   const [isDisabled, setIsDisabled] = useState(false);
   const [isLoading, setIsLoading] = useState(false)
 
-  //const refSelet = useRef(null)
-
-  const selectStyle = {
-    control: (provided, state) => ({
-      ...provided,
-      backgroundColor: 'transparent',
-      borderColor: "rgb(209 213 219)",
-      cursor: "pointer",
-      selected: "none",
-      borderRadius: "6px",
-      height: '30px',
-      minHeight: '30px',
-      boxShadow: state.isFocused ? null : null
-    }),
-    valueContainer: (provided, state) => ({
-      ...provided,
-      height: '30px',
-      padding: '0 4px'
-    }),
-
-    input: (provided, state) => ({
-      ...provided,
-      margin: '0px',
-    }),
-    indicatorSeparator: state => ({
-      display: 'none',
-    }),
-    indicatorsContainer: (provided, state) => ({
-      ...provided,
-      height: '30px',
-    }),
+  const classNames = {
+    control: (state) => "!rounded-lg",
+    valueContainer: (state) => "",
+    input: (state) => {
+      document?.getElementById(state.id)?.setAttribute("class", "bg-red-500 focus:border-transparent focus:ring-0")
+    },
+    indicatorSeparator: (state) => "",
+    indicatorsContainer: (state) => "",
   }
-
 
   return (
     <Select
@@ -53,15 +29,15 @@ export const InputSelect = ({ options, defaultValue, onChange, value }) => {
       // placeholder={
       //   "algo"
       // }
-      styles={selectStyle}
+      // styles={selectStyle}
       value={value}
-      defaultValue={defaultValue}
+      //defaultValue={defaultValue}
       isDisabled={isDisabled}
       isLoading={isLoading}
       isClearable={isClearable}
       isSearchable={isSearchable}
       options={options}
-      classNames={"w-full "}
+      classNames={classNames}
     />
   )
 }

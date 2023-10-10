@@ -15,6 +15,7 @@ import { BiTask } from 'react-icons/bi';
 import { LiaMedalSolid } from 'react-icons/lia';
 import { BiCategory, BiAbacus } from 'react-icons/bi';
 import { elements } from "./schemaElements.js"
+import { tagsGroups } from "./schemaCoordinations.js"
 
 
 export const defaultVisibleColumns = [
@@ -43,7 +44,7 @@ export const BodyStaticAPP = [
         Header: "tag",
         accessor: "tag",
         type: "text",
-        required: true,
+        required: false,
         size: 1
       },
       {
@@ -557,9 +558,10 @@ export const BodyStaticAPP = [
           {
             Header: "tag",
             accessor: "tag",
-            type: "text",
+            type: "select",
+            options: tagsGroups.map(elem => { return { value: elem, label: elem.toUpperCase() } }),
             required: true,
-            size: 3
+            size: 2
           },
           {
             Header: "nombre",

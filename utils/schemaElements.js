@@ -1,18 +1,8 @@
 import * as Icons from "../icons";
-import { BsShieldLockFill, BsIntersect } from 'react-icons/bs';
-import { RiShieldUserLine } from 'react-icons/ri';
-import { HiUserGroup, HiUserCircle } from 'react-icons/hi';
-import { VscGroupByRefType } from 'react-icons/vsc';
-import { AiFillSetting } from 'react-icons/ai';
-import { GrCodeSandbox } from 'react-icons/gr';
-import { FiLogOut } from 'react-icons/fi';
+import { BsIntersect } from 'react-icons/bs';
+
 import { queries } from "./Fetching";
-import { MdOutlineManageAccounts, MdOutlineCleaningServices } from 'react-icons/md';
-import { PiPassword } from 'react-icons/pi';
-import { FaTasks } from 'react-icons/fa';
-import { TbChartInfographic, TbReportSearch } from 'react-icons/tb';
-import { BiTask } from 'react-icons/bi';
-import { LiaMedalSolid } from 'react-icons/lia';
+
 import { ImOffice, ImInsertTemplate } from 'react-icons/im';
 
 const schemaElement = [
@@ -88,6 +78,19 @@ export const elements = schemaElement.map(elem => {
         Header: "parte de",
         accessor: "father",
         type: "dobleSelect",
+        options: elem?.father?.map(elem => {
+          return {
+            value: elem,
+            label: `${schemaElement.find(el => el.typeElement === elem)?.title
+              }`
+          }
+        }),
+        size: 3
+      },
+      {
+        Header: "propiedades",
+        accessor: "properties",
+        type: "properties",
         options: elem?.father?.map(elem => {
           return {
             value: elem,

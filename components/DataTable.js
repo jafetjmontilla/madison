@@ -20,7 +20,6 @@ export const DataTable = ({ data, setData }) => {
       for (const property in data?.results[0]) {
         const key = `${property}`
         const p = variables?.find(elem => elem.tag === key)
-        console.log(22222222, p?.type)
         let options = {
           display: defaultVisibleColumns.includes(p?.tag),
           filter: true,

@@ -5,9 +5,11 @@ import { useEffect, useRef, useState } from "react";
 import { BodyStaticAPP } from "../utils/schemas";
 import { fetchApi, queries } from '../utils/Fetching';
 import { AppContextProvider } from '../context/AppContext';
-import { Checkbox } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Checkbox, Typography } from '@mui/material';
 import { InputSelect } from './InputSelect';
 import { InputDoubleSelect } from './inputDoubleSelect';
+import { MdExpandLess } from 'react-icons/md'
+import { InputProperties } from './InputProperties'
 
 export const InputField = ({ elem: params, isSelect, ...props }) => {
   const { stage, setData, itemSchema } = AppContextProvider()
@@ -15,6 +17,7 @@ export const InputField = ({ elem: params, isSelect, ...props }) => {
 
   const [isMounted, setIsMounted] = useState(false)
   const [options, setOptions] = useState()
+  const [value, setValue] = useState()
 
   useEffect(() => {
     if (!isMounted) {
@@ -50,13 +53,20 @@ export const InputField = ({ elem: params, isSelect, ...props }) => {
           })
         }
       }
-      if (params.type === "dobleSelect") {
-
-      }
     }
   }, [params, isMounted])
 
   useEffect(() => {
+    if (params?.type === "select") {
+
+      const index = params?.options.findIndex(elem => elem.value === field?.value)
+      console.log(index)
+      console.log(10005, (params?.options && params?.options[index]) || undefined)
+      setValue((params?.options && params?.options[index]) || undefined)
+      setOptions(params?.options || [])
+    }
+
+    // para revisar probanlemnte eliminar
     if (!!isSelect && isMounted) {
       //table, accessor
       const query = BodyStaticAPP.find(elem => elem.slug == `/${isSelect?.table}`).getData
@@ -75,7 +85,6 @@ export const InputField = ({ elem: params, isSelect, ...props }) => {
         })
         setOptions(options)
       })
-
     }
   }, [isMounted])
 
@@ -86,69 +95,78 @@ export const InputField = ({ elem: params, isSelect, ...props }) => {
     }
   }, [stage?.payload?._id])
 
-
   const onChangeHandler = async (e) => {
-    if (params?.getOptions) {
-      const asd = options.map(elem => {
-        return elem.title === e.target.name ? { ...elem, checked: e.target.checked } : elem
-      })
-      setOptions(asd)
-      const asdReduce = asd.reduce((acc, item) => {
-        if (item.checked) {
-          acc.push(item.title)
-        }
-        return acc
-      }, [])
-      setData((old) => {
-        old.results.splice(stage.dataIndex, 1, { ...old.results[stage.dataIndex], [field.name]: asdReduce })
-        return { ...old, results: old.results }
-      })
-      await fetchApi({
-        query: itemSchema.updateEntry,
-        variables: {
-          args: { _id: stage.payload?._id, [field.name]: asdReduce },
-        },
-        type: "json"
-      })
-      console.log("actualizazo registro en InputField")
+    if (e.target.checked) {
+      field.value.push(e.target.name)
+    } else {
+      const index = field.value.findIndex(elem => elem === e.target.name)
+      delete field.value.splice(index, 1)
     }
+    helpers.setValue(field.value)
   }
+
   return (
-    <div className={`${params?.type !== "id" ? "w-full relative text-sm" : "w-[190px] absolute top-[74px] right-0 scale-[65%] md:scale-75 translate-x-8 md:translate-x-6 text-gray-500"}`}>
-      {
-        (() => {
-          if (["id", "text", "number", "datetime-local", "date"].includes(params?.type)) {
-            return (
-              <input {...field}  {...props} type={params?.type} disabled={["id"].includes(params?.type) || (!stage?.payload && !params?.required) || (stage?.payload && params?.readOnly)} className={`h-[30px] rounded-[6px] border-[1px] border-gray-300 text-sm w-[100%] ${stage?.payload && params?.readOnly && "cursor-not-allowed"}`} />
-            )
-          }
-
-          if (params?.type == "checkbox") {
-            return (
-              <div className='flex w-full'>
-                <div className='w-full grid md:grid-cols-4 lg:grid-cols-6' >
-                  {options?.map((elem, idx) => {
-                    return (
-                      <label key={idx} className={`text-sm uppercase items-center col-span-2 ${!stage?.payload && !params?.required ? "" : "cursor-pointer"}`}>
-                        <Checkbox id={idx} type="checkbox" defaultChecked={elem.checked} name={elem.title} onClick={(e) => onChangeHandler(e)} disabled={!stage?.payload && !params?.required} />
-                        {elem?.title}
-                      </label>
-                    )
-                  })}
-                </div>
-              </div>
-            )
-          }
-
-          if (params?.type == "dobleSelect") {
-            return (
-              <InputDoubleSelect params={params} props={props} />
-            )
-          }
-        })()
+    <div className='w-full h-full'>
+      {params.accessor !== "_id" &&
+        <div>
+          <label className="uppercase text-xs">{params.Header}</label>
+          {meta.error && <span className="text-red-500 text-xs ml-2">!requerido</span>}
+        </div>
       }
-      {/* {meta.touched && meta.error && <span>{`${elem?.Header} ${meta.error} `}</span>} */}
+      <div className={`${params?.type !== "id" ? "w-full relative text-sm" : "w-[190px] absolute top-[74px] right-0 scale-[65%] md:scale-75 translate-x-8 md:translate-x-6 text-gray-500"}`} {...props}>
+        {
+          (() => {
+            if (["id", "text", "number", "datetime-local", "date"].includes(params?.type)) {
+              return (
+                <input {...field} type={params?.type} disabled={["id"].includes(params?.type) || (!stage?.payload && !params?.required) || (stage?.payload && params?.readOnly)} className={`h-[38px] rounded-lg border-[1px] border-gray-300 text-sm w-[100%] ${stage?.payload && params?.readOnly && "cursor-not-allowed"}`} />
+              )
+            }
 
+            if (params?.type == "checkbox") {
+              return (
+                <div className='flex w-full'>
+                  <div className='w-full grid md:grid-cols-4 lg:grid-cols-6' >
+                    {options?.map((elem, idx) => {
+                      return (
+                        <label key={idx} className={`text-sm uppercase items-center col-span-2 ${!stage?.payload && !params?.required ? "" : "cursor-pointer"}`}>
+                          <Checkbox id={idx} type="checkbox" defaultChecked={elem.checked} name={elem.title} onClick={(e) => onChangeHandler(e)} disabled={!stage?.payload && !params?.required} />
+                          {elem?.title}
+                        </label>
+                      )
+                    })}
+                  </div>
+                </div>
+              )
+            }
+
+            if (params?.type == "select") {
+              return (
+                <InputSelect
+                  options={options}
+                  // defaultValue={undefined}
+                  onChange={(value) => {
+                    setValue(value)
+                    helpers.setValue(value?.value)
+                  }}
+                  value={value} />
+              )
+            }
+
+            if (params?.type == "dobleSelect") {
+              return (
+                <InputDoubleSelect />
+              )
+            }
+            if (params?.type == "properties") {
+              return (
+                <InputProperties params={params} props={props} />
+              )
+            }
+          })()
+        }
+        {/* {meta.touched && meta.error && <span>{`${elem?.Header} ${meta.error} `}</span>} */}
+
+      </div>
     </div>
 
   );
