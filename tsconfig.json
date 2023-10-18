@@ -26,7 +26,8 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "utils/schemas.js"
+    "utils/schemas.js",
+    "components/InputProperties.js"
   ],
   "exclude": [
     "node_modules"

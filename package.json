@@ -16,6 +16,7 @@
     "@mui/material": "^5.14.4",
     "axios": "^1.4.0",
     "chat-component-library": "^0.1.0",
+    "cronstrue": "^2.32.0",
     "firebase": "^10.3.0",
     "firebase-admin": "^11.10.1",
     "formik": "^2.4.3",

@@ -5,8 +5,9 @@ export const useHasRole = () => {
 
 
   const hasRole = (schemaGroups: string[]): boolean => {
+    const userGroups = user?.groups?.map(elem => elem?.tag)
     if (schemaGroups?.includes("all")) return true
-    return user?.groups?.some(group => schemaGroups?.includes(group))
+    return userGroups?.some(group => schemaGroups?.includes(group))
   }
 
   return hasRole

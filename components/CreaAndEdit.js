@@ -49,17 +49,17 @@ export const CreaAndEdit = () => {
       const keysErrors = Object.keys(errors)
       if (!keysErrors.length && stage?.payload) {
         if (`${dataValues[accesor]}` != values[accesor]) {
+          const asd = typeof values[accesor] !== "object" ? null : [...values[accesor]?.map(elem => elem?._id)]
           setData((old) => {
             old.results.splice(stage.dataIndex, 1, { ...old.results[stage.dataIndex], [accesor]: values[accesor] })
             return { ...old, results: old.results }
           })
-          console.log(10004, itemSchema)
           await fetchApi({
             query: itemSchema.updateEntry,
             variables: {
               args: {
                 _id: stage.payload._id,
-                [accesor]: values[accesor],
+                [accesor]: typeof values[accesor] !== "object" ? values[accesor] : [...values[accesor]?.map(elem => elem?._id)],
               },
             },
             type: "json"
@@ -71,7 +71,6 @@ export const CreaAndEdit = () => {
       }
 
       let valir = true
-      console.log(1001, requiredValues)
       Object.entries(requiredValues).forEach(([key, value]) => {
         if (key == accesor && values[accesor] != "") requiredValues[`${key}`] = values[accesor]
         if (!requiredValues[`${key}`]) return valir = false
@@ -144,12 +143,11 @@ export const CreaAndEdit = () => {
     let asd = {}
     if (item.required) {
       asd = {
-        [`${item.accessor}`]: yup[`${"string"}`]().test((value) => !!value)
+        [`${item.accessor}`]: yup[`${"string"}`]().test((value) => item.accessor !== "password" ? !!value : !stage?.payload ? !!value : true)
       }
     }
     return { ...acc, ...asd }
   }, {})
-
   const validationSchema = yup.object().shape(schemaReduce)
 
   return (
@@ -163,6 +161,7 @@ export const CreaAndEdit = () => {
           return (
 
             <div className="bg-gray-200 bg-opacity-50 flex items-center justify-center w-[100%] h-[calc(90%-54px)] absolute z-10">
+
               <AutoSubmitToken setErrors={setErrors} setValues={setValues} />
               <div className="bg-white w-full h-[100%] md:w-[800px] md:h-[105%] md:translate-y-[-20px] rounded-lg shadow-lg truncate">
                 <div className="bg-gray-300 flex w-[100%] h-20 ">
@@ -177,7 +176,7 @@ export const CreaAndEdit = () => {
                     <span className="hidden md:flex mr-5 mt-3 text-2xl text-gray-500 cursor-pointer hover:scale-110" onClick={handleOnClick}>X</span>
                   </div>
                 </div>
-                <div className="h-[calc(100%-160px)] overflow-auto">
+                <div className="h-[calc(100%-160px)] overflow-y-scroll">
                   <div className="gap-2 grid grid-cols-3 p-4">
                     {schema?.map((elem, idx) => {
 
@@ -188,7 +187,7 @@ export const CreaAndEdit = () => {
                           ${elem?.size == 3 && "col-span-3"} 
                         `}>
 
-                          <InputField elem={elem} name={elem.accessor} isSelect={elem?.ref} tabindex={idx} onBlur={() => { handleOnBlur(elem.accessor) }} />
+                          <InputField elem={elem} name={elem.accessor} isSelect={elem?.ref} onBlur={() => { handleOnBlur(elem.accessor) }} />
                         </div>
                       ) : <></>
                     })}
@@ -196,7 +195,7 @@ export const CreaAndEdit = () => {
                 </div>
                 <div className={`bg-gray-300 flex h-20 items-center justify-between`}>
                   <CSSTransition
-                    in={stage.payload}
+                    in={!!stage.payload}
                     //nodeRef={nodeRef}
                     classNames="alert"
                     unmountOnExit

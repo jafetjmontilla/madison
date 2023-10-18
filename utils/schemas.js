@@ -16,6 +16,7 @@ import { LiaMedalSolid } from 'react-icons/lia';
 import { BiCategory, BiAbacus } from 'react-icons/bi';
 import { elements } from "./schemaElements.js"
 import { tagsGroups } from "./schemaCoordinations.js"
+import { VscTools } from "react-icons/vsc"
 
 
 export const defaultVisibleColumns = [
@@ -375,7 +376,7 @@ export const BodyStaticAPP = [
   {
     icon: <MdOutlineCleaningServices className="w-8 h-8 text-gray-500" />,
     title: "limpieza",
-    groups: ["admin", "coordinacion mantenimiento", "supervisor limpieza", "obreros limpieza"],
+    groups: ["admin", "coordinador de mantenimiento", "supervisor de limpieza", "obrero limpieza"],
     slug: "/cleaning",
     // schema: [
     //   {
@@ -390,25 +391,25 @@ export const BodyStaticAPP = [
       {
         icon: <FaTasks className="w-8 h-8 text-gray-500" />,
         title: "tareas departamento",
-        groups: ["admin", "coordinacion mantenimiento", "supervisor limpieza"],
+        groups: ["admin", "coordinador de mantenimiento", "supervisor de limpieza"],
         slug: "/cleaning/alltasks",
       },
       {
         icon: <TbChartInfographic className="w-8 h-8 text-gray-500" />,
         title: "graficos",
-        groups: ["admin", "coordinacion mantenimiento"],
+        groups: ["admin", "coordinador de mantenimiento"],
         slug: "/cleaning/dashboards",
       },
       {
         icon: <TbReportSearch className="w-8 h-8 text-gray-500" />,
         title: "reportes",
-        groups: ["admin", "coordinacion mantenimiento", "supervisor limpieza"],
+        groups: ["admin", "coordinador de mantenimiento", "supervisor de limpieza"],
         slug: "/cleaning/reports",
       },
       {
         icon: <BiTask className="w-8 h-8 text-gray-500" />,
         title: "tareas",
-        groups: ["admin", "supervisor limpieza", "obreros limpieza"],
+        groups: ["admin", "supervisor de limpieza", "obrero limpieza"],
         filterUser: true,
         slug: "/cleaning/tasks",
       },
@@ -421,9 +422,57 @@ export const BodyStaticAPP = [
     ]
   },
   {
+    icon: <VscTools className="w-8 h-8 text-gray-500" />,
+    title: "mantenimiento",
+    groups: ["admin", "coordinador de mantenimiento", "supervisor de mantenimiento", "obrero limpieza"],
+    slug: "/maintenance",
+    // schema: [
+    //   {
+    //     Header: "tag_cod",
+    //     accessor: "tag_cod",
+    //     type: "text",
+    //     required: true,
+    //     size: 1
+    //   },
+    // ],
+    subMenu: [
+      {
+        icon: <FaTasks className="w-8 h-8 text-gray-500" />,
+        title: "tareas departamento",
+        groups: ["admin", "coordinador de mantenimiento", "supervisor de mantenimiento"],
+        slug: "/maintenance/alltasks",
+      },
+      {
+        icon: <TbChartInfographic className="w-8 h-8 text-gray-500" />,
+        title: "graficos",
+        groups: ["admin", "coordinador de mantenimiento"],
+        slug: "/maintenance/dashboards",
+      },
+      {
+        icon: <TbReportSearch className="w-8 h-8 text-gray-500" />,
+        title: "reportes",
+        groups: ["admin", "coordinador de mantenimiento", "supervisor de mantenimiento"],
+        slug: "/maintenance/reports",
+      },
+      {
+        icon: <BiTask className="w-8 h-8 text-gray-500" />,
+        title: "tareas",
+        groups: ["admin", "supervisor de mantenimiento", "obrero limpieza"],
+        filterUser: true,
+        slug: "/maintenance/tasks",
+      },
+      {
+        icon: <LiaMedalSolid className="w-8 h-8 text-gray-500" />,
+        title: "evaluación tareas",
+        groups: ["admin", "supervisor",],
+        slug: "/maintenance/evaluation",
+      },
+    ]
+  },
+  {
     icon: <AiFillSetting className="w-8 h-8 text-gray-500" />,
     title: "configuración",
-    groups: ["admin"],
+    groups: ["admin", "coordinador de mantenimiento"],
     slug: "/setup",
     position: "bottom",
     subMenu: [
@@ -535,6 +584,7 @@ export const BodyStaticAPP = [
             Header: "grupos de permisos",
             accessor: "groups",
             type: "checkbox",
+            subType: "group",
             required: false,
             size: 3,
             getOptions: queries.getGroups,
@@ -553,7 +603,7 @@ export const BodyStaticAPP = [
         slug: "/security/group",
         getData: queries.getGroups,
         createEntry: queries.createGroups,
-        updateEntry: queries.updateGroup,
+        updateEntry: queries.updateGroups,
         schema: [
           {
             Header: "tag",
@@ -592,14 +642,15 @@ export const BodyStaticAPP = [
         slug: "/security/permission",
         getData: queries.getPermissions,
         createEntry: queries.createPermissions,
+        updateEntry: queries.updatePermissions,
         schema: [
-          {
-            Header: "tag",
-            accessor: "tag",
-            type: "text",
-            required: true,
-            size: 3
-          },
+          // {
+          //   Header: "tag",
+          //   accessor: "tag",
+          //   type: "text",
+          //   required: true,
+          //   size: 3
+          // },
           {
             Header: "permiso",
             accessor: "title",

@@ -70,11 +70,14 @@ export const useAuthentication = () => {
             development: "madison"
           })
           const moreInfo = asd.results[0]
-          const rights = await fetchApi({
-            query: queries.getUserPermissions,
-            variables: { args: moreInfo.groups },
-            development: "madison"
-          });
+
+          const rights = moreInfo?.groups.reduce((acc, item) => {
+            acc.groups.push(item?.tag)
+            acc.permissions.push({ group: item.tag, permissions: item.permissions.map(elem => elem.title) })
+            return acc
+          }, { groups: [], permissions: [] })
+          console.log(rights)
+
           if (moreInfo?.status && res?.user?.email) {
             const token = (await res?.user?.getIdTokenResult())?.token;
             const sessionCookie = await getSessionCookie(token)

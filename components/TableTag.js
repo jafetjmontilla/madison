@@ -21,7 +21,6 @@ export const TableTag = () => {
   const { setLoading } = LoadingContextProvider()
   const { slug, itemSchema, setItemSchema, stage, setStage, data, setData } = AppContextProvider()
   const [showSelect, setShowSelect] = useState(false)
-  const [rights, setRights] = useState([])
   const [isAllowed] = useAllowed()
   const hasRole = useHasRole()
 
@@ -45,7 +44,6 @@ export const TableTag = () => {
 
   useEffect(() => {
     if (isMounted && !!itemSchema?.getData && hasRole(itemSchema?.groups)) {
-      console.log(1041, "itemSchema:", itemSchema)
       setStage({ action: "viewTable" })
       fetchApi({
         query: itemSchema?.getData,

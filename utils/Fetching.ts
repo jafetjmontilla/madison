@@ -97,27 +97,29 @@ type queries = {
   getTasaBCV: String,
   deleteTasaBCV: String,
   getLog: string,
-  getUser: string
   getVariables: string,
-  getPermissions: string,
-  getGroups: string,
   getProperties: string,
   getSections: string,
   getEquipments: string,
   getEquipmentsMasters: string,
   getReplacementsMasters: string,
+  getUser: string
   createUsers: string,
+  updateUser: string
   createVariables: string,
+  getPermissions: string,
   createPermissions: string,
+  updatePermissions: string,
+  getGroups: string,
   createGroups: string
+  updateGroups: string
   createProperties: string,
+  updateProperties: string,
   createSections: string,
   createEquipments: string
   createEquipmentsMasters: string
   createReplacementsMasters: string
-  updateUser: string
   updateVariable: string,
-  updateGroup: string
   getUserPermissions: string
   createElements: string
   getElements: string
@@ -198,24 +200,6 @@ export const queries: queries = {
       }
     }
   }`,
-  getUser: `query ( $args:inputUser, $sort:sortCriteriaUser, $skip:Int, $limit:Int ) 
-  {
-    getUser(args:$args, sort:$sort, skip:$skip, limit:$limit){
-      total
-      results{
-        _id
-        uid
-        name
-        email
-        position
-        phone
-        groups
-        status
-        createdAt
-        updatedAt
-      }
-    }
-  }`,
   getProperties: `query ( $args:inputProperty, $sort:sortCriteriaProperty, $skip:Int, $limit:Int )
   {
     getProperty(args:$args, sort:$sort, skip:$skip, limit:$limit ){
@@ -225,33 +209,6 @@ export const queries: queries = {
         tag
         type
         title
-        createdAt
-        updatedAt
-      }
-    }
-  }`,
-  getPermissions: `query ( $args:inputPermission, $sort:sortCriteriaPermission, $skip:Int, $limit:Int )
-  {
-    getPermission(args:$args, sort:$sort, skip:$skip, limit:$limit ){
-      total
-      results{
-        _id
-        tag
-        title
-        createdAt
-        updatedAt
-      }
-    }
-  }`,
-  getGroups: `query ( $args:inputGroup, $sort:sortCriteriaGroup, $skip:Int, $limit:Int )
-  {
-    getGroup(args:$args, sort:$sort, skip:$skip, limit:$limit ){
-      total
-      results{
-        _id
-        tag
-        title
-        permissions
         createdAt
         updatedAt
       }
@@ -360,6 +317,32 @@ export const queries: queries = {
      permissions
     }
   }`,
+  getUser: `query ( $args:inputUser, $sort:sortCriteriaUser, $skip:Int, $limit:Int ) 
+  {
+    getUser(args:$args, sort:$sort, skip:$skip, limit:$limit){
+      total
+      results{
+        _id
+        uid
+        name
+        email
+        position
+        phone
+        groups{
+          _id
+          tag
+          title
+          permissions{
+            _id
+            title
+          }
+        }
+        status
+        createdAt
+        updatedAt
+      }
+    }
+  }`,
   createUsers: `mutation ( $args:[inputUser] )
   {
     createUser(args:$args ){
@@ -371,10 +354,32 @@ export const queries: queries = {
         position
         email
         phone
-        groups
+        groups{
+          _id
+          tag
+          title
+        }
         createdAt
         updatedAt
       }
+    }
+  }`,
+  updateUser: `mutation ( $args:inputUser )
+  {
+    updateUser( args:$args ){
+      _id
+      uid
+      name
+      position
+      email
+      phone
+      groups{
+        _id
+        tag
+        title
+      }
+      createdAt
+      updatedAt
     }
   }`,
   createVariables: `mutation ( $args:[inputVariable] )
@@ -390,14 +395,51 @@ export const queries: queries = {
       }
     }
   }`,
+  getPermissions: `query ( $args:inputPermission, $sort:sortCriteriaPermission, $skip:Int, $limit:Int )
+  {
+    getPermission(args:$args, sort:$sort, skip:$skip, limit:$limit ){
+      total
+      results{
+        _id
+        title
+        createdAt
+        updatedAt
+      }
+    }
+  }`,
   createPermissions: `mutation ( $args:[inputPermission] )
   {
     createPermission(args:$args ){
       total
       results{
         _id
+        title
+        createdAt
+        updatedAt
+      }
+    }
+  }`,
+  updatePermissions: `mutation ( $args:inputPermission )
+  {
+    updatePermission(args:$args ){
+      _id
+      title
+      createdAt
+      updatedAt
+    }
+  }`,
+  getGroups: `query ( $args:inputGroup, $sort:sortCriteriaGroup, $skip:Int, $limit:Int )
+  {
+    getGroup(args:$args, sort:$sort, skip:$skip, limit:$limit ){
+      total
+      results{
+        _id
         tag
         title
+        permissions{
+          _id
+          title
+        }
         createdAt
         updatedAt
       }
@@ -411,10 +453,27 @@ export const queries: queries = {
         _id
         tag
         title
-        permissions
+        permissions{
+          _id
+          title
+        }
         createdAt
         updatedAt
       }
+    }
+  }`,
+  updateGroups: `mutation ( $args:inputGroup )
+  {
+    updateGroup(args:$args ){
+      _id
+      tag
+      title
+      permissions{
+        _id
+        title
+      }
+      createdAt
+      updatedAt
     }
   }`,
   createProperties: `mutation ( $args:[inputProperty] )
@@ -422,14 +481,38 @@ export const queries: queries = {
     createProperty(args:$args ){
       total
       results{
-        _id
-        tag
-        title
-        createdAt
-        updatedAt
+          _id
+          execution
+          medition
+          coordination
+          title
+          description
+          periodic
+          unique{
+            date
+            time
+          }
+          executor
+        }
       }
-    }
-  }`,
+    }`,
+  updateProperties: `mutation ( $args:inputProperty )
+  {
+    updateProperty(args:$args ){
+        _id
+        execution
+        medition
+        coordination
+        title
+        description
+        periodic
+        unique{
+          date
+          time
+        }
+        executor
+      }
+    }`,
   createSections: `mutation ( $args:[inputSection] )
   {
     createSection(args:$args ){
@@ -512,37 +595,12 @@ export const queries: queries = {
       }
     }
   }`,
-  updateUser: `mutation ( $args:inputUser )
-  {
-    updateUser( args:$args ){
-      _id
-      uid
-      name
-      position
-      email
-      phone
-      groups
-      createdAt
-      updatedAt
-    }
-  }`,
   updateVariable: `mutation ( $args:inputVariable )
   {
     updateVariable( args:$args ){
       _id
       tag
       title
-      createdAt
-      updatedAt
-    }
-  }`,
-  updateGroup: `mutation ( $args:inputGroup )
-  {
-    updateGroup( args:$args ){
-      _id
-      tag
-      title
-      permissions
       createdAt
       updatedAt
     }
@@ -580,6 +638,20 @@ export const queries: queries = {
           typeElement
         }
         title
+        properties{
+          _id
+          execution
+          medition
+          coordination
+          title
+          description
+          periodic
+          unique{
+            date
+            time
+          }
+          executor
+        }
         createdAt
         updatedAt
       }

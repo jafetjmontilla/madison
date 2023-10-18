@@ -1,0 +1,192 @@
+import { useEffect, useState } from "react"
+import { InputSelectNew } from "./InputsProperty/InputSelectNew"
+import { fetchApi, queries } from "../utils/Fetching"
+import { Formik, useField, useFormikContext } from "formik";
+import { AppContextProvider } from "../context/AppContext";
+import { InputField } from "./InputField";
+import { RiBarChart2Fill } from "react-icons/ri"
+import { AiTwotoneEdit, AiTwotoneDelete } from "react-icons/ai"
+import { MdOutlineAddCircleOutline } from "react-icons/md"
+import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io"
+import { InputRadioGroup } from "./InputsProperty/InputRadioGroup"
+import { InputCron } from "./InputsProperty/InputCron"
+import { InputDateTime } from "./InputsProperty/InputDateTime"
+import { schemaCoordinations } from "../utils/schemaCoordinations.js"
+import * as yup from 'yup'
+import { InputNew } from "./InputsProperty/InputNew";
+import { ButtonBasic } from "./ButtonBasic";
+import { FaCheck } from "react-icons/fa"
+import { useToast } from '../hooks/useToast';
+
+
+export const CreaAndEditProperties = ({ params, setShowAdd }) => {
+  const toast = useToast()
+  const d = new Date()
+  const { stage, setStage, setData, itemSchema } = AppContextProvider()
+  const [dataValues, setDataValues] = useState()
+  const [values, setValues] = useState()
+  const [errors, setErrors] = useState()
+
+  const [initialValues, setInitialValues] = useState({
+    execution: "periódica",
+    medition: "",
+    coordination: "",
+    title: "",
+    description: "",
+    periodic: ["0", "*/8", "*", "*", "*"],
+    unique: {
+      date: `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`,
+      time: `08:00`
+    },
+    executor: ""
+  })
+
+  const validationSchema = yup.object().shape({
+    medition: yup.string().test((value) => !!value),
+    coordination: yup.string().test((value) => !!value),
+    title: yup.string().test((value) => !!value),
+    executor: yup.string().test((value) => !!value),
+    description: yup.string().test((value) => !!value),
+  });
+
+  const handleSubmit = async () => {
+    try {
+      if (Object.keys(errors).length === 0) {
+        if (!params) {
+          const data = await fetchApi({
+            query: queries.createProperties,
+            variables: {
+              args: { elementID: stage.payload._id, ...values },
+            },
+            type: "json"
+          })
+          stage?.payload?.properties?.push(data?.results[0])
+          setStage({ ...stage })
+        }
+        if (params) {
+          const data = await fetchApi({
+            query: queries.updateProperties,
+            variables: {
+              args: { elementID: stage.payload._id, ...values },
+            },
+            type: "json"
+          })
+          const f1 = stage?.payload?.properties?.findIndex(elem => elem?._id === data?._id)
+          stage?.payload?.properties?.splice(f1, 1, data)
+          setStage({ ...stage })
+        }
+        toast("success", "propiedad guardada")
+        setShowAdd({ status: false })
+        return
+      }
+      toast("error", "faltan campos requeridos");
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(() => {
+    console.log(200221, values)
+  }, [values])
+
+  const meditionOptions = [
+    {
+      value: "calidad", label: "calidad",
+    },
+    {
+      value: "valor", label: "valor",
+    }
+  ]
+
+  return (
+
+    <Formik
+      initialValues={params ? params : initialValues}
+      validationSchema={validationSchema}
+
+    >
+      {({ resetForm }) => {
+
+        return (
+          <div className='w-full grid grid-cols-6 gap-2 *border-[1px] *border-gray-300 *rounded-lg px-4'>
+            <AutoSubmitToken setErrors={setErrors} setValues={setValues} />
+            <div className="col-span-2">
+              <InputRadioGroup name={"execution"} label="ejecución" />
+            </div>
+            <div className="col-span-2">
+              <InputSelectNew name={"medition"} label="medición" options={meditionOptions} />
+            </div>
+            <div className="col-span-2">
+              <InputSelectNew name={"coordination"} label="coordinacion" options={schemaCoordinations?.map((elem) => { return { value: elem.title, label: elem.title } })} />
+            </div>
+            <div className="col-span-4">
+              <InputNew name="title" label="nombre" />
+            </div>
+            <div className="col-span-2">
+              <InputSelectNew name={"executor"} label="responsable" options={schemaCoordinations?.find((elem) => elem?.title == values?.coordination)?.workers?.map(elem => { return { value: elem, label: elem } })} />
+            </div>
+            <div className="col-span-6">
+              <InputNew name="description" label="descripcion" />
+            </div>
+            <div className="col-span-6">
+              {values?.execution === "periódica"
+                ? <InputCron name="periodic" label="periódica" />
+                : <InputDateTime name="unique" label="única" />}
+            </div>
+            <div className="col-span-6 flex justify-end items-end">
+              <ButtonBasic
+                className={`m-4 bg-green-500 hover:bg-green-600 w-48 h-8 text-sm`}
+                onClick={handleSubmit}
+                caption={
+                  <div className="flex gap-2 text-sm">Guardar propiedad<FaCheck className="w-5 h-5" /></div>
+                }
+              />
+            </div>
+          </div>
+        )
+      }}
+    </Formik>
+  )
+}
+
+const AutoSubmitToken = ({ setErrors, setValues }) => {
+  const { values, errors, setValues: setValueFormik } = useFormikContext();
+  const [valir, setValir] = useState(false)
+  const d = new Date()
+  useEffect(() => {
+    //console.log(100008)
+    setErrors(errors)
+  }, [errors]);
+
+  useEffect(() => {
+    //console.log(100009)
+    setValues(values)
+  }, [values]);
+
+  useEffect(() => {
+    if (valir) {
+      setValueFormik({ ...values, executor: "" })
+    }
+    setValir(true)
+  }, [values?.coordination]);
+  useEffect(() => {
+    if (valir) {
+      if (values?.execution === "periódica") {
+        //delete values["unique"]
+        setValueFormik({ ...values, periodic: ["0", "*/8", "*", "*", "*"] })
+      }
+      if (values?.execution === "única") {
+        //delete values["periodic"]
+        setValueFormik({
+          ...values, unique: {
+            date: `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`,
+            time: `08:00`
+          }
+        })
+      }
+    }
+    setValir(true)
+  }, [values?.execution]);
+
+  return null;
+};

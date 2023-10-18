@@ -8,7 +8,7 @@ export const InputSelect = ({ options, defaultValue, onChange, value }) => {
   const [isLoading, setIsLoading] = useState(false)
 
   const classNames = {
-    control: (state) => "!rounded-lg",
+    control: (state) => "!rounded-lg !border-gray-300",
     valueContainer: (state) => "",
     input: (state) => {
       document?.getElementById(state.id)?.setAttribute("class", "bg-red-500 focus:border-transparent focus:ring-0")

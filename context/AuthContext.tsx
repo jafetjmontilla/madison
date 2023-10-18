@@ -73,11 +73,14 @@ const AuthProvider = ({ children }) => {
                 development: "madison"
               });
               const moreInfo = asd?.results[0]
-              const rights = await fetchApi({
-                query: queries.getUserPermissions,
-                variables: { args: moreInfo.groups },
-                development: "madison"
-              });
+
+              const rights = moreInfo?.groups.reduce((acc, item) => {
+                acc.groups.push(item?.tag)
+                acc.permissions.push({ group: item.tag, permissions: item.permissions.map(elem => elem.title) })
+                return acc
+              }, { groups: [], permissions: [] })
+              console.log(rights)
+
               moreInfo && console.info("Tengo datos de la base de datos");
               setUser({ ...user, ...moreInfo, rights });
               console.info("Guardo datos en contexto react");

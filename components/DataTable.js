@@ -65,6 +65,14 @@ export const DataTable = ({ data, setData }) => {
           }
           options = { ...options, customBodyRender }
         }
+        if (p?.type == "arrayobject") {
+          const customBodyRender = (value) => {
+            return (
+              <p className="uppercase">{value?.length > 0 && value?.map((elem, idx) => <li key={idx}>{elem?.title ? elem?.title : ""}</li>)}</p>
+            )
+          }
+          options = { ...options, customBodyRender }
+        }
         colummnas.push({
           name: `${p?.tag}`,
           label: `${p?.title}`,
@@ -142,7 +150,6 @@ export const DataTable = ({ data, setData }) => {
   //     console.log(557, refDataTable.current.getTableContentRef().clientHeight)
   //   }
   // }, [])
-
   return (
 
     <div ref={refDivTable} className={``} >
