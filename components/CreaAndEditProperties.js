@@ -85,10 +85,6 @@ export const CreaAndEditProperties = ({ params, setShowAdd }) => {
     }
   }
 
-  useEffect(() => {
-    console.log(200221, values)
-  }, [values])
-
   const meditionOptions = [
     {
       value: "calidad", label: "calidad",

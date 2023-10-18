@@ -15,7 +15,6 @@ export const InputProperties = ({ params, props }) => {
   const d = new Date()
   const { stage, setStage, setData, itemSchema } = AppContextProvider()
   const [field, meta, helpers] = useField(props);
-  console.log("15555,", field?.value)
   const [showAdd, setShowAdd] = useState({ status: false, payload: {} })
   const [initialValues, setInitialValues] = useState({
     medition: "periodica",
@@ -37,10 +36,6 @@ export const InputProperties = ({ params, props }) => {
     title: yup.string().test((value) => !!value),
     description: yup.string().test((value) => !!value),
   });
-
-  useEffect(() => {
-    console.log(8887777777, showAdd)
-  }, [showAdd])
 
   const handleDelete = async (elem) => {
     try {

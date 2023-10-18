@@ -52,7 +52,7 @@ export const elements = schemaElement.map(elem => {
   return {
     icon: elem.icon,
     title: elem.title,
-    groups: ["admin", "coordinador de mantenimiento", "supervisor de mantenimiento", "supervisor de limpieza"],
+    groups: ["admin", "development", "coordinador de mantenimiento", "supervisor de mantenimiento", "supervisor de limpieza"],
     slug: `/setup/${elem.typeElement}`,
     dataVariables: { typeElement: elem.typeElement },
     getData: queries.getElements,

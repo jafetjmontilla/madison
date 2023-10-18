@@ -33,7 +33,7 @@ export const BodyStaticAPP = [
   {
     icon: <BsIntersect className="w-8 h-8 text-gray-500" />,
     title: "secciones de la planta",
-    groups: ["admin"],
+    groups: ["development"],
     slug: "/plantSections",
     getData: queries.getSections,
     //getByID: FetchGraphQL.business.getOneBusiness,
@@ -65,7 +65,7 @@ export const BodyStaticAPP = [
   {
     icon: <Icons.IconEquipment className="w-8 h-8 text-gray-500" />,
     title: "equipos de proceso",
-    groups: ["admin", "gerencia mantenimiento", "supervisor mantenimiento", "gerencia servicios"],
+    groups: ["development"],
     slug: "/processEquipment",
     getData: queries.getEquipments,
     createEntry: queries.createEquipments,
@@ -94,7 +94,7 @@ export const BodyStaticAPP = [
   {
     icon: <Icons.IconScrewdriverWrench className="w-8 h-8 text-gray-500" />,
     title: "maestro de repuestos",
-    groups: ["admin", "gerencia mantenimiento", "supervisor mantenimiento"],
+    groups: ["development"],
     slug: "/replacementsMasters",
     getData: queries.getReplacementsMasters,
     createEntry: queries.createReplacementsMasters,
@@ -151,7 +151,7 @@ export const BodyStaticAPP = [
   {
     icon: <Icons.IconStateMachine className="w-8 h-8 text-gray-500" />,
     title: "maestro de equipos",
-    groups: ["admin", "gerencia mantenimiento", "supervisor mantenimiento"],
+    groups: ["development"],
     slug: "/equipmentsMasters",
     getData: queries.getEquipmentsMasters,
     createEntry: queries.createEquipmentsMasters,
@@ -368,15 +368,10 @@ export const BodyStaticAPP = [
       }
     ]
   },
-  // {
-  //   icon: <Icons.IconEquipment className="w-8 h-8 text-gray-500" />,
-  //   title: "configuración",
-  //   groups: ["admin"],
-  // }, 
   {
     icon: <MdOutlineCleaningServices className="w-8 h-8 text-gray-500" />,
     title: "limpieza",
-    groups: ["admin", "coordinador de mantenimiento", "supervisor de limpieza", "obrero limpieza"],
+    groups: ["development", "admin", "coordinador de mantenimiento", "supervisor de limpieza", "obrero limpieza"],
     slug: "/cleaning",
     // schema: [
     //   {
@@ -391,32 +386,32 @@ export const BodyStaticAPP = [
       {
         icon: <FaTasks className="w-8 h-8 text-gray-500" />,
         title: "tareas departamento",
-        groups: ["admin", "coordinador de mantenimiento", "supervisor de limpieza"],
+        groups: ["development", "admin", "coordinador de mantenimiento", "supervisor de limpieza"],
         slug: "/cleaning/alltasks",
       },
       {
         icon: <TbChartInfographic className="w-8 h-8 text-gray-500" />,
         title: "graficos",
-        groups: ["admin", "coordinador de mantenimiento"],
+        groups: ["development", "admin", "coordinador de mantenimiento"],
         slug: "/cleaning/dashboards",
       },
       {
         icon: <TbReportSearch className="w-8 h-8 text-gray-500" />,
         title: "reportes",
-        groups: ["admin", "coordinador de mantenimiento", "supervisor de limpieza"],
+        groups: ["development", "admin", "coordinador de mantenimiento", "supervisor de limpieza"],
         slug: "/cleaning/reports",
       },
       {
         icon: <BiTask className="w-8 h-8 text-gray-500" />,
         title: "tareas",
-        groups: ["admin", "supervisor de limpieza", "obrero limpieza"],
+        groups: ["development", "admin", "supervisor de limpieza", "obrero limpieza"],
         filterUser: true,
         slug: "/cleaning/tasks",
       },
       {
         icon: <LiaMedalSolid className="w-8 h-8 text-gray-500" />,
         title: "evaluación tareas",
-        groups: ["admin", "supervisor",],
+        groups: ["development", "admin", "supervisor",],
         slug: "/cleaning/evaluation",
       },
     ]
@@ -424,7 +419,7 @@ export const BodyStaticAPP = [
   {
     icon: <VscTools className="w-8 h-8 text-gray-500" />,
     title: "mantenimiento",
-    groups: ["admin", "coordinador de mantenimiento", "supervisor de mantenimiento", "obrero limpieza"],
+    groups: ["development", "admin", "coordinador de mantenimiento", "supervisor de mantenimiento", "obrero limpieza"],
     slug: "/maintenance",
     // schema: [
     //   {
@@ -439,32 +434,32 @@ export const BodyStaticAPP = [
       {
         icon: <FaTasks className="w-8 h-8 text-gray-500" />,
         title: "tareas departamento",
-        groups: ["admin", "coordinador de mantenimiento", "supervisor de mantenimiento"],
+        groups: ["development", "admin", "coordinador de mantenimiento", "supervisor de mantenimiento"],
         slug: "/maintenance/alltasks",
       },
       {
         icon: <TbChartInfographic className="w-8 h-8 text-gray-500" />,
         title: "graficos",
-        groups: ["admin", "coordinador de mantenimiento"],
+        groups: ["development", "admin", "coordinador de mantenimiento"],
         slug: "/maintenance/dashboards",
       },
       {
         icon: <TbReportSearch className="w-8 h-8 text-gray-500" />,
         title: "reportes",
-        groups: ["admin", "coordinador de mantenimiento", "supervisor de mantenimiento"],
+        groups: ["development", "admin", "coordinador de mantenimiento", "supervisor de mantenimiento"],
         slug: "/maintenance/reports",
       },
       {
         icon: <BiTask className="w-8 h-8 text-gray-500" />,
         title: "tareas",
-        groups: ["admin", "supervisor de mantenimiento", "obrero limpieza"],
+        groups: ["development", "admin", "supervisor de mantenimiento", "obrero limpieza"],
         filterUser: true,
         slug: "/maintenance/tasks",
       },
       {
         icon: <LiaMedalSolid className="w-8 h-8 text-gray-500" />,
         title: "evaluación tareas",
-        groups: ["admin", "supervisor",],
+        groups: ["development", "admin", "supervisor",],
         slug: "/maintenance/evaluation",
       },
     ]
@@ -472,7 +467,7 @@ export const BodyStaticAPP = [
   {
     icon: <AiFillSetting className="w-8 h-8 text-gray-500" />,
     title: "configuración",
-    groups: ["admin", "coordinador de mantenimiento"],
+    groups: ["development", "admin", "coordinador de mantenimiento"],
     slug: "/setup",
     position: "bottom",
     subMenu: [
@@ -480,20 +475,20 @@ export const BodyStaticAPP = [
       {
         icon: <BiCategory className="w-8 h-8 text-gray-500" />,
         title: "propiedades",
-        groups: ["admin"],
+        groups: ["development", "admin"],
         slug: "/setup/properties",
         getData: queries.getProperties,
       },
       {
         icon: <BiAbacus className="w-8 h-8 text-gray-500" />,
         title: "características",
-        groups: ["admin"],
+        groups: ["development", "admin"],
         slug: "/setup/characteristics",
       },
       {
         icon: <GrCodeSandbox className="w-6 h-8 text-gray-500" />,
         title: "variables",
-        groups: ["admin"],
+        groups: ["development"],
         slug: "/setup/variables",
         getData: queries.getVariables,
         createEntry: queries.createVariables,
@@ -531,14 +526,14 @@ export const BodyStaticAPP = [
   {
     icon: <BsShieldLockFill className="w-8 h-8 text-gray-500" />,
     title: "seguridad",
-    groups: ["admin"],
+    groups: ["development", "admin"],
     slug: "/security",
     position: "bottom",
     subMenu: [
       {
         icon: <RiShieldUserLine className="w-8 h-8 text-gray-500" />,
         title: "usuarios",
-        groups: ["admin"],
+        groups: ["development", "admin"],
         slug: "/security/users",
         getData: queries.getUser,
         createEntry: queries.createUsers,
@@ -599,7 +594,7 @@ export const BodyStaticAPP = [
       {
         icon: <HiUserGroup className="w-8 h-8 text-gray-500" />,
         title: "grupos",
-        groups: ["admin"],
+        groups: ["development", "admin"],
         slug: "/security/group",
         getData: queries.getGroups,
         createEntry: queries.createGroups,
@@ -638,7 +633,7 @@ export const BodyStaticAPP = [
       {
         icon: <VscGroupByRefType className="w-8 h-8 text-gray-500" />,
         title: "permisos",
-        groups: ["admin"],
+        groups: ["development", "admin"],
         slug: "/security/permission",
         getData: queries.getPermissions,
         createEntry: queries.createPermissions,
