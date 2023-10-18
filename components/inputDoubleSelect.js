@@ -52,7 +52,6 @@ export const InputDoubleSelect = ({ params, props }) => {
     }
     helpers.setValue(newValue)
     if (stage?.payload) {
-      console.log(stage, field?.name)
       setData((old) => {
         old.results.splice(stage.dataIndex, 1, { ...old.results[stage.dataIndex], [field?.name]: newValue })
         return { ...old, results: old.results }

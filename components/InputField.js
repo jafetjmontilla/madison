@@ -47,7 +47,6 @@ export const InputField = ({ elem: params, isSelect, ...props }) => {
             },
             type: "json"
           }).then(result => {
-            console.log(54441, result)
             const ids = field?.value?.length > 0 ? field?.value?.map(elem => elem?._id) : []
             setOptions(result.results.map(elem => {
               return { ...elem, checked: ids.includes(elem._id) }
@@ -62,7 +61,6 @@ export const InputField = ({ elem: params, isSelect, ...props }) => {
     if (params?.type === "select") {
 
       const index = params?.options.findIndex(elem => elem.value === field?.value)
-      console.log(index)
       //console.log(100051, (params?.options && params?.options[index]) || undefined)
       setValue((params?.options && params?.options[index]) || undefined)
       setOptions(params?.options || [])
@@ -105,7 +103,6 @@ export const InputField = ({ elem: params, isSelect, ...props }) => {
       const index = arr.findIndex(elem => elem?._id === e?.target?.value)
       delete arr.splice(index, 1)
     }
-    console.log(41111, arr)
     helpers.setValue(arr)
   }
 
@@ -131,7 +128,6 @@ export const InputField = ({ elem: params, isSelect, ...props }) => {
                 <div className='flex w-full'>
                   <div className='w-full grid md:grid-cols-4 lg:grid-cols-6' >
                     {options?.map((elem, idx) => {
-                      params?.subType === "group" && console.log(1000111, elem?.permissions?.length && elem?.permissions?.map(el => el?.title).toString().replace(/,/g, " "))
                       return (
                         <label key={idx} className={`text-sm items-center col-span-2 ${params?.subType === "group" && "flex my-2"} ${!stage?.payload && !params?.required ? "" : "cursor-pointer"}`}>
                           <Checkbox id={idx} value={elem._id} type="checkbox" defaultChecked={elem.checked} name={elem.title} onClick={(e) => onChangeHandler(e)} disabled={!stage?.payload && !params?.required} />

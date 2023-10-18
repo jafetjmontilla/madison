@@ -8,10 +8,11 @@ import { MdOutlineAddCircleOutline } from "react-icons/md"
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io"
 import * as yup from 'yup'
 import { CreaAndEditProperties } from "./CreaAndEditProperties"
-
+import { useToast } from "../hooks/useToast";
 
 
 export const InputProperties = ({ params, props }) => {
+  const toast = useToast();
   const d = new Date()
   const { stage, setStage, setData, itemSchema } = AppContextProvider()
   const [field, meta, helpers] = useField(props);
@@ -48,9 +49,8 @@ export const InputProperties = ({ params, props }) => {
       }).then(data => {
         const f1 = stage?.payload?.properties?.findIndex(elem => elem?._id === data?._id)
         stage?.payload?.properties?.splice(f1, 1)
-        console.log(1000004, f1, stage?.payload)
         setStage({ ...stage })
-        toast("success", "propiedad guardada")
+        toast("success", "propiedad eliminada")
       })
     } catch (error) {
       console.log(error)
