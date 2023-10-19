@@ -484,6 +484,7 @@ export const BodyStaticAPP = [
         title: "características",
         groups: ["development", "admin"],
         slug: "/setup/characteristics",
+        getData: queries.getCharacteristics,
       },
       {
         icon: <GrCodeSandbox className="w-6 h-8 text-gray-500" />,

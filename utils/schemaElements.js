@@ -91,13 +91,26 @@ export const elements = schemaElement.map(elem => {
         Header: "propiedades",
         accessor: "properties",
         type: "properties",
-        options: elem?.father?.map(elem => {
-          return {
-            value: elem,
-            label: `${schemaElement.find(el => el.typeElement === elem)?.title
-              }`
-          }
-        }),
+        // options: elem?.father?.map(elem => {
+        //   return {
+        //     value: elem,
+        //     label: `${schemaElement.find(el => el.typeElement === elem)?.title
+        //       }`
+        //   }
+        // }),
+        size: 3
+      },
+      {
+        Header: "caracteristicas",
+        accessor: "characteristics",
+        type: "characteristics",
+        // options: elem?.father?.map(elem => {
+        //   return {
+        //     value: elem,
+        //     label: `${schemaElement.find(el => el.typeElement === elem)?.title
+        //       }`
+        //   }
+        // }),
         size: 3
       },
       {

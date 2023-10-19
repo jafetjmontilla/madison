@@ -98,7 +98,6 @@ type queries = {
   deleteTasaBCV: String,
   getLog: string,
   getVariables: string,
-  getProperties: string,
   getSections: string,
   getEquipments: string,
   getEquipmentsMasters: string,
@@ -113,8 +112,12 @@ type queries = {
   getGroups: string,
   createGroups: string
   updateGroups: string
+  getProperties: string,
   createProperties: string,
   updateProperties: string,
+  getCharacteristics: string,
+  createCharacteristics: string,
+  updateCharacteristics: string,
   createSections: string,
   createEquipments: string
   createEquipmentsMasters: string
@@ -197,20 +200,6 @@ export const queries: queries = {
         smartOlt
         confirmation
         createdAt}
-      }
-    }
-  }`,
-  getProperties: `query ( $args:inputProperty, $sort:sortCriteriaProperty, $skip:Int, $limit:Int )
-  {
-    getProperty(args:$args, sort:$sort, skip:$skip, limit:$limit ){
-      total
-      results{
-        _id
-        tag
-        type
-        title
-        createdAt
-        updatedAt
       }
     }
   }`,
@@ -476,6 +465,33 @@ export const queries: queries = {
       updatedAt
     }
   }`,
+  getProperties: `query ( $args:inputProperty, $sort:sortCriteriaProperty, $skip:Int, $limit:Int )
+  {
+    getProperty(args:$args, sort:$sort, skip:$skip, limit:$limit ){
+      total
+      results{
+        _id
+        father{
+          _id
+          tag
+          title
+        }
+        execution
+        medition
+        coordination
+        title
+        description
+        periodic
+        unique{
+          date
+          time
+        }
+        executor
+        createdAt
+        updatedAt
+      }
+    }
+  }`,
   createProperties: `mutation ( $args:[inputProperty] )
   {
     createProperty(args:$args ){
@@ -511,6 +527,46 @@ export const queries: queries = {
           time
         }
         executor
+      }
+    }`,
+  getCharacteristics: `query ( $args:inputCharacteristic, $sort:sortCriteriaCharacteristic, $skip:Int, $limit:Int )
+  {
+    getCharacteristic(args:$args, sort:$sort, skip:$skip, limit:$limit ){
+      total
+      results{
+         _id
+          father{
+          _id
+          tag
+          title
+        }
+        coordination
+        title
+        description
+        createdAt
+        updatedAt
+      }
+    }
+  }`,
+  createCharacteristics: `mutation ( $args:[inputCharacteristic] )
+  {
+    createCharacteristic(args:$args ){
+      total
+      results{
+          _id
+          coordination
+          title
+          description
+        }
+      }
+    }`,
+  updateCharacteristics: `mutation ( $args:inputCharacteristic )
+  {
+    updateCharacteristic(args:$args ){
+        _id
+        coordination
+        title
+        description
       }
     }`,
   createSections: `mutation ( $args:[inputSection] )
@@ -651,6 +707,12 @@ export const queries: queries = {
             time
           }
           executor
+        }
+        characteristics{
+          _id
+          coordination
+          title
+          description
         }
         createdAt
         updatedAt

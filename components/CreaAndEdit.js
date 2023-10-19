@@ -102,20 +102,24 @@ export const CreaAndEdit = () => {
   }
 
   const handlerDelete = async () => {
-    // setLoading(true)
-    await fetchApi({
-      query: itemSchema.updateEntry,
-      variables: {
-        args: { _id: stage.payload._id, status: false },
-      },
-      type: "json"
-    })
-    setData((old) => {
-      old.results.splice(stage.dataIndex, 1)
-      return { total: old.total - 1, results: old.results }
-    })
-    setStage(stage.action == "viewTable" ? { action: "creaAndEdit" } : { action: "viewTable" })
-    toast("success", "result")
+    try {
+      // setLoading(true)
+      await fetchApi({
+        query: itemSchema.updateEntry,
+        variables: {
+          args: { _id: stage.payload._id, status: false }
+        },
+        type: "json"
+      })
+      setData((old) => {
+        old.results.splice(stage.dataIndex, 1)
+        return { total: old.total - 1, results: old.results }
+      })
+      setStage(stage.action == "viewTable" ? { action: "creaAndEdit" } : { action: "viewTable" })
+      toast("success", "result")
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   useEffect(() => {
@@ -152,6 +156,12 @@ export const CreaAndEdit = () => {
 
   return (
     <>
+      <div className="w-full h-full top-0 left-0 opacity-50 bg-gray-900 fixed z-20" />
+      <div className="w-full absolute z-30 flex justify-center">
+        <div className="bg-white w-[340px] h-[220px] rounded-2xl p-8">
+          <span className="text-2xl font-semibold">Elimnar registro</span>
+        </div>
+      </div>
       {valir && <Formik
         initialValues={initialValues ? initialValues : dataValues}
         validationSchema={validationSchema}
@@ -159,7 +169,6 @@ export const CreaAndEdit = () => {
       >
         {({ resetForm }) => {
           return (
-
             <div className="bg-gray-200 bg-opacity-50 flex items-center justify-center w-[100%] h-[calc(90%-54px)] absolute z-10">
 
               <AutoSubmitToken setErrors={setErrors} setValues={setValues} />

@@ -10,6 +10,7 @@ import { InputSelect } from './InputSelect';
 import { InputDoubleSelect } from './inputDoubleSelect';
 import { MdExpandLess } from 'react-icons/md'
 import { InputProperties } from './InputProperties'
+import { InputCharacteristics } from './InputCharacteristics'
 
 export const InputField = ({ elem: params, isSelect, ...props }) => {
   const { stage, setData, itemSchema } = AppContextProvider()
@@ -169,6 +170,11 @@ export const InputField = ({ elem: params, isSelect, ...props }) => {
             if (params?.type == "properties") {
               return (
                 <InputProperties params={params} props={props} />
+              )
+            }
+            if (params?.type == "characteristics") {
+              return (
+                <InputCharacteristics params={params} props={props} />
               )
             }
           })()
