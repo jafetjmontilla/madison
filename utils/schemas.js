@@ -17,6 +17,7 @@ import { BiCategory, BiAbacus } from 'react-icons/bi';
 import { elements } from "./schemaElements.js"
 import { tagsGroups } from "./schemaCoordinations.js"
 import { VscTools } from "react-icons/vsc"
+import { InDevelopment } from "../components/InDevelopment";
 
 
 export const defaultVisibleColumns = [
@@ -369,85 +370,32 @@ export const BodyStaticAPP = [
     ]
   },
   {
-    icon: <MdOutlineCleaningServices className="w-8 h-8 text-gray-500" />,
-    title: "limpieza",
-    groups: ["development", "admin", "coordinador de mantenimiento", "supervisor de limpieza", "obrero limpieza"],
-    slug: "/cleaning",
-    // schema: [
-    //   {
-    //     Header: "tag_cod",
-    //     accessor: "tag_cod",
-    //     type: "text",
-    //     required: true,
-    //     size: 1
-    //   },
-    // ],
-    subMenu: [
-      {
-        icon: <FaTasks className="w-8 h-8 text-gray-500" />,
-        title: "tareas departamento",
-        groups: ["development", "admin", "coordinador de mantenimiento", "supervisor de limpieza"],
-        slug: "/cleaning/alltasks",
-      },
-      {
-        icon: <TbChartInfographic className="w-8 h-8 text-gray-500" />,
-        title: "graficos",
-        groups: ["development", "admin", "coordinador de mantenimiento"],
-        slug: "/cleaning/dashboards",
-      },
-      {
-        icon: <TbReportSearch className="w-8 h-8 text-gray-500" />,
-        title: "reportes",
-        groups: ["development", "admin", "coordinador de mantenimiento", "supervisor de limpieza"],
-        slug: "/cleaning/reports",
-      },
-      {
-        icon: <BiTask className="w-8 h-8 text-gray-500" />,
-        title: "tareas",
-        groups: ["development", "admin", "supervisor de limpieza", "obrero limpieza"],
-        filterUser: true,
-        slug: "/cleaning/tasks",
-      },
-      {
-        icon: <LiaMedalSolid className="w-8 h-8 text-gray-500" />,
-        title: "evaluación tareas",
-        groups: ["development", "admin", "supervisor",],
-        slug: "/cleaning/evaluation",
-      },
-    ]
-  },
-  {
     icon: <VscTools className="w-8 h-8 text-gray-500" />,
     title: "mantenimiento",
     groups: ["development", "admin", "coordinador de mantenimiento", "supervisor de mantenimiento", "obrero limpieza"],
     slug: "/maintenance",
-    // schema: [
-    //   {
-    //     Header: "tag_cod",
-    //     accessor: "tag_cod",
-    //     type: "text",
-    //     required: true,
-    //     size: 1
-    //   },
-    // ],
+    component: <InDevelopment />,
     subMenu: [
       {
         icon: <FaTasks className="w-8 h-8 text-gray-500" />,
         title: "tareas departamento",
         groups: ["development", "admin", "coordinador de mantenimiento", "supervisor de mantenimiento"],
         slug: "/maintenance/alltasks",
+        component: <InDevelopment />,
       },
       {
         icon: <TbChartInfographic className="w-8 h-8 text-gray-500" />,
         title: "graficos",
         groups: ["development", "admin", "coordinador de mantenimiento"],
         slug: "/maintenance/dashboards",
+        component: <InDevelopment />,
       },
       {
         icon: <TbReportSearch className="w-8 h-8 text-gray-500" />,
         title: "reportes",
         groups: ["development", "admin", "coordinador de mantenimiento", "supervisor de mantenimiento"],
         slug: "/maintenance/reports",
+        component: <InDevelopment />,
       },
       {
         icon: <BiTask className="w-8 h-8 text-gray-500" />,
@@ -455,12 +403,59 @@ export const BodyStaticAPP = [
         groups: ["development", "admin", "supervisor de mantenimiento", "obrero limpieza"],
         filterUser: true,
         slug: "/maintenance/tasks",
+        component: <InDevelopment />,
       },
       {
         icon: <LiaMedalSolid className="w-8 h-8 text-gray-500" />,
         title: "evaluación tareas",
         groups: ["development", "admin", "supervisor",],
         slug: "/maintenance/evaluation",
+        component: <InDevelopment />,
+      },
+    ]
+  },
+  {
+    icon: <MdOutlineCleaningServices className="w-8 h-8 text-gray-500" />,
+    title: "limpieza",
+    groups: ["development", "admin", "coordinador de mantenimiento", "supervisor de limpieza", "obrero limpieza"],
+    slug: "/cleaning",
+    component: <InDevelopment />,
+    subMenu: [
+      {
+        icon: <FaTasks className="w-8 h-8 text-gray-500" />,
+        title: "tareas departamento",
+        groups: ["development", "admin", "coordinador de mantenimiento", "supervisor de limpieza"],
+        slug: "/cleaning/alltasks",
+        component: <InDevelopment />,
+      },
+      {
+        icon: <TbChartInfographic className="w-8 h-8 text-gray-500" />,
+        title: "graficos",
+        groups: ["development", "admin", "coordinador de mantenimiento"],
+        slug: "/cleaning/dashboards",
+        component: <InDevelopment />,
+      },
+      {
+        icon: <TbReportSearch className="w-8 h-8 text-gray-500" />,
+        title: "reportes",
+        groups: ["development", "admin", "coordinador de mantenimiento", "supervisor de limpieza"],
+        slug: "/cleaning/reports",
+        component: <InDevelopment />,
+      },
+      {
+        icon: <BiTask className="w-8 h-8 text-gray-500" />,
+        title: "tareas",
+        groups: ["development", "admin", "supervisor de limpieza", "obrero limpieza"],
+        filterUser: true,
+        slug: "/cleaning/tasks",
+        component: <InDevelopment />,
+      },
+      {
+        icon: <LiaMedalSolid className="w-8 h-8 text-gray-500" />,
+        title: "evaluación tareas",
+        groups: ["development", "admin", "supervisor",],
+        slug: "/cleaning/evaluation",
+        component: <InDevelopment />,
       },
     ]
   },
@@ -478,6 +473,20 @@ export const BodyStaticAPP = [
         groups: ["development", "admin"],
         slug: "/setup/properties",
         getData: queries.getProperties,
+        schema: [
+          {
+            Header: "nombre",
+            accessor: "title",
+            type: "text",
+            required: true,
+            size: 3
+          },
+          {
+            Header: "id",
+            accessor: "_id",
+            type: "id",
+          }
+        ]
       },
       {
         icon: <BiAbacus className="w-8 h-8 text-gray-500" />,
@@ -485,6 +494,20 @@ export const BodyStaticAPP = [
         groups: ["development", "admin"],
         slug: "/setup/characteristics",
         getData: queries.getCharacteristics,
+        schema: [
+          {
+            Header: "nombre",
+            accessor: "title",
+            type: "text",
+            required: true,
+            size: 3
+          },
+          {
+            Header: "id",
+            accessor: "_id",
+            type: "id",
+          }
+        ]
       },
       {
         icon: <GrCodeSandbox className="w-6 h-8 text-gray-500" />,
@@ -501,13 +524,15 @@ export const BodyStaticAPP = [
             type: "text",
             required: true,
             size: 3
-          }, {
+          },
+          {
             Header: "nombre",
             accessor: "title",
             type: "text",
             required: true,
             size: 3
-          }, {
+          },
+          {
             Header: "tipo",
             accessor: "type",
             type: "text",
@@ -669,15 +694,14 @@ export const BodyStaticAPP = [
     groups: ["all"],
     slug: "/profile",
     position: "bottom",
+    component: <InDevelopment />,
     subMenu: [
       {
         icon: <MdOutlineManageAccounts className="w-10 h-10 text-gray-500" />,
         title: "preferencias",
         groups: ["all"],
         slug: "/profile/perfil",
-        // getData: queries.getUser,
-        // createEntry: queries.createUsers,
-        // updateEntry: queries.updateUser,
+        component: <InDevelopment />,
         schema: [
           {
             Header: "nombre",
@@ -693,9 +717,7 @@ export const BodyStaticAPP = [
         title: "cambiar contraseña",
         groups: ["all"],
         slug: "/profile/passwords",
-        // getData: queries.getUser,
-        // createEntry: queries.createUsers,
-        // updateEntry: queries.updateUser,
+        component: <InDevelopment />,
         schema: [
           {
             Header: "nombre",

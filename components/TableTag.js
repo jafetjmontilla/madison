@@ -73,6 +73,11 @@ export const TableTag = () => {
     }
   }
 
+  useEffect(() => {
+    console.log(!!itemSchema?.component)
+  }, [itemSchema])
+
+
   return (
     <div className="bg-[#0E356B] w-full h-full flex items-center justify-center relative">
 
@@ -132,7 +137,10 @@ export const TableTag = () => {
           >
             <CreaAndEdit />
           </CSSTransition>
-          <DataTable data={data} setData={setData} />
+          {!itemSchema?.component
+            ? <DataTable data={data} setData={setData} />
+            : itemSchema.component
+          }
         </div>
       </div>
     </div>

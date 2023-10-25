@@ -13,7 +13,7 @@ export const useAuthentication = () => {
   const { setLoading } = LoadingContextProvider();
   const { setUser } = AuthContextProvider();
   const { setItemSchema } = AppContextProvider()
-  const toast = useToast();
+  const toast = useToast(3500);
   const router = useRouter();
 
   const getSessionCookie = useCallback(async (tokenID: any): Promise<string | undefined> => {
@@ -109,8 +109,14 @@ export const useAuthentication = () => {
           case "auth/too-many-requests":
             toast("error", "usuario o contraseña inválida");
             break;
-          case "user does not exist into events bd":
-            toast("error", "debes estar invitado a un evento para poder ingresar");
+          case "auth/wrong-password":
+            toast("error", "usuario o contraseña inválido");
+            break;
+          case "auth/invalid-email":
+            toast("error", "correo inválido");
+            break;
+          case "auth/missing-password":
+            toast("error", "password inválido");
             break;
           case "user does not exist into events bd":
             toast("error", "debes estar invitado a un evento para poder ingresar");
@@ -120,7 +126,7 @@ export const useAuthentication = () => {
         }
 
         console.log("error", error)
-        console.log("errorCode", error?.code ? error.code : error?.message)
+        console.log("errorCode", error?.code, "errorMessage", error?.message)
       }
       //setLoading(false);
     },
@@ -134,9 +140,22 @@ export const useAuthentication = () => {
     router.push("/")
   }, [router])
 
+  const resetPassword = async (values: any, setShowResetPassword: any) => {// funcion para conectar con con firebase para enviar el correo 
+    if (values?.identifier !== "") {
+      try {
+        //await sendPasswordResetEmail(getAuth(), values?.identifier);
+        setShowResetPassword(false)
+        toast("success", "Se ha enviado un enlace a tu email")
+      } catch (error) {
+        toast("error", "Error, email no encontrado")
+        console.log(error);
+      }
+    } else {
+      toast("error", "introduce un correo")
+    }
+  };
 
-
-  return { signIn, _signOut, getSessionCookie };
+  return { signIn, _signOut, getSessionCookie, resetPassword };
 
 };
 
