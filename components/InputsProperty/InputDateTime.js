@@ -1,7 +1,19 @@
 import { useField } from "formik";
+import { useEffect, useState } from "react";
 
 export const InputDateTime = (props) => {
   const [field, meta, helpers] = useField(props);
+  const d = new Date(field.value)
+  const [values, setValues] = useState({
+    date: `${d.getFullYear()}-${(d.getMonth() + 1) < 10 ? `0${d.getMonth() + 1}` : d.getMonth() + 1}-${d.getDate() < 10 ? `0${d.getDate()}` : d.getDate()}`, time: `${d.getHours() < 10 ? `0${d.getHours()}` : d.getHours()}:${d.getMinutes() < 10 ? `0${d.getMinutes()}` : d.getMinutes()}`
+  })
+  useEffect(() => {
+    //helpers.setValue(values)
+    console.log(55441, new Date(`${values.date}:${values.time}`))
+    helpers.setValue(new Date(`${values.date}:${values.time}`))
+  }, [values])
+
+  console.log(55440, props?.name, field.value)
 
   return (
     <>
@@ -9,18 +21,18 @@ export const InputDateTime = (props) => {
         <label className="capitalize text-xs">{props?.label}</label>
         {meta.error && <span className="text-red-500 text-xs ml-2">!requerido</span>}
       </div>
-      <div className="grid grid-cols-8 gap-2">
+      <div className={`grid gap-2 ${props?.name === "executedAt" ? "grid-cols-5" : "grid-cols-8"}`}>
         <input type="date"
           onChange={(e) => {
             console.log(e.target.value)
-            helpers?.setValue({ ...field?.value, date: e.target.value })
+            setValues({ ...values, date: e.target.value })
           }}
-          value={field?.value?.date ? field?.value?.date : ""} className={`col-span-2 h-[38px] rounded-lg border-[1px] border-gray-300 text-sm`} />
+          value={values?.date ? values?.date : ""} className={`col-span-2 h-[38px] rounded-lg border-[1px] border-gray-300 text-sm`} />
         <input type="time"
           onChange={(e) => {
-            helpers?.setValue({ ...field?.value, time: e.target.value })
+            setValues({ ...values, time: e.target.value })
           }}
-          value={field?.value?.time ? field?.value?.time : ""} className={`col-span-2 h-[38px] rounded-lg border-[1px] border-gray-300 text-sm `} />
+          value={values?.time ? values?.time : ""} className={`col-span-2 h-[38px] rounded-lg border-[1px] border-gray-300 text-sm `} />
       </div>
     </>
   )

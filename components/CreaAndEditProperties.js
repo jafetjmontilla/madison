@@ -17,6 +17,8 @@ import { InputNew } from "./InputsProperty/InputNew";
 import { ButtonBasic } from "./ButtonBasic";
 import { FaCheck } from "react-icons/fa"
 import { useToast } from '../hooks/useToast';
+import { InputSwitch } from "./InputsProperty/InputSwitch"
+import { InputDateInterval } from "./InputsProperty/InputDateInterval"
 
 
 export const CreaAndEditProperties = ({ params, setShowAdd }) => {
@@ -33,12 +35,11 @@ export const CreaAndEditProperties = ({ params, setShowAdd }) => {
     coordination: "",
     title: "",
     description: "",
-    periodic: ["0", "*/8", "*", "*", "*"],
-    unique: {
-      date: `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`,
-      time: `08:00`
-    },
-    executor: ""
+    executedAt: new Date(`${d.getFullYear()}-${(d.getMonth() + 1) < 10 ? `0${d.getMonth() + 1}` : d.getMonth() + 1}-${d.getDate() < 10 ? `0${d.getDate()}` : d.getDate()},08:00`),
+    periodic: undefined,
+    unique: new Date(`${d.getFullYear()}-${(d.getMonth() + 1) < 10 ? `0${d.getMonth() + 1}` : d.getMonth() + 1}-${d.getDate() < 10 ? `0${d.getDate()}` : d.getDate()},08:00`),
+    executor: "",
+    active: true
   })
 
   const validationSchema = yup.object().shape({
@@ -85,12 +86,27 @@ export const CreaAndEditProperties = ({ params, setShowAdd }) => {
     }
   }
 
+  const optionsIntervals = [
+    { value: "diaria", label: "Diaria" },
+    { value: "interdiaria", label: "Interdiaria" },
+    { value: "semanal", label: "Semanal" },
+    { value: "quincenal", label: "Quincenal" },
+    { value: "mensual", label: "Mensual" },
+    { value: "bimensual", label: "Bimensual" },
+    { value: "trimestral", label: "Trimestral" },
+    { value: "semestral", label: "Semestral" },
+    { value: "anual", label: "Anual" },
+  ]
+
   const meditionOptions = [
     {
-      value: "calidad", label: "calidad",
+      value: "cualitativa", label: "Cualitativa",
     },
     {
-      value: "valor", label: "valor",
+      value: "cuantitativa", label: "Cuantitativa",
+    },
+    {
+      value: "no aplica", label: "No aplica",
     }
   ]
 
@@ -124,10 +140,18 @@ export const CreaAndEditProperties = ({ params, setShowAdd }) => {
             <div className="col-span-6">
               <InputNew name="description" label="descripcion" />
             </div>
-            <div className="col-span-6">
+            {values?.execution === "periódica" &&
+              <div className="col-span-3">
+                <InputDateTime name="executedAt" label="última ejecución" />
+              </div>
+            }
+            <div className={`${values?.execution === "periódica" ? "col-span-2" : "col-span-5"}`}>
               {values?.execution === "periódica"
-                ? <InputCron name="periodic" label="periódica" />
-                : <InputDateTime name="unique" label="única" />}
+                ? <InputSelectNew name={"periodic"} label="intérvalo ejecución" options={optionsIntervals} />
+                : <InputDateTime name="unique" label="ejecución única" />}
+            </div>
+            <div className="col-span-1">
+              <InputSwitch name="active" label="activo" />
             </div>
             <div className="col-span-6 flex justify-end items-end">
               <ButtonBasic
@@ -155,7 +179,7 @@ const AutoSubmitToken = ({ setErrors, setValues }) => {
   }, [errors]);
 
   useEffect(() => {
-    //console.log(100009)
+    console.log(100009, values)
     setValues(values)
   }, [values]);
 
@@ -165,24 +189,24 @@ const AutoSubmitToken = ({ setErrors, setValues }) => {
     }
     setValir(true)
   }, [values?.coordination]);
-  useEffect(() => {
-    if (valir) {
-      if (values?.execution === "periódica") {
-        //delete values["unique"]
-        setValueFormik({ ...values, periodic: ["0", "*/8", "*", "*", "*"] })
-      }
-      if (values?.execution === "única") {
-        //delete values["periodic"]
-        setValueFormik({
-          ...values, unique: {
-            date: `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`,
-            time: `08:00`
-          }
-        })
-      }
-    }
-    setValir(true)
-  }, [values?.execution]);
+  // useEffect(() => {
+  //   if (valir) {
+  //     if (values?.execution === "periódica") {
+  //       //delete values["unique"]
+  //       setValueFormik({ ...values, periodic: ["0", "*/8", "*", "*", "*"] })
+  //     }
+  //     if (values?.execution === "única") {
+  //       //delete values["periodic"]
+  //       setValueFormik({
+  //         ...values, unique: {
+  //           date: `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`,
+  //           time: `08:00`
+  //         }
+  //       })
+  //     }
+  //   }
+  //   setValir(true)
+  // }, [values?.execution]);
 
   return null;
 };

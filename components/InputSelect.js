@@ -38,6 +38,7 @@ export const InputSelect = ({ options, defaultValue, onChange, value }) => {
       isSearchable={isSearchable}
       options={options}
       classNames={classNames}
+      className='uppercase'
     />
   )
 }

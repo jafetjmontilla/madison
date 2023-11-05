@@ -106,7 +106,7 @@ export const InputField = ({ elem: params, isSelect, ...props }) => {
     }
     helpers.setValue(arr)
   }
-
+  console.log(params)
   return (
     <div className='w-full h-full'>
       {params.accessor !== "_id" &&
@@ -120,7 +120,7 @@ export const InputField = ({ elem: params, isSelect, ...props }) => {
           (() => {
             if (["id", "text", "number", "datetime-local", "date"].includes(params?.type)) {
               return (
-                <input {...field} type={params?.type} disabled={["id"].includes(params?.type) || (!stage?.payload && !params?.required) || (stage?.payload && params?.readOnly)} className={`h-[38px] rounded-lg border-[1px] border-gray-300 text-sm w-[100%] ${stage?.payload && params?.readOnly && "cursor-not-allowed"}`} />
+                <input {...field} type={params?.type} disabled={["id"].includes(params?.type) || (!stage?.payload && !params?.required) || (stage?.payload && params?.readOnly)} className={`h-[38px] rounded-lg border-[1px] border-gray-300 text-sm w-[100%] ${stage?.payload && params?.readOnly && "cursor-not-allowed"} ${!["_id", "email"].includes(params?.accessor) && "uppercase"}`} />
               )
             }
 
@@ -130,7 +130,7 @@ export const InputField = ({ elem: params, isSelect, ...props }) => {
                   <div className='w-full grid md:grid-cols-4 lg:grid-cols-6' >
                     {options?.map((elem, idx) => {
                       return (
-                        <label key={idx} className={`text-sm items-center col-span-2 ${params?.subType === "group" && "flex my-2"} ${!stage?.payload && !params?.required ? "" : "cursor-pointer"}`}>
+                        <label key={idx} className={`text-sm items-center col-span-2 uppercase ${params?.subType === "group" && "flex my-2"} ${!stage?.payload && !params?.required ? "" : "cursor-pointer"}`}>
                           <Checkbox id={idx} value={elem._id} type="checkbox" defaultChecked={elem.checked} name={elem.title} onClick={(e) => onChangeHandler(e)} disabled={!stage?.payload && !params?.required} />
                           {params?.subType === "group"
                             ? <div className='flex flex-col text-xs capitalize'>

@@ -481,12 +481,11 @@ export const queries: queries = {
         coordination
         title
         description
+        executedAt
         periodic
-        unique{
-          date
-          time
-        }
+        unique
         executor
+        active
         createdAt
         updatedAt
       }
@@ -503,12 +502,11 @@ export const queries: queries = {
           coordination
           title
           description
+          executedAt
           periodic
-          unique{
-            date
-            time
-          }
+          unique
           executor
+          active
         }
       }
     }`,
@@ -521,12 +519,11 @@ export const queries: queries = {
         coordination
         title
         description
+        executedAt
         periodic
-        unique{
-          date
-          time
-        }
+        unique
         executor
+        active
       }
     }`,
   getCharacteristics: `query ( $args:inputCharacteristic, $sort:sortCriteriaCharacteristic, $skip:Int, $limit:Int )
@@ -701,12 +698,11 @@ export const queries: queries = {
           coordination
           title
           description
+          executedAt
           periodic
-          unique{
-            date
-            time
-          }
+          unique
           executor
+          active
         }
         characteristics{
           _id

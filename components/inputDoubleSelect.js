@@ -25,7 +25,7 @@ export const InputDoubleSelect = ({ params, props }) => {
         type: "json"
       }).then(result => {
         const opt = result?.results?.map(elem => {
-          return { value: elem?._id, label: elem.title }
+          return { value: elem?._id, label: `${elem.tag} · ${elem.title}`, title: elem.title }
         })
         setOptiosSecondSelect(opt)
         if (valir) {
@@ -46,7 +46,7 @@ export const InputDoubleSelect = ({ params, props }) => {
   const onChangeHandler = async (secondValue) => {
     setSecondValue(secondValue)
     const newValue = {
-      title: secondValue?.label,
+      title: secondValue?.title,
       typeElement: value?.value,
       _id: secondValue?.value
     }

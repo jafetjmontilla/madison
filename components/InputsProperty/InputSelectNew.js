@@ -14,7 +14,7 @@ export const InputSelectNew = ({ options, name, label }) => {
     control: (state) => "!rounded-lg !border-gray-300",
     valueContainer: (state) => "",
     input: (state) => {
-      document?.getElementById(state.id)?.setAttribute("class", "bg-red-500 focus:border-transparent focus:ring-0")
+      document?.getElementById(state.id)?.setAttribute("class", "focus:border-transparent focus:ring-0")
     },
     indicatorSeparator: (state) => "",
     indicatorsContainer: (state) => "",
@@ -38,7 +38,7 @@ export const InputSelectNew = ({ options, name, label }) => {
         //   "algo"
         // }
         // styles={selectStyle}
-        value={field?.value ? { value: field?.value, label: field?.value } : ""}
+        value={field?.value ? options?.find(elem => elem.value === field.value) : ""}
         //defaultValue={defaultValue}
         isDisabled={isDisabled}
         isLoading={isLoading}
@@ -46,6 +46,7 @@ export const InputSelectNew = ({ options, name, label }) => {
         isSearchable={isSearchable}
         options={options}
         classNames={classNames}
+        className='uppercase'
       />
     </>
   )
