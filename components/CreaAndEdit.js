@@ -199,7 +199,7 @@ export const CreaAndEdit = () => {
       >
         {({ resetForm }) => {
           return (
-            <div className="bg-gray-200 bg-opacity-50 flex items-center justify-center w-[100%] h-[calc(90%-54px)] absolute z-10">
+            <div className="bg-gray-800 bg-opacity-50 flex items-center justify-center w-[100%] h-[calc(90%-28px)] absolute z-10 ">
 
               <AutoSubmitToken setErrors={setErrors} setValues={setValues} />
               <div className="bg-white w-full h-[100%] md:w-[800px] md:h-[105%] md:translate-y-[-20px] rounded-lg shadow-lg truncate">

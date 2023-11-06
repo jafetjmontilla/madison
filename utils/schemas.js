@@ -7,7 +7,7 @@ import { AiFillSetting } from 'react-icons/ai';
 import { GrCodeSandbox } from 'react-icons/gr';
 import { FiLogOut } from 'react-icons/fi';
 import { queries } from "./Fetching";
-import { MdOutlineManageAccounts, MdOutlineCleaningServices } from 'react-icons/md';
+import { MdOutlineManageAccounts, MdOutlineCleaningServices, MdOutlineAccountTree } from 'react-icons/md';
 import { PiPassword } from 'react-icons/pi';
 import { FaTasks } from 'react-icons/fa';
 import { TbChartInfographic, TbReportSearch } from 'react-icons/tb';
@@ -30,6 +30,12 @@ export const BodyStaticAPP = [
     title: "inicio",
     groups: ["all"],
     slug: "/",
+  },
+  {
+    icon: <MdOutlineAccountTree className="w-8 h-8 text-gray-500" />,
+    title: "estructura",
+    groups: ["development", "admin"],
+    slug: "/structure",
   },
   {
     icon: <BsIntersect className="w-8 h-8 text-gray-500" />,

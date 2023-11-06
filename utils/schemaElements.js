@@ -5,18 +5,18 @@ import { queries } from "./Fetching";
 
 import { ImOffice, ImInsertTemplate } from 'react-icons/im';
 
-const schemaElement = [
+export const schemaElement = [
   {
     title: "empresa",
     typeElement: "company",
-    children: ["section", "area", "part"],
+    children: ["section", "area", "equipment", "part"],
     icon: <ImOffice className="w-8 h-8 text-gray-500" />,
   },
   {
     title: "secciones",
     typeElement: "section",
     father: ["company"],
-    children: ["area", "section", "equipment", "part"],
+    children: ["area", "equipment", "part"],
     icon: <ImInsertTemplate className="w-8 h-8 text-gray-500" />,
   },
   {
@@ -30,7 +30,7 @@ const schemaElement = [
     title: "equipos",
     typeElement: "equipment",
     father: ["section", "area", "equipment"],
-    children: ["equipmen", "component", "part"],
+    children: ["equipment", "component", "part"],
     icon: <Icons.IconEquipment className="w-8 h-8 text-gray-500" />,
   },
   {

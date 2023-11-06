@@ -665,6 +665,7 @@ export const queries: queries = {
       results{
         _id
         tag
+        typeElement
         title
         father{
           _id
@@ -684,6 +685,7 @@ export const queries: queries = {
       results{
         _id
         tag
+        typeElement
         father{
           _id
           tag
@@ -721,6 +723,7 @@ export const queries: queries = {
       _id
       tag
       title
+      typeElement
       father{
         _id
         tag
@@ -736,6 +739,7 @@ export const queries: queries = {
     updateElemnt( args:$args ){
       _id
       tag
+      typeElement
       title
       permissions
       createdAt
