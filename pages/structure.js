@@ -9,7 +9,7 @@ import { TreeItem } from '@mui/x-tree-view/TreeItem';
 import { schemaElement } from "../utils/schemaElements.js"
 import { fetchApi, queries } from "../utils/Fetching";
 import { Button } from "@mui/material";
-import { CiEdit } from "react-icons/ci"
+import { BsCheck2Circle } from "react-icons/bs"
 import { GiBookPile, GiBackwardTime } from "react-icons/gi"
 
 
@@ -61,10 +61,6 @@ const Structure = () => {
       }
     }
   }, [isMounted])
-
-  useEffect(() => {
-    console.log(1005, data)
-  }, [data])
 
   useEffect(() => {
     if (isMounted) {
@@ -181,7 +177,7 @@ const Structure = () => {
       onClick={() => handleExpanded(nodes)}
       label={
         <div className="flex items-center gap-2 text-sm">
-          <CiEdit onClick={(e) => handleClickView(e, nodes)} className="w-4 h-4 text-gray-800 hover:scale-125" />
+          <BsCheck2Circle onClick={(e) => handleClickView(e, nodes)} className="w-4 h-4 text-gray-800 hover:scale-125" />
           <span className="uppercase font-semibold text-gray-800">{nodes.tag}</span>
           <span className="capitalize font-normal">{nodes.name}</span>
         </div>
@@ -273,7 +269,7 @@ const Structure = () => {
           </div>
         </div>
       }
-      <div className="bg-[#0E356B] stick flex w-full h-full items-center justify-center  font">
+      <div className="bg-[#0E356B] stick flex w-full h-full items-center justify-center">
         <div className="bg-[#0E356B] w-full h-full flex items-center justify-center relative">
           <div className="flex flex-col relative h-[100%] w-[95%]">
             <div className="bg-gray-100 rounded-lg w-[100%] h-[calc(100%-120px)] overflow-auto mt-[92px] flex flex-col">
@@ -283,7 +279,7 @@ const Structure = () => {
                 </Button>
 
               </Box>
-              <div className="border-2 border-gray-500 rounded-xl w-[95%] h-[90%] overflow-auto mx-auto py-2">
+              <div className="border-[1px] border-gray-300 rounded-xl w-[95%] h-[90%] overflow-auto mx-auto py-2">
                 <TreeView
                   aria-label="rich object"
                   defaultCollapseIcon={<ExpandMoreIcon />}

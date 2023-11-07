@@ -18,6 +18,7 @@ import { elements } from "./schemaElements.js"
 import { tagsGroups } from "./schemaCoordinations.js"
 import { VscTools } from "react-icons/vsc"
 import { InDevelopment } from "../components/InDevelopment";
+import { CalendarCompont } from "../components/CalendarCompont";
 
 
 export const defaultVisibleColumns = [
@@ -387,7 +388,7 @@ export const BodyStaticAPP = [
         title: "tareas departamento",
         groups: ["development", "admin", "coordinador de mantenimiento", "supervisor de mantenimiento"],
         slug: "/maintenance/alltasks",
-        component: <InDevelopment />,
+        component: <CalendarCompont />,
       },
       {
         icon: <TbChartInfographic className="w-8 h-8 text-gray-500" />,
@@ -409,7 +410,7 @@ export const BodyStaticAPP = [
         groups: ["development", "admin", "supervisor de mantenimiento", "obrero limpieza"],
         filterUser: true,
         slug: "/maintenance/tasks",
-        component: <InDevelopment />,
+        component: <CalendarCompont />,
       },
       {
         icon: <LiaMedalSolid className="w-8 h-8 text-gray-500" />,
@@ -432,7 +433,7 @@ export const BodyStaticAPP = [
         title: "tareas departamento",
         groups: ["development", "admin", "coordinador de mantenimiento", "supervisor de limpieza"],
         slug: "/cleaning/alltasks",
-        component: <InDevelopment />,
+        component: <CalendarCompont />,
       },
       {
         icon: <TbChartInfographic className="w-8 h-8 text-gray-500" />,
@@ -454,7 +455,7 @@ export const BodyStaticAPP = [
         groups: ["development", "admin", "supervisor de limpieza", "obrero limpieza"],
         filterUser: true,
         slug: "/cleaning/tasks",
-        component: <InDevelopment />,
+        component: <CalendarCompont />,
       },
       {
         icon: <LiaMedalSolid className="w-8 h-8 text-gray-500" />,
