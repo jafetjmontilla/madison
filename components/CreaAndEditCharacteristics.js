@@ -33,27 +33,28 @@ export const CreaAndEditCharacteristics = ({ params, setShowAdd }) => {
     try {
       if (Object.keys(errors).length === 0) {
         if (!params) {
-          const data = await fetchApi({
+          const result = await fetchApi({
             query: queries.createCharacteristics,
             variables: {
               args: { elementID: stage.payload._id, ...values },
             },
             type: "json"
           })
-          stage?.payload?.characteristics?.push(data?.results[0])
+          stage?.payload?.characteristics?.push(result?.results[0])
           setStage({ ...stage })
         }
         if (params) {
-          const data = await fetchApi({
+          const result = await fetchApi({
             query: queries.updateCharacteristics,
             variables: {
               args: { elementID: stage.payload._id, ...values },
             },
             type: "json"
           })
-          const f1 = stage?.payload?.characteristics?.findIndex(elem => elem?._id === data?._id)
-          stage?.payload?.characteristics?.splice(f1, 1, data)
+          const f1 = stage?.payload?.characteristics?.findIndex(elem => elem?._id === result?._id)
+          stage?.payload?.characteristics?.splice(f1, 1, result)
           setStage({ ...stage })
+          toast("success", "0002")
         }
         toast("success", "característica guardada")
         setShowAdd({ status: false })

@@ -174,12 +174,10 @@ const AutoSubmitToken = ({ setErrors, setValues }) => {
   const [valir, setValir] = useState(false)
   const d = new Date()
   useEffect(() => {
-    //console.log(100008)
     setErrors(errors)
   }, [errors]);
 
   useEffect(() => {
-    console.log(100009, values)
     setValues(values)
   }, [values]);
 
@@ -189,24 +187,6 @@ const AutoSubmitToken = ({ setErrors, setValues }) => {
     }
     setValir(true)
   }, [values?.coordination]);
-  // useEffect(() => {
-  //   if (valir) {
-  //     if (values?.execution === "periódica") {
-  //       //delete values["unique"]
-  //       setValueFormik({ ...values, periodic: ["0", "*/8", "*", "*", "*"] })
-  //     }
-  //     if (values?.execution === "única") {
-  //       //delete values["periodic"]
-  //       setValueFormik({
-  //         ...values, unique: {
-  //           date: `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`,
-  //           time: `08:00`
-  //         }
-  //       })
-  //     }
-  //   }
-  //   setValir(true)
-  // }, [values?.execution]);
 
   return null;
 };

@@ -5,7 +5,7 @@ import { useField } from "formik";
 import { AppContextProvider } from "../context/AppContext";
 
 export const InputDoubleSelect = ({ params, props }) => {
-  const { stage, setData, itemSchema } = AppContextProvider()
+  const { stage, setStage, setData, itemSchema } = AppContextProvider()
   const [field, meta, helpers] = useField(props);
   const [value, setValue] = useState(params?.options?.find(elem => elem?.value === field?.value?.typeElement))
   const [optiosSecondSelect, setOptiosSecondSelect] = useState()
@@ -54,6 +54,9 @@ export const InputDoubleSelect = ({ params, props }) => {
     if (stage?.payload) {
       setData((old) => {
         old.results.splice(stage.dataIndex, 1, { ...old.results[stage.dataIndex], [field?.name]: newValue })
+        setStage(oldStage => {
+          return { ...oldStage, payload: { ...old.results[stage.dataIndex], [field?.name]: newValue } }
+        })
         return { ...old, results: old.results }
       })
       await fetchApi({

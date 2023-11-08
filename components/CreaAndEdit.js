@@ -90,10 +90,10 @@ export const CreaAndEdit = () => {
         })
         if (resp) {
           setData((old) => {
-            old?.results?.splice(0, 0, { ...requiredValues, _id: resp?.results[0]?._id })
+            old?.results?.splice(0, 0, { ...resp?.results[0], characteristics: [], properties: [] })
             return { total: old.total + 1, results: old?.results }
           })
-          setStage({ ...stage, payload: { ...stage.payload, ...requiredValues, _id: resp?.results[0]?._id }, dataIndex: 0 })
+          setStage({ ...stage, payload: { ...resp?.results[0], characteristics: [], properties: [] }, dataIndex: 0 })
           console.log("*guardo nuevo registro", { ...requiredValues, _id: resp?.results[0]?._id })
         }
       }
@@ -132,7 +132,7 @@ export const CreaAndEdit = () => {
         setValir(true)
       } else {
         const values = varSchema?.schema?.reduce((acc, item) => {
-          acc.initialValues = { ...acc.initialValues, [`${item.accessor}`]: "" }
+          acc.initialValues = { ...acc.initialValues, [`${item.accessor}`]: ["characteristics", "properties"].includes(item.accessor) ? [] : "" }
           if (item?.required) acc.requiredValues = { ...acc.requiredValues, [`${item.accessor}`]: null }
           return acc
         }, { initialValues: {}, requiredValues: {} })

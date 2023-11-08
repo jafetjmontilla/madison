@@ -9,11 +9,8 @@ export const InputDateTime = (props) => {
   })
   useEffect(() => {
     //helpers.setValue(values)
-    console.log(55441, new Date(`${values.date}:${values.time}`))
     helpers.setValue(new Date(`${values.date}:${values.time}`))
   }, [values])
-
-  console.log(55440, props?.name, field.value)
 
   return (
     <>
@@ -24,7 +21,6 @@ export const InputDateTime = (props) => {
       <div className={`grid gap-2 ${props?.name === "executedAt" ? "grid-cols-5" : "grid-cols-8"}`}>
         <input type="date"
           onChange={(e) => {
-            console.log(e.target.value)
             setValues({ ...values, date: e.target.value })
           }}
           value={values?.date ? values?.date : ""} className={`col-span-2 h-[38px] rounded-lg border-[1px] border-gray-300 text-sm`} />

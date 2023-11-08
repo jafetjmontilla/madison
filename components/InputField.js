@@ -106,7 +106,6 @@ export const InputField = ({ elem: params, isSelect, ...props }) => {
     }
     helpers.setValue(arr)
   }
-  console.log(params)
   return (
     <div className='w-full h-full'>
       {params.accessor !== "_id" &&

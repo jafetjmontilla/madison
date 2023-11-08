@@ -7,7 +7,7 @@ import { defaultVisibleColumns } from "../utils/schemas"
 import { TextField } from "@mui/material";
 import { useAllowed } from "../hooks/useAllowed"
 
-export const DataTable = ({ data, setData }) => {
+export const DataTable = ({ data }) => {
   const { setStage, itemSchema, variables } = AppContextProvider()
   const [isAllowed] = useAllowed()
 

@@ -16,6 +16,10 @@ export const InputProperties = ({ props }) => {
   const [field, meta, helpers] = useField(props);
   const [showAdd, setShowAdd] = useState({ status: false, payload: {} })
 
+  useEffect(() => {
+    helpers.setValue(stage?.payload?.properties)
+  }, [stage?.payload])
+
   const handleDelete = async (elem) => {
     try {
       await fetchApi({
