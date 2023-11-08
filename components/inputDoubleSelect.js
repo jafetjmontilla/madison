@@ -12,6 +12,13 @@ export const InputDoubleSelect = ({ params, props }) => {
   const [secondValue, setSecondValue] = useState(optiosSecondSelect?.find(elem => elem?.value === field?.value?._id))
   const [valir, setValir] = useState(false)
 
+
+  useEffect(() => {
+    if (!stage?.payload) {
+      setValue([])
+    }
+  }, [stage])
+
   useEffect(() => {
     if (value?.value) {
       fetchApi({

@@ -1,5 +1,5 @@
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useMounted } from "../hooks/useMounted";
 import { LoadingContextProvider } from "../context/LoadingContext";
 import { AppContextProvider } from "../context/AppContext";
@@ -11,7 +11,6 @@ import { Formik, useFormikContext } from "formik";
 import { InputField } from "./InputField";
 import * as yup from 'yup'
 import { fetchApi } from "../utils/Fetching";
-import { tagsGroups } from "../utils/schemaCoordinations";
 
 
 export const CreaAndEdit = () => {
@@ -25,7 +24,6 @@ export const CreaAndEdit = () => {
   const [values, setValues] = useState()
   const [errors, setErrors] = useState()
   const [confirmation, setConfirmation] = useState({ show: false, value: false })
-
 
   const { setLoading } = LoadingContextProvider()
   const [isMounted, setIsMounted] = useState(false)
