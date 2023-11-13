@@ -10,6 +10,11 @@ import { ButtonBasic } from "./ButtonBasic";
 import { FaCheck } from "react-icons/fa"
 import { useToast } from '../hooks/useToast';
 
+const variations = (newArr, oldArr) => {
+  const z1 = newArr.filter(elem => oldArr.findIndex(el => el == elem) == -1)
+  const z2 = oldArr.filter(elem => newArr.findIndex(el => el == elem) == -1)
+  return [...z1, ...z2]
+}
 
 export const CreaAndEditCharacteristics = ({ params, setShowAdd }) => {
   const toast = useToast()
@@ -66,6 +71,36 @@ export const CreaAndEditCharacteristics = ({ params, setShowAdd }) => {
     }
   }
 
+  const optionsCharacteristicsOld = stage.payload.characteristics.map(elem => elem.title)
+  const optionsCharacteristics = [
+    { title: "funcion", },
+    { title: "capacidad", },
+    { title: "marca", },
+    { title: "modelo", },
+    { title: "serial", },
+    { title: "ubicacion", },
+    { title: "largo (m)", },
+    { title: "alto (m)", },
+    { title: "ancho (m)", },
+    { title: "potencia (hp)", },
+    { title: "voltaje nominal (v)", },
+    { title: "amperaje (a)", },
+    { title: "corriente nominal (a) rpm", },
+    { title: "frecuencia (hz)", },
+    { title: "rodamiento del.", },
+    { title: "rodamiento tra.", },
+    { title: "estopera", },
+    { title: "lubricante", },
+    { title: "peso(kg)", },
+    { title: "material", },
+    { title: "espesor de lamina", },
+    { title: "tipo", },
+    { title: "hrs de servicio", },
+    { title: "datos adjuntos", },
+    { title: "observaciones" },
+  ]
+  const optionsCharacteristicsNew = variations(optionsCharacteristics.map(elem => elem.title), optionsCharacteristicsOld.filter(elem => elem !== values?.title))
+
   return (
     <Formik
       initialValues={params ? params : initialValues}
@@ -76,7 +111,9 @@ export const CreaAndEditCharacteristics = ({ params, setShowAdd }) => {
           <div className='w-full grid grid-cols-6 gap-2 *border-[1px] *border-gray-300 *rounded-lg px-4'>
             <AutoSubmitToken setErrors={setErrors} setValues={setValues} />
             <div className="col-span-4">
-              <InputNew name="title" label="nombre" />
+              {["equipment", "component", "part"].includes(stage?.payload?.typeElement)
+                ? <InputSelectNew name={"title"} label="nombre" options={optionsCharacteristicsNew?.map((elem) => { return { value: elem, label: elem } })} />
+                : <InputNew name="title" label="nombre" />}
             </div>
             <div className="col-span-2">
               <InputSelectNew name={"coordination"} label="coordinacion" options={schemaCoordinations?.map((elem) => { return { value: elem.title, label: elem.title } })} />
