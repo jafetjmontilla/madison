@@ -16,11 +16,46 @@ const variations = (newArr, oldArr) => {
   return [...z1, ...z2]
 }
 
+const optionsCharacteristics = [
+  { title: "alto (m)" },
+  { title: "amperaje (a)" },
+  { title: "amperimetro" },
+  { title: "ancho (m)" },
+  { title: "capacidad" },
+  { title: "conexion" },
+  { title: "corriente nominal (a) rpm" },
+  { title: "datos adjuntos" },
+  { title: "espesor de lamina" },
+  { title: "estopera" },
+  { title: "factor de potencia" },
+  { title: "frame" },
+  { title: "frecuencia (hz)" },
+  { title: "funcion" },
+  { title: "hrs de servicio" },
+  { title: "ip" },
+  { title: "largo (m)" },
+  { title: "lubricante" },
+  { title: "marca" },
+  { title: "material" },
+  { title: "modelo" },
+  { title: "observaciones" },
+  { title: "peso(kg)" },
+  { title: "potencia (hp)" },
+  { title: "rodamiento del." },
+  { title: "rodamiento tra." },
+  { title: "rpm" },
+  { title: "serial" },
+  { title: "tipo" },
+  { title: "ubicacion" },
+  { title: "voltaje nominal (v)" },
+]
+
 export const CreaAndEditCharacteristics = ({ params, setShowAdd }) => {
   const toast = useToast()
   const { stage, setStage } = AppContextProvider()
   const [values, setValues] = useState()
   const [errors, setErrors] = useState()
+  const [optionsCharacteristicsNew, setOptionsCharacteristicsNew] = useState()
 
   const [initialValues, setInitialValues] = useState({
     coordination: "",
@@ -70,36 +105,14 @@ export const CreaAndEditCharacteristics = ({ params, setShowAdd }) => {
       console.log(error)
     }
   }
-
-  const optionsCharacteristicsOld = stage.payload.characteristics.map(elem => elem.title)
-  const optionsCharacteristics = [
-    { title: "funcion", },
-    { title: "capacidad", },
-    { title: "marca", },
-    { title: "modelo", },
-    { title: "serial", },
-    { title: "ubicacion", },
-    { title: "largo (m)", },
-    { title: "alto (m)", },
-    { title: "ancho (m)", },
-    { title: "potencia (hp)", },
-    { title: "voltaje nominal (v)", },
-    { title: "amperaje (a)", },
-    { title: "corriente nominal (a) rpm", },
-    { title: "frecuencia (hz)", },
-    { title: "rodamiento del.", },
-    { title: "rodamiento tra.", },
-    { title: "estopera", },
-    { title: "lubricante", },
-    { title: "peso(kg)", },
-    { title: "material", },
-    { title: "espesor de lamina", },
-    { title: "tipo", },
-    { title: "hrs de servicio", },
-    { title: "datos adjuntos", },
-    { title: "observaciones" },
-  ]
-  const optionsCharacteristicsNew = variations(optionsCharacteristics.map(elem => elem.title), optionsCharacteristicsOld.filter(elem => elem !== values?.title))
+  useEffect(() => {
+    if (!optionsCharacteristicsNew && values?.title !== undefined) {
+      const options = stage.payload.characteristics.map(elem => elem.title)
+      const optionsCharacteristicsOld = options.filter(elem => elem !== values?.title)
+      const optionsDiferent = variations(optionsCharacteristics.map(elem => elem.title), optionsCharacteristicsOld)
+      setOptionsCharacteristicsNew(optionsDiferent)
+    }
+  }, [values?.title])
 
   return (
     <Formik

@@ -34,6 +34,7 @@ export const InputCharacteristics = ({ params, props }) => {
         setStage({ ...stage })
         toast("success", "característica eliminada")
       })
+      setShowAdd(false)
     } catch (error) {
       console.log(error)
     }
