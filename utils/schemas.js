@@ -381,7 +381,7 @@ export const BodyStaticAPP = [
     title: "mantenimiento",
     groups: ["development", "admin", "coordinador de mantenimiento", "supervisor de mantenimiento", "obrero limpieza"],
     slug: "/maintenance",
-    component: <InDevelopment />,
+    //component: <InDevelopment />,
     subMenu: [
       {
         icon: <FaTasks className="w-8 h-8 text-gray-500" />,
@@ -426,7 +426,7 @@ export const BodyStaticAPP = [
     title: "limpieza",
     groups: ["development", "admin", "coordinador de mantenimiento", "supervisor de limpieza", "obrero limpieza"],
     slug: "/cleaning",
-    component: <InDevelopment />,
+    //component: <InDevelopment />,
     subMenu: [
       {
         icon: <FaTasks className="w-8 h-8 text-gray-500" />,
@@ -701,7 +701,7 @@ export const BodyStaticAPP = [
     groups: ["all"],
     slug: "/profile",
     position: "bottom",
-    component: <InDevelopment />,
+    //component: <InDevelopment />,
     subMenu: [
       {
         icon: <MdOutlineManageAccounts className="w-10 h-10 text-gray-500" />,

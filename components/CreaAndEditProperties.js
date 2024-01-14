@@ -18,7 +18,7 @@ import { ButtonBasic } from "./ButtonBasic";
 import { FaCheck } from "react-icons/fa"
 import { useToast } from '../hooks/useToast';
 import { InputSwitch } from "./InputsProperty/InputSwitch"
-import { InputDateInterval } from "./InputsProperty/InputDateInterval"
+import { optionsIntervals } from '../utils/dictionaries.js'
 
 
 export const CreaAndEditProperties = ({ params, setShowAdd }) => {
@@ -57,27 +57,30 @@ export const CreaAndEditProperties = ({ params, setShowAdd }) => {
           const data = await fetchApi({
             query: queries.createProperties,
             variables: {
-              args: { elementID: stage.payload._id, ...values },
+              args: { elementID: stage?.payload?._id, ...values },
             },
             type: "json"
           })
           stage?.payload?.properties?.push(data?.results[0])
           setStage({ ...stage })
+          setShowAdd({ status: false })
+
         }
         if (params) {
+          delete values?.father
           const data = await fetchApi({
             query: queries.updateProperties,
             variables: {
-              args: { elementID: stage.payload._id, ...values },
+              args: { elementID: stage?.payload?._id, ...values },
             },
             type: "json"
           })
           const f1 = stage?.payload?.properties?.findIndex(elem => elem?._id === data?._id)
           stage?.payload?.properties?.splice(f1, 1, data)
           setStage({ ...stage })
+          setShowAdd({ status: false, payload: data })
         }
         toast("success", "propiedad guardada")
-        setShowAdd({ status: false })
         return
       }
       toast("error", "faltan campos requeridos");
@@ -85,18 +88,6 @@ export const CreaAndEditProperties = ({ params, setShowAdd }) => {
       console.log(error)
     }
   }
-
-  const optionsIntervals = [
-    { value: "diaria", label: "Diaria" },
-    { value: "interdiaria", label: "Interdiaria" },
-    { value: "semanal", label: "Semanal" },
-    { value: "quincenal", label: "Quincenal" },
-    { value: "mensual", label: "Mensual" },
-    { value: "bimensual", label: "Bimensual" },
-    { value: "trimestral", label: "Trimestral" },
-    { value: "semestral", label: "Semestral" },
-    { value: "anual", label: "Anual" },
-  ]
 
   const meditionOptions = [
     {

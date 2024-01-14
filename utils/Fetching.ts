@@ -128,6 +128,8 @@ type queries = {
   getElements: string
   updateElements: string
   deleteElements: string
+  getTasks: String
+  updateTasks: String
 };
 
 export const queries: queries = {
@@ -744,6 +746,45 @@ export const queries: queries = {
       permissions
       createdAt
       updatedAt
+    }
+  }`,
+  getTasks: `query ( $args:inputTask, $sort:sortCriteriaTask, $skip:Int, $limit:Int )
+  {
+    getTasks(args:$args, sort:$sort, skip:$skip, limit:$limit){
+      total
+      results{
+        _id
+        start
+        end
+        property{
+          _id
+          title
+          father{
+            _id
+          }
+        }
+        status
+        createdAt
+        updatedAt
+      }
+    }
+  }`,
+  updateTasks: `mutation ( $args:inputTask )
+  {
+    updateTask( args:$args ){
+           _id
+        start
+        end
+        property{
+          _id
+          title
+          father{
+            _id
+          }
+        }
+        status
+        createdAt
+        updatedAt
     }
   }`,
 };

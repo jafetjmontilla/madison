@@ -275,7 +275,7 @@ export const CreaAndEdit = () => {
 };
 
 const AutoSubmitToken = ({ setErrors, setValues }) => {
-  const { values, errors } = useFormikContext();
+  const { values, errors, res } = useFormikContext();
 
   useEffect(() => {
     setErrors(errors)

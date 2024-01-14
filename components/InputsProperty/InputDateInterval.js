@@ -1,6 +1,7 @@
 import { useField } from "formik";
 import Select from 'react-select'
 import { useState } from "react"
+import { optionsIntervals } from '../../utils/dictionaries'
 
 
 export const InputDateInterval = (props) => {
@@ -20,17 +21,6 @@ export const InputDateInterval = (props) => {
     indicatorsContainer: (state) => "",
   }
 
-  const optionsIntervals = [
-    { value: "diaria", label: "Diaria" },
-    { value: "interdiaria", label: "Interdiaria" },
-    { value: "semanal", label: "Semanal" },
-    { value: "quincenal", label: "Quincenal" },
-    { value: "mensual", label: "Mensual" },
-    { value: "bimensual", label: "Bimensual" },
-    { value: "trimestral", label: "Trimestral" },
-    { value: "semestral", label: "Semestral" },
-    { value: "anual", label: "Anual" },
-  ]
 
   return (
     <>
@@ -41,7 +31,6 @@ export const InputDateInterval = (props) => {
       <div className="grid grid-cols-8 gap-2">
         <input type="date"
           onChange={(e) => {
-            console.log(e.target.value)
             helpers?.setValue({ ...field?.value, date: e.target.value })
           }}
           value={field?.value?.date ? field?.value?.date : ""} className={`col-span-2 h-[38px] rounded-lg border-[1px] border-gray-300 text-sm`} />
