@@ -10,17 +10,22 @@ import { CreaAndEditProperties } from "./CreaAndEditProperties"
 import { useToast } from "../hooks/useToast";
 
 
-export const InputProperties = ({ props }) => {
+export const InputProperties = ({ params, props, setDataComponenentes }) => {
   const toast = useToast();
-  const { stage, setStage } = AppContextProvider()
+  const { stage, setStage, barNav } = AppContextProvider()
   const [field, meta, helpers] = useField(props);
   const [showAdd, setShowAdd] = useState({ status: false, payload: {} })
 
   useEffect(() => {
-    helpers.setValue(stage?.payload?.properties)
+    if (params) {
+      helpers.setValue(params?.properties)
+    } else {
+      helpers.setValue(stage?.payload?.properties)
+    }
   }, [stage?.payload])
 
   const handleDelete = async (elem) => {
+    console.log("elimino propiedad")
     try {
       await fetchApi({
         query: queries.updateProperties,
@@ -29,9 +34,19 @@ export const InputProperties = ({ props }) => {
         },
         type: "json"
       }).then(data => {
-        const f1 = stage?.payload?.properties?.findIndex(elem => elem?._id === data?._id)
-        stage?.payload?.properties?.splice(f1, 1)
-        setStage({ ...stage })
+        if (!setDataComponenentes) {
+          const f1 = stage?.payload?.properties?.findIndex(elem => elem?._id === data?._id)
+          stage?.payload?.properties?.splice(f1, 1)
+          setStage({ ...stage })
+        }
+        if (setDataComponenentes) {
+          setDataComponenentes(old => {
+            const f1 = old?.data?.findIndex(elem => elem?._id === params?._id)
+            const f2 = old.data[f1].properties.findIndex(elem => elem._id === data?._id)
+            old.data[f1].properties.splice(f2, 1)
+            return { ...old }
+          })
+        }
         toast("success", "propiedad eliminada")
       })
     } catch (error) {
@@ -40,8 +55,8 @@ export const InputProperties = ({ props }) => {
   }
 
   return (
-    <div className="w-full">
-      <div className="w-full text-gray-700 capitalize grid grid-cols-12 items-center text-left font-semibold border-b-2 py-1">
+    <div className="w-full -mt-1">
+      <div className="w-full text-gray-700 capitalize grid grid-cols-12 items-center text-left font-semibold border-b-2 text-xs *py-1">
         <span className="col-span-4">Nombre</span>
         <span className="col-span-2">ejecución</span>
         <span className="col-span-2">medición</span>
@@ -53,7 +68,7 @@ export const InputProperties = ({ props }) => {
             < div className={`w-full ${(showAdd.status && showAdd?.payload?._id === elem._id) && "bg-gray-200"} text-gray-700 uppercase grid grid-cols-12 gap-4 items-center py-1`}>
               <div className="col-span-4 gap-2 flex items-center">
                 <GiBackwardTime className="w-5 h-5" />
-                <span className="truncate">{elem?.title}</span>
+                <span className="truncate flex-1">{elem?.title}</span>
               </div>
               <span className="col-span-2 truncate">{elem?.execution}</span>
               <span className="col-span-2 truncate">{elem?.medition}</span>
@@ -73,21 +88,26 @@ export const InputProperties = ({ props }) => {
             </div>
             {(showAdd.status && showAdd?.payload?._id === elem._id) &&
               <div className="border-2 border-t-0 rounded-b-xl pb-4 mb-4">
-                <CreaAndEditProperties params={elem} setShowAdd={setShowAdd} />
+                <CreaAndEditProperties father={params} params={elem} setShowAdd={setShowAdd} setDataComponenentes={setDataComponenentes} />
               </div>
             }
           </div>
         )
       })}
       <div className="w-full text-gray-700 uppercase grid grid-cols-12 gap-4 items-center border-t-2 py-1">
-        <div className="col-span-12 gap-2 flex items-center cursor-pointer ml-10" onClick={() => { setShowAdd({ status: showAdd?.payload ? true : !showAdd?.status }) }}>
+        <div className="col-span-12 gap-2 flex items-center cursor-pointer ml-10"
+          onClick={() => {
+            if (barNav[barNav.length - 1] !== "...") {
+              setShowAdd({ status: showAdd?.payload ? true : !showAdd?.status })
+            }
+          }}>
           {showAdd?.status && !showAdd?.payload ? <IoIosArrowUp className="w-4 h-4" /> : <IoIosArrowDown className="w-4 h-4" />}
           <span className="">agregar propiedad</span>
           <MdOutlineAddCircleOutline className="w-5 h-5" />
         </div>
       </div>
       {(showAdd?.status && !showAdd?.payload) &&
-        <CreaAndEditProperties setShowAdd={setShowAdd} />
+        <CreaAndEditProperties father={params} setShowAdd={setShowAdd} setDataComponenentes={setDataComponenentes} />
       }
     </div>
   )

@@ -19,7 +19,7 @@ export const TableTag = () => {
   const router = useRouter()
   const { setUser, user } = AuthContextProvider()
   const { setLoading } = LoadingContextProvider()
-  const { slug, itemSchema, setItemSchema, stage, setStage, data, setData } = AppContextProvider()
+  const { slug, itemSchema, setItemSchema, stage, setStage, data, setData, barNav, setBarNav } = AppContextProvider()
   const [showSelect, setShowSelect] = useState(false)
   const [isAllowed] = useAllowed()
   const hasRole = useHasRole()
@@ -73,15 +73,10 @@ export const TableTag = () => {
     }
   }
 
-  useEffect(() => {
-    console.log(!!itemSchema?.component)
-  }, [itemSchema])
-
-
   return (
     <div className="bg-[#0E356B] w-full h-full flex items-center justify-center relative">
 
-      <div className="flex flex-col relative h-[100%] w-[95%] overflow-auto">
+      <div className="flex flex-col h-[100%] w-[95%] overflow-auto">
         {subMenu &&
           <div className="flex w-full h-11 relative items-center md:items-start ">
             <div onClick={() => { setShowSelect(!showSelect) }} className="bg-white flex px-2 border-2 rounded-lg w-[60%] h-8 md:hidden justify-between items-center">
@@ -116,16 +111,17 @@ export const TableTag = () => {
         <div className={`w-[100%] ${itemSchema?.father || itemSchema?.subMenu ? "h-[40px]" : "h-[84px]"} flex items-end justify-left mb-2`}>
           {(itemSchema?.schema && isAllowed("crear")) && <ButtonBasic
             className={`${stage.action == "viewTable" ? "bg-green-500 hover:bg-green-600" : "bg-gray-400 hover:bg-gray-500"}`}
-            onClick={
-              () => {
-                // setLoading(true)
-                setStage(stage.action == "viewTable" ? { action: "creaAndEdit" } : { action: "viewTable" })
-              }
+            onClick={() => {
+              // setLoading(true)
+              barNav.push("...")
+              setBarNav([...barNav])
+              setStage(stage.action == "viewTable" ? { action: "creaAndEdit" } : { action: "viewTable" })
+            }
             }
             caption={stage.action == "viewTable" ? "crear registro" : "volver"}
           />}
         </div>
-        <div className="bg-gray-100 rounded-lg w-[100%] h-[calc(100%-120px)] overflow-auto">
+        <div id="rootelement" className="bg-gray-100 rounded-lg w-[100%] h-[calc(100%-120px)] overflow-auto">
           <CSSTransition
             in={stage.action == "creaAndEdit"}
             //nodeRef={nodeRef}
@@ -138,7 +134,7 @@ export const TableTag = () => {
             <CreaAndEdit />
           </CSSTransition>
           {!itemSchema?.component
-            ? <DataTable data={data} setData={setData} />
+            ? <DataTable data={data} />
             : itemSchema.component
           }
         </div>

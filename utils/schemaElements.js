@@ -5,6 +5,16 @@ import { queries } from "./Fetching";
 
 import { ImOffice, ImInsertTemplate } from 'react-icons/im';
 
+export const optionsComponentsAndParts = [
+  { title: "motor" },
+  { title: "sistema de transmisión" },
+  { title: "estructura" },
+  { title: "elementos de sujeción" },
+  { title: "sensores" },
+  { title: "controlador" },
+  { title: "actuadores" },
+]
+
 export const schemaElement = [
   {
     title: "empresa",
@@ -43,7 +53,7 @@ export const schemaElement = [
   {
     title: "partes",
     typeElement: "part",
-    father: ["company", "section", "area", "equipment", "component"],
+    father: ["equipment", "component"],
     icon: <Icons.IconScrewdriverWrench className="w-8 h-8 text-gray-500" />,
   },
 ]
@@ -52,7 +62,7 @@ export const elements = schemaElement.map(elem => {
   return {
     icon: elem.icon,
     title: elem.title,
-    groups: ["admin", "development", "coordinador de mantenimiento", "supervisor de mantenimiento", "supervisor de limpieza"],
+    groups: ["admin", "development", "coordinador de mantenimiento", "supervisor de mantenimiento", "supervisor de servicios generales"],
     slug: `/setup/${elem.typeElement}`,
     dataVariables: { typeElement: elem.typeElement },
     getData: queries.getElements,
@@ -60,17 +70,26 @@ export const elements = schemaElement.map(elem => {
     updateEntry: queries.updateElements,
     deleteEntry: queries.deleteElements,
     schema: [
-      {
+      ["company", "area", "section", "equipment"].includes(elem.typeElement) && {
         Header: "tag",
         accessor: "tag",
         type: "text",
         required: true,
         size: 1
       },
+      ["component", "part"].includes(elem.typeElement) &&
+      {
+        Header: "tipo",
+        accessor: "tipo",
+        type: "select",
+        options: optionsComponentsAndParts.map((elem) => { return { value: elem.title, label: elem.title } }),
+        required: true,
+        size: 1,
+      },
       {
         Header: "nombre",
         accessor: "title",
-        type: "text",
+        type: "textarea",
         required: true,
         size: 3
       },
@@ -113,12 +132,26 @@ export const elements = schemaElement.map(elem => {
         // }),
         size: 3
       },
+      ["equipment", "component"].includes(elem.typeElement) && {
+        Header: "componentes",
+        accessor: "component",
+        type: "componentsAndParts",
+        size: 3,
+        icon: <Icons.IconStateMachine className="w-5 h-5 text-gray-500" />,
+      },
+      ["equipment", "component"].includes(elem.typeElement) && {
+        Header: "partes",
+        accessor: "part",
+        type: "componentsAndParts",
+        size: 3,
+        icon: <Icons.IconScrewdriverWrench className="w-5 h-5 text-gray-500" />,
+      },
       {
         Header: "id",
         accessor: "_id",
         type: "id",
       }
-    ]
+    ].filter(elem => elem !== false)
   }
 })
 

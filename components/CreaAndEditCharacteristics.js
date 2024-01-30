@@ -9,6 +9,7 @@ import { InputNew } from "./InputsProperty/InputNew";
 import { ButtonBasic } from "./ButtonBasic";
 import { FaCheck } from "react-icons/fa"
 import { useToast } from '../hooks/useToast';
+import { TextareaNew } from "./InputsProperty/TextareaNew";
 
 const variations = (newArr, oldArr) => {
   const z1 = newArr.filter(elem => oldArr.findIndex(el => el == elem) == -1)
@@ -50,7 +51,7 @@ const optionsCharacteristics = [
   { title: "voltaje nominal (v)" },
 ]
 
-export const CreaAndEditCharacteristics = ({ params, setShowAdd }) => {
+export const CreaAndEditCharacteristics = ({ father, params, setShowAdd, setDataComponenentes }) => {
   const toast = useToast()
   const { stage, setStage } = AppContextProvider()
   const [values, setValues] = useState()
@@ -73,29 +74,60 @@ export const CreaAndEditCharacteristics = ({ params, setShowAdd }) => {
     try {
       if (Object.keys(errors).length === 0) {
         if (!params) {
-          const result = await fetchApi({
+          const data = await fetchApi({
             query: queries.createCharacteristics,
             variables: {
-              args: { elementID: stage.payload._id, ...values },
+              args: {
+                elementID: father?._id ? father?._id : stage?.payload?._id,
+                ...values
+              },
             },
             type: "json"
           })
-          stage?.payload?.characteristics?.push(result?.results[0])
-          setStage({ ...stage })
+          if (!setDataComponenentes) {
+            stage?.payload?.characteristics?.push(data?.results[0])
+            setStage({ ...stage })
+          }
+          if (setDataComponenentes) {
+            setDataComponenentes(old => {
+              const f1 = old?.data?.findIndex(elem => elem?._id === father?._id)
+              old?.data[f1]?.characteristics?.push(data?.results[0])
+              return { ...old }
+            })
+          }
+          setShowAdd({ status: false })
+
         }
+
+
+
         if (params) {
-          const result = await fetchApi({
+          delete values?.father
+          const data = await fetchApi({
             query: queries.updateCharacteristics,
             variables: {
-              args: { elementID: stage.payload._id, ...values },
+              args: { elementID: father?._id ? father?._id : stage?.payload?._id, ...values },
             },
             type: "json"
           })
-          const f1 = stage?.payload?.characteristics?.findIndex(elem => elem?._id === result?._id)
-          stage?.payload?.characteristics?.splice(f1, 1, result)
-          setStage({ ...stage })
-          toast("success", "0002")
+          if (!setDataComponenentes) {
+            const f1 = stage?.payload?.characteristics?.findIndex(elem => elem?._id === data?._id)
+            stage?.payload?.characteristics?.splice(f1, 1, data)
+            setStage({ ...stage })
+          }
+          if (setDataComponenentes) {
+            setDataComponenentes(old => {
+              const f1 = old?.data?.findIndex(elem => elem?._id === father?._id)
+              const f2 = old.data[f1].characteristics.findIndex(elem => elem._id === data?._id)
+              old.data[f1].characteristics.splice(f2, 1, data)
+              return { ...old }
+            })
+          }
+          setShowAdd({ status: false, payload: data })
         }
+
+
+
         toast("success", "característica guardada")
         setShowAdd({ status: false })
         return
@@ -107,10 +139,12 @@ export const CreaAndEditCharacteristics = ({ params, setShowAdd }) => {
   }
   useEffect(() => {
     if (!optionsCharacteristicsNew && values?.title !== undefined) {
-      const options = stage.payload.characteristics.map(elem => elem.title)
-      const optionsCharacteristicsOld = options.filter(elem => elem !== values?.title)
-      const optionsDiferent = variations(optionsCharacteristics.map(elem => elem.title), optionsCharacteristicsOld)
-      setOptionsCharacteristicsNew(optionsDiferent)
+      if (stage?.payload?.characteristics?.length) {
+        const options = stage.payload.characteristics.map(elem => elem.title)
+        const optionsCharacteristicsOld = options.filter(elem => elem !== values?.title)
+        const optionsDiferent = variations(optionsCharacteristics.map(elem => elem.title), optionsCharacteristicsOld)
+        setOptionsCharacteristicsNew(optionsDiferent)
+      }
     }
   }, [values?.title])
 
@@ -132,7 +166,7 @@ export const CreaAndEditCharacteristics = ({ params, setShowAdd }) => {
               <InputSelectNew name={"coordination"} label="coordinacion" options={schemaCoordinations?.map((elem) => { return { value: elem.title, label: elem.title } })} />
             </div>
             <div className="col-span-6">
-              <InputNew name="description" label="descripcion" />
+              <TextareaNew name="description" label="descripcion" />
             </div>
             <div className="col-span-6 flex justify-end items-end">
               <ButtonBasic

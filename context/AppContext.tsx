@@ -33,6 +33,8 @@ type Context = {
   setStage: Dispatch<SetStateAction<Stage>>
   data: Data
   setData: Dispatch<SetStateAction<Data>>
+  barNav: String[]
+  setBarNav: Dispatch<SetStateAction<String[]>>
 };
 
 const initialContext: Context = {
@@ -46,6 +48,8 @@ const initialContext: Context = {
   setStage: () => { return { stage: "viewTable", payload: {} } },
   data: { total: 0, results: [] },
   setData: () => { return { total: 0, results: [] } },
+  barNav: [],
+  setBarNav: () => { return [] },
 };
 
 const AppContext = createContext<Context>(initialContext);
@@ -57,7 +61,7 @@ const AppProvider: FC<any> = ({ children }): JSX.Element => {
   const [isMounted, setIsMounted] = useState(false)
   const [stage, setStage] = useState({ action: "viewTable", payload: {}, dataIndex: 0 })
   const [data, setData] = useState({ total: 0, results: [] })
-
+  const [barNav, setBarNav] = useState([])
 
   useEffect(() => {
     if (!isMounted) {
@@ -83,9 +87,8 @@ const AppProvider: FC<any> = ({ children }): JSX.Element => {
     }
   }, [isMounted])
 
-
   return (
-    <AppContext.Provider value={{ slug: slug, setSlug: setSlug, itemSchema: itemSchema, setItemSchema: setItemSchema, variables, setVariables, stage, setStage, data, setData }}>
+    <AppContext.Provider value={{ slug: slug, setSlug: setSlug, itemSchema: itemSchema, setItemSchema: setItemSchema, variables, setVariables, stage, setStage, data, setData, barNav, setBarNav }}>
       {children}
     </AppContext.Provider>
   );

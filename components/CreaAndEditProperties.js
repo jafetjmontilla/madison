@@ -14,6 +14,7 @@ import { InputDateTime } from "./InputsProperty/InputDateTime"
 import { schemaCoordinations } from "../utils/schemaCoordinations.js"
 import * as yup from 'yup'
 import { InputNew } from "./InputsProperty/InputNew";
+import { TextareaNew } from "./InputsProperty/TextareaNew";
 import { ButtonBasic } from "./ButtonBasic";
 import { FaCheck } from "react-icons/fa"
 import { useToast } from '../hooks/useToast';
@@ -21,11 +22,10 @@ import { InputSwitch } from "./InputsProperty/InputSwitch"
 import { optionsIntervals } from '../utils/dictionaries.js'
 
 
-export const CreaAndEditProperties = ({ params, setShowAdd }) => {
+export const CreaAndEditProperties = ({ father, params, setShowAdd, setDataComponenentes }) => {
   const toast = useToast()
   const d = new Date()
-  const { stage, setStage, setData, itemSchema } = AppContextProvider()
-  const [dataValues, setDataValues] = useState()
+  const { stage, setStage, setData } = AppContextProvider()
   const [values, setValues] = useState()
   const [errors, setErrors] = useState()
 
@@ -57,29 +57,57 @@ export const CreaAndEditProperties = ({ params, setShowAdd }) => {
           const data = await fetchApi({
             query: queries.createProperties,
             variables: {
-              args: { elementID: stage?.payload?._id, ...values },
+              args: {
+                elementID: father?._id ? father?._id : stage?.payload?._id,
+                ...values
+              },
             },
             type: "json"
           })
-          stage?.payload?.properties?.push(data?.results[0])
-          setStage({ ...stage })
+          if (!setDataComponenentes) {
+            stage?.payload?.properties?.push(data?.results[0])
+            setStage({ ...stage })
+          }
+          if (setDataComponenentes) {
+            setDataComponenentes(old => {
+              const f1 = old?.data?.findIndex(elem => elem?._id === father?._id)
+              old?.data[f1]?.properties?.push(data?.results[0])
+              return { ...old }
+            })
+          }
           setShowAdd({ status: false })
 
         }
+
+
+
         if (params) {
           delete values?.father
           const data = await fetchApi({
             query: queries.updateProperties,
             variables: {
-              args: { elementID: stage?.payload?._id, ...values },
+              args: { elementID: father?._id ? father?._id : stage?.payload?._id, ...values },
             },
             type: "json"
           })
-          const f1 = stage?.payload?.properties?.findIndex(elem => elem?._id === data?._id)
-          stage?.payload?.properties?.splice(f1, 1, data)
-          setStage({ ...stage })
+          if (!setDataComponenentes) {
+            const f1 = stage?.payload?.properties?.findIndex(elem => elem?._id === data?._id)
+            stage?.payload?.properties?.splice(f1, 1, data)
+            setStage({ ...stage })
+          }
+          if (setDataComponenentes) {
+            setDataComponenentes(old => {
+              const f1 = old?.data?.findIndex(elem => elem?._id === father?._id)
+              const f2 = old.data[f1].properties.findIndex(elem => elem._id === data?._id)
+              old.data[f1].properties.splice(f2, 1, data)
+              return { ...old }
+            })
+          }
           setShowAdd({ status: false, payload: data })
         }
+
+
+
         toast("success", "propiedad guardada")
         return
       }
@@ -129,7 +157,7 @@ export const CreaAndEditProperties = ({ params, setShowAdd }) => {
               <InputSelectNew name={"executor"} label="responsable" options={schemaCoordinations?.find((elem) => elem?.title == values?.coordination)?.workers?.map(elem => { return { value: elem, label: elem } })} />
             </div>
             <div className="col-span-6">
-              <InputNew name="description" label="descripcion" />
+              <TextareaNew name="description" label="descripcion" />
             </div>
             {values?.execution === "periódica" &&
               <div className="col-span-3">
@@ -163,7 +191,7 @@ export const CreaAndEditProperties = ({ params, setShowAdd }) => {
 const AutoSubmitToken = ({ setErrors, setValues }) => {
   const { values, errors, setValues: setValueFormik } = useFormikContext();
   const [valir, setValir] = useState(false)
-  const d = new Date()
+
   useEffect(() => {
     setErrors(errors)
   }, [errors]);

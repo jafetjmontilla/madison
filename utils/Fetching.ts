@@ -669,6 +669,7 @@ export const queries: queries = {
         tag
         typeElement
         title
+        tipo
         father{
           _id
           tag
@@ -695,6 +696,7 @@ export const queries: queries = {
           typeElement
         }
         title
+        tipo
         properties{
           _id
           execution
@@ -725,6 +727,7 @@ export const queries: queries = {
       _id
       tag
       title
+      tipo
       typeElement
       father{
         _id
@@ -743,6 +746,7 @@ export const queries: queries = {
       tag
       typeElement
       title
+      tipo
       permissions
       createdAt
       updatedAt

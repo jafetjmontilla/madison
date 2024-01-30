@@ -6,9 +6,10 @@ import { AppContextProvider } from "../context/AppContext"
 import { defaultVisibleColumns } from "../utils/schemas"
 import { TextField } from "@mui/material";
 import { useAllowed } from "../hooks/useAllowed"
+import { fetchApi, queries } from "../utils/Fetching";
 
 export const DataTable = ({ data }) => {
-  const { setStage, itemSchema, variables } = AppContextProvider()
+  const { setStage, itemSchema, variables, setData, barNav, setBarNav } = AppContextProvider()
   const [isAllowed] = useAllowed()
 
   const refDataTable = useRef(null)
@@ -85,8 +86,30 @@ export const DataTable = ({ data }) => {
   }, [data])
 
 
-  const handleonRowClick = (values, dataIndex) => {
-    isAllowed("actualizar") && setStage({ action: "creaAndEdit", payload: values, dataIndex })
+  const handleonRowClick = async (values, dataIndex) => {
+    const result = await fetchApi({
+      query: queries.getElements,
+      variables: {
+        args: {
+          _id: values?._id
+        },
+        sort: {},
+        limit: 0,
+        skip: 0,
+      },
+      type: "json"
+    })
+    setData(old => {
+      const f1 = old.results.findIndex(elem => elem._id === values?._id)
+      old.results.splice(f1, 1, result?.results[0])
+      return { ...old }
+    })
+    if (isAllowed("actualizar")) {
+      setStage({ action: "creaAndEdit", payload: result?.results[0], dataIndex })
+      barNav.push(`${result.results[0]?.title}`)
+      setBarNav([...barNav])
+    }
+
   }
 
   const options = {

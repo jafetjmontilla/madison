@@ -11,6 +11,18 @@ export const InputDoubleSelect = ({ params, props }) => {
   const [optiosSecondSelect, setOptiosSecondSelect] = useState()
   const [secondValue, setSecondValue] = useState(optiosSecondSelect?.find(elem => elem?.value === field?.value?._id))
   const [valir, setValir] = useState(false)
+  const [isMounted, setIsMounted] = useState(false)
+
+  useEffect(() => {
+    if (!isMounted) {
+      setIsMounted(true)
+    }
+    return () => {
+      if (isMounted) {
+        setIsMounted(false)
+      }
+    }
+  }, [isMounted])
 
 
   useEffect(() => {
@@ -20,35 +32,37 @@ export const InputDoubleSelect = ({ params, props }) => {
   }, [stage])
 
   useEffect(() => {
-    if (value?.value) {
-      fetchApi({
-        query: queries.getElements,
-        variables: {
-          args: { typeElement: value?.value },
-          sort: {},
-          limit: 0,
-          skip: 0,
-        },
-        type: "json"
-      }).then(result => {
-        const opt = result?.results?.map(elem => {
-          return { value: elem?._id, label: `${elem.tag} · ${elem.title}`, title: elem.title }
+    if (isMounted) {
+      if (value?.value) {
+        fetchApi({
+          query: queries.getElements,
+          variables: {
+            args: { typeElement: value?.value },
+            sort: {},
+            limit: 0,
+            skip: 0,
+          },
+          type: "json"
+        }).then(result => {
+          const opt = result?.results?.map(elem => {
+            return { value: elem?._id, label: `${elem.tag} · ${elem.title}`, title: elem.title }
+          })
+          setOptiosSecondSelect(opt)
+          if (valir) {
+            setSecondValue([])
+          }
+          if (!valir) {
+            setSecondValue(opt?.find(elem => elem?.value === field?.value?._id))
+            setValir(true)
+          }
         })
-        setOptiosSecondSelect(opt)
-        if (valir) {
-          setSecondValue([])
-        }
-        if (!valir) {
-          setSecondValue(opt?.find(elem => elem?.value === field?.value?._id))
-          setValir(true)
-        }
-      })
+      }
+      if (!value?.value) {
+        setOptiosSecondSelect(undefined)
+        setSecondValue([])
+      }
     }
-    if (!value?.value) {
-      setOptiosSecondSelect(undefined)
-      setSecondValue([])
-    }
-  }, [value])
+  }, [value, isMounted])
 
   const onChangeHandler = async (secondValue) => {
     setSecondValue(secondValue)

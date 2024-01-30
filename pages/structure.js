@@ -229,7 +229,7 @@ const Structure = () => {
                         < div className={`w-full  text-gray-700 uppercase grid grid-cols-12 gap-4 items-center py-1`}>
                           <div className="col-span-4 gap-2 flex items-center">
                             <GiBackwardTime className="w-5 h-5" />
-                            <span className="truncate">{elem?.title}</span>
+                            <span className="truncate flex-1">{elem?.title}</span>
                           </div>
                           <span className="col-span-2 truncate">{elem?.execution}</span>
                           <span className="col-span-2 truncate">{elem?.periodic}</span>
@@ -255,7 +255,7 @@ const Structure = () => {
                         < div className={`w-full  text-gray-700 uppercase grid grid-cols-12 gap-4 items-center py-1`}>
                           <div className="col-span-2 gap-2 flex items-center">
                             <GiBookPile className="w-5 h-5" />
-                            <span className="truncate">{elem?.title}</span>
+                            <span className="truncate flex-1">{elem?.title}</span>
                           </div>
                           <span className="col-span-7 truncate">{elem?.description}</span>
                           <span className="col-span-3 truncate">{elem?.coordination}</span>

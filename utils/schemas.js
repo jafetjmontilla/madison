@@ -379,7 +379,7 @@ export const BodyStaticAPP = [
   {
     icon: <VscTools className="w-8 h-8 text-gray-500" />,
     title: "mantenimiento",
-    groups: ["development", "admin", "coordinador de mantenimiento", "supervisor de mantenimiento", "obrero limpieza"],
+    groups: ["development", "admin", "coordinador de mantenimiento", "supervisor de mantenimiento", "obrero servicios generales"],
     slug: "/maintenance",
     //component: <InDevelopment />,
     subMenu: [
@@ -407,7 +407,7 @@ export const BodyStaticAPP = [
       {
         icon: <BiTask className="w-8 h-8 text-gray-500" />,
         title: "tareas",
-        groups: ["development", "admin", "supervisor de mantenimiento", "obrero limpieza"],
+        groups: ["development", "admin", "supervisor de mantenimiento", "obrero servicios generales"],
         filterUser: true,
         slug: "/maintenance/tasks",
         component: <CalendarCompont />,
@@ -423,15 +423,15 @@ export const BodyStaticAPP = [
   },
   {
     icon: <MdOutlineCleaningServices className="w-8 h-8 text-gray-500" />,
-    title: "limpieza",
-    groups: ["development", "admin", "coordinador de mantenimiento", "supervisor de limpieza", "obrero limpieza"],
+    title: "servicios generales",
+    groups: ["development", "admin", "coordinador de mantenimiento", "supervisor de servicios generales", "obrero servicios generales"],
     slug: "/cleaning",
     //component: <InDevelopment />,
     subMenu: [
       {
         icon: <FaTasks className="w-8 h-8 text-gray-500" />,
         title: "tareas departamento",
-        groups: ["development", "admin", "coordinador de mantenimiento", "supervisor de limpieza"],
+        groups: ["development", "admin", "coordinador de mantenimiento", "supervisor de servicios generales"],
         slug: "/cleaning/alltasks",
         component: <CalendarCompont />,
       },
@@ -445,14 +445,14 @@ export const BodyStaticAPP = [
       {
         icon: <TbReportSearch className="w-8 h-8 text-gray-500" />,
         title: "reportes",
-        groups: ["development", "admin", "coordinador de mantenimiento", "supervisor de limpieza"],
+        groups: ["development", "admin", "coordinador de mantenimiento", "supervisor de servicios generales"],
         slug: "/cleaning/reports",
         component: <InDevelopment />,
       },
       {
         icon: <BiTask className="w-8 h-8 text-gray-500" />,
         title: "tareas",
-        groups: ["development", "admin", "supervisor de limpieza", "obrero limpieza"],
+        groups: ["development", "admin", "supervisor de servicios generales", "obrero servicios generales"],
         filterUser: true,
         slug: "/cleaning/tasks",
         component: <CalendarCompont />,

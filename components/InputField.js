@@ -11,8 +11,11 @@ import { InputDoubleSelect } from './inputDoubleSelect';
 import { MdExpandLess } from 'react-icons/md'
 import { InputProperties } from './InputProperties'
 import { InputCharacteristics } from './InputCharacteristics'
+import { InputComponentsAndParts } from './InputComponentsAndParts'
 
 export const InputField = ({ elem: params, isSelect, ...props }) => {
+  const refInput = useRef()
+  const [rowT, setRowT] = useState()
   const { stage, setData, itemSchema } = AppContextProvider()
   const [field, meta, helpers] = useField(props);
 
@@ -60,9 +63,7 @@ export const InputField = ({ elem: params, isSelect, ...props }) => {
 
   useEffect(() => {
     if (params?.type === "select") {
-
       const index = params?.options.findIndex(elem => elem.value === field?.value)
-      //console.log(100051, (params?.options && params?.options[index]) || undefined)
       setValue((params?.options && params?.options[index]) || undefined)
       setOptions(params?.options || [])
     }
@@ -106,6 +107,19 @@ export const InputField = ({ elem: params, isSelect, ...props }) => {
     }
     helpers.setValue(arr)
   }
+
+  const handleChange = (e) => {
+    e.target.rows = 1
+    let rowT = (refInput?.current.scrollHeight - 16) / 20
+    if (rowT < 5) {
+      e.target.rows = rowT
+    }
+    else {
+      e.target.rows = 4
+    }
+    helpers.setValue(e.target.value)
+  }
+
   return (
     <div className='w-full h-full'>
       {params.accessor !== "_id" &&
@@ -114,12 +128,30 @@ export const InputField = ({ elem: params, isSelect, ...props }) => {
           {meta.error && <span className="text-red-500 text-xs ml-2">!requerido</span>}
         </div>
       }
-      <div className={`${params?.type !== "id" ? "w-full relative text-sm" : "w-[190px] absolute top-[74px] right-0 scale-[65%] md:scale-75 translate-x-8 md:translate-x-6 text-gray-500"}`} {...props}>
+      <div className={`${params?.type !== "id" ? "w-full text-sm *bg-red-500" : "w-[190px] absolute top-[56px] right-0 scale-[65%] md:scale-75 translate-x-8 md:translate-x-6 text-gray-500"}`} {...props}>
         {
           (() => {
             if (["id", "text", "number", "datetime-local", "date"].includes(params?.type)) {
               return (
                 <input {...field} type={params?.type} disabled={["id"].includes(params?.type) || (!stage?.payload && !params?.required) || (stage?.payload && params?.readOnly)} className={`h-[38px] rounded-lg border-[1px] border-gray-300 text-sm w-[100%] ${stage?.payload && params?.readOnly && "cursor-not-allowed"} ${!["_id", "email"].includes(params?.accessor) && "uppercase"}`} />
+              )
+            }
+
+            if (params?.type == "textarea") {
+              return (
+                <textarea
+                  style={{ resize: 'none' }}
+                  rows={
+                    refInput?.current
+                      ? (refInput?.current.scrollHeight - 16) / 20 < 5
+                        ? (refInput?.current.scrollHeight - 16) / 20
+                        : 4
+                      : 1
+                  }
+                  ref={refInput}
+                  {...field} type={params?.type} disabled={["id"].includes(params?.type) || (!stage?.payload && !params?.required) || (stage?.payload && params?.readOnly)} className={`rounded-lg border-[1px] border-gray-300 text-sm w-[100%] ${stage?.payload && params?.readOnly && "cursor-not-allowed"} ${!["_id", "email"].includes(params?.accessor) && "uppercase"} overflow-y-scroll`}
+                  onChange={(e) => { handleChange(e) }}
+                />
               )
             }
 
@@ -147,7 +179,6 @@ export const InputField = ({ elem: params, isSelect, ...props }) => {
               )
             }
 
-
             if (params?.type == "select") {
               return (
                 <InputSelect
@@ -168,12 +199,17 @@ export const InputField = ({ elem: params, isSelect, ...props }) => {
             }
             if (params?.type == "properties") {
               return (
-                <InputProperties params={params} props={props} />
+                <InputProperties props={props} />
               )
             }
             if (params?.type == "characteristics") {
               return (
-                <InputCharacteristics params={params} props={props} />
+                <InputCharacteristics props={props} />
+              )
+            }
+            if (params?.type == "componentsAndParts") {
+              return (
+                <InputComponentsAndParts params={params} />
               )
             }
           })()

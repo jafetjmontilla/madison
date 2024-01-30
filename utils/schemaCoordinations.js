@@ -21,8 +21,8 @@ export const schemaCoordinations = [
   {
     title: "mantenimiento",
     cordinator: "coordinador de mantenimiento",
-    supervitors: ["supervisor de mantenimiento", "supervisor de limpieza", "planificador"],
-    workers: ["electromecánico", "calderista", "planificador", "obrero limpieza"]
+    supervitors: ["supervisor de mantenimiento", "supervisor de servicios generales", "planificador"],
+    workers: ["electromecánico", "calderista", "planificador", "obrero servicios generales"]
   },
   {
     title: "aseguramiento calidad",

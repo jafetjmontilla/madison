@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useMounted } from "../hooks/useMounted";
 import { LoadingContextProvider } from "../context/LoadingContext";
 import { AppContextProvider } from "../context/AppContext";
@@ -11,10 +11,12 @@ import { Formik, useFormikContext } from "formik";
 import { InputField } from "./InputField";
 import * as yup from 'yup'
 import { fetchApi } from "../utils/Fetching";
+import { ConfirmationDelete } from "./ConfirmationDelete";
+import { nanoid } from "nanoid";
 
 
 export const CreaAndEdit = () => {
-  const { stage, setStage, setData, itemSchema } = AppContextProvider()
+  const { stage, setStage, setData, itemSchema, barNav, setBarNav } = AppContextProvider()
   const toast = useToast()
   const [schema, setSchema] = useState()
   const [dataValues, setDataValues] = useState()
@@ -24,10 +26,10 @@ export const CreaAndEdit = () => {
   const [values, setValues] = useState()
   const [errors, setErrors] = useState()
   const [confirmation, setConfirmation] = useState({ show: false, value: false })
-
   const { setLoading } = LoadingContextProvider()
   const [isMounted, setIsMounted] = useState(false)
   const [valir, setValir] = useState(false)
+
   useMounted()
   useEffect(() => {
     if (!isMounted) {
@@ -35,6 +37,7 @@ export const CreaAndEdit = () => {
     }
     return () => {
       if (isMounted) {
+        setBarNav([])
         //setLoading(false)
       }
     }
@@ -62,8 +65,13 @@ export const CreaAndEdit = () => {
               },
             },
             type: "json"
+          }).then(result => {
+            setStage(old => {
+              old.payload = { ...old.payload, ...result }
+              return { ...old }
+            })
           })
-          console.log("actualizazo registro en CreaAndEdit", dataValues)
+          // console.log("actualizazo registro en CreaAndEdit", dataValues)
           return
         }
         return
@@ -76,12 +84,15 @@ export const CreaAndEdit = () => {
       });
       if (valir) {
         ///////guarda nuevo registro
+        const tag = ["component", "part"].includes(itemSchema?.dataVariables?.typeElement) ?
+          (itemSchema?.dataVariables?.typeElement?.slice(0, 3) + nanoid(8)).replace(/-/g, "a").replace(/_/g, "b") : null
         const resp = await fetchApi({
           query: itemSchema.createEntry,
           variables: {
             args: {
               ...requiredValues,
-              ...itemSchema?.dataVariables
+              ...itemSchema?.dataVariables,
+              tag
             },
           },
           type: "json"
@@ -92,7 +103,7 @@ export const CreaAndEdit = () => {
             return { total: old.total + 1, results: old?.results }
           })
           setStage({ ...stage, payload: { ...resp?.results[0], characteristics: [], properties: [] }, dataIndex: 0 })
-          console.log("*guardo nuevo registro", { ...requiredValues, _id: resp?.results[0]?._id })
+          // console.log("*guardo nuevo registro", { ...requiredValues, _id: resp?.results[0]?._id })
         }
       }
     } catch (error) {
@@ -156,38 +167,7 @@ export const CreaAndEdit = () => {
   return (
     <>
       {confirmation.state &&
-        <div>
-          <div className="w-full h-full top-0 left-0 opacity-50 bg-gray-900 fixed z-20" />
-          <div className="w-full absolute z-30 flex justify-center">
-            <div className="bg-white w-[400px] h-[280px] rounded-2xl p-8">
-              <span className="text-2xl">Elimnar registro</span>
-              <p className="leading-4 my-2 text-sm font-semibold text-gray-600">Eliminará todas los otros elementos, propiedades y characterísticas que son parte de este elemento.</p>
-              <p className="leading-4 my-2">Para eliminar <span className="font-semibold">{stage?.payload?.tag}</span>, escriba el tag para confirmar.</p>
-              <input type="text" onChange={(e) => { setConfirmation({ state: true, value: e.target.value === stage?.payload?.tag }) }} className="h-[38px] rounded-lg border-[1px] border-gray-300 text-sm w-[100%] my-4" placeholder="Escriba el tag" />
-              <div className="flex justify-between">
-                <ButtonBasic
-                  className={`bg-white border-[1px] border-gray-300 hover:drop-shadow-lg w-20 h-[26px] text-sm`}
-                  onClick={() => setConfirmation({ state: false, value: false })}
-                  caption={
-                    <div className="text-black flex gap-2 text-sm">cancelar</div>
-                  }
-                />
-                <ButtonBasic
-                  className={` ${confirmation.value ? "bg-red-500 hover:bg-red-700" : "bg-red-100 cursor-not-allowed"} w-20 h-[26px] text-sm`}
-                  onClick={() => {
-                    if (confirmation.value) {
-                      handlerDelete()
-                      setConfirmation({ state: false, value: false })
-                    }
-                  }}
-                  caption={
-                    <div className="flex gap-2 text-sm"><IconDelete className="w-5 h-5" /> eliminar</div>
-                  }
-                />
-              </div>
-            </div>
-          </div>
-        </div>
+        <ConfirmationDelete confirmation={confirmation} handlerDelete={handlerDelete} setConfirmation={setConfirmation} email={stage?.payload?.email} tag={stage?.payload?.tag} />
       }
 
       {valir && <Formik
@@ -198,22 +178,24 @@ export const CreaAndEdit = () => {
         {({ resetForm }) => {
           return (
             <div className="bg-gray-800 bg-opacity-50 flex items-center justify-center w-[100%] h-[calc(90%-28px)] absolute z-10 ">
-
               <AutoSubmitToken setErrors={setErrors} setValues={setValues} />
-              <div className="bg-white w-full h-[100%] md:w-[800px] md:h-[105%] md:translate-y-[-20px] rounded-lg shadow-lg truncate">
-                <div className="bg-gray-300 flex w-[100%] h-20 ">
-                  <div className="w-[25%] h-[100%] flex justify-start items-center">
+              <div className="bg-white w-full h-[100%] md:w-[800px] md:h-[105%] md:translate-y-[-20px] rounded-lg shadow-lg">
+                <div className="bg-gray-300 flex w-[100%] h-10 rounded-t-lg">
+                  <div className="w-[30%] h-[100%] flex justify-start items-center">
                     <span className="ml-4 text-xl uppercase font-semibold text-gray-700 ">
                       {edition ? `editar ${itemSchema?.title}` : `crear ${itemSchema?.title}`}
                     </span>
                   </div>
-                  <div className="w-[50%] h-[100%] flex justify-center items-center">
+                  <div className="w-[45%] h-[100%] flex justify-center items-center">
                   </div>
                   <div className="w-[25%] h-[100%] flex justify-end">
                     <span className="hidden md:flex mr-5 mt-3 text-2xl text-gray-500 cursor-pointer hover:scale-110" onClick={handleOnClick}>X</span>
                   </div>
                 </div>
-                <div className="h-[calc(100%-160px)] overflow-y-scroll">
+                <div className="bg-gray-300 flex w-[100%] h-6 px-4 uppercase text-xs">
+                  / {barNav.toString().replace(/,/g, " / ")} /
+                </div>
+                <div className="h-[calc(100%-128px)] overflow-y-scroll">
                   <div className="gap-2 grid grid-cols-3 p-4">
                     {schema?.map((elem, idx) => {
 
@@ -230,7 +212,7 @@ export const CreaAndEdit = () => {
                     })}
                   </div>
                 </div>
-                <div className={`bg-gray-300 flex h-20 items-center justify-between`}>
+                <div className={`bg-gray-300 flex h-16 items-center justify-between rounded-b-lg`}>
                   <CSSTransition
                     in={!!stage.payload}
                     //nodeRef={nodeRef}
@@ -275,7 +257,7 @@ export const CreaAndEdit = () => {
 };
 
 const AutoSubmitToken = ({ setErrors, setValues }) => {
-  const { values, errors, res } = useFormikContext();
+  const { values, errors } = useFormikContext();
 
   useEffect(() => {
     setErrors(errors)
