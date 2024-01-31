@@ -166,7 +166,7 @@ export const CreaAndEditCharacteristics = ({ father, params, setShowAdd, setData
               <InputSelectNew name={"coordination"} label="coordinacion" options={schemaCoordinations?.map((elem) => { return { value: elem.title, label: elem.title } })} />
             </div>
             <div className="col-span-6">
-              <TextareaNew name="description" label="descripcion" />
+              <TextareaNew name="description" label="descripción" />
             </div>
             <div className="col-span-6 flex justify-end items-end">
               <ButtonBasic

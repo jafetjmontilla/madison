@@ -8,7 +8,12 @@ export const TextareaNew = (props) => {
   const handleChange = (e) => {
     e.target.rows = 1
     let rowT = (refInput?.current.scrollHeight - 16) / 20
-    e.target.rows = rowT
+    if (rowT < 9) {
+      e.target.rows = rowT
+    }
+    else {
+      e.target.rows = 8
+    }
     helpers.setValue(e.target.value)
   }
 
@@ -20,7 +25,13 @@ export const TextareaNew = (props) => {
       </div>
       <textarea
         style={{ resize: 'none' }}
-        rows={refInput?.current ? (refInput?.current.scrollHeight - 16) / 20 : 1}
+        rows={
+          refInput?.current
+            ? (refInput?.current.scrollHeight - 16) / 20 < 9
+              ? (refInput?.current.scrollHeight - 16) / 20
+              : 8
+            : 1
+        }
         ref={refInput}
         type="text" value={field?.value}
         onChange={(e) => { handleChange(e) }}

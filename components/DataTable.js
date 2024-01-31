@@ -25,7 +25,6 @@ export const DataTable = ({ data }) => {
           display: defaultVisibleColumns.includes(p?.tag),
           filter: true,
           sort: true,
-          rowsPerPage: 100,
           customToolbarSelect: selectedRows => (
             <div
               selectedRows={selectedRows}
@@ -119,7 +118,8 @@ export const DataTable = ({ data }) => {
     selectableRowsHideCheckboxes: false,
     selectableRowsOnClick: false,
     selectToolbarPlacement: "replace",
-    rowsPerPageOptions: [10, 50, 100],
+    rowsPerPage: 100,
+    rowsPerPageOptions: [25, 50, 100, 200],
     sort: true,
     sortOrder: {
       name: 'name',
@@ -185,8 +185,6 @@ export const DataTable = ({ data }) => {
           data={data?.results}
           columns={columns}
           options={options}
-
-          rowsPerPage={100}
           className={"*h-[80%] overflow-auto"}
         />}
     </div>

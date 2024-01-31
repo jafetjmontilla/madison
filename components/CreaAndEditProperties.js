@@ -157,7 +157,7 @@ export const CreaAndEditProperties = ({ father, params, setShowAdd, setDataCompo
               <InputSelectNew name={"executor"} label="responsable" options={schemaCoordinations?.find((elem) => elem?.title == values?.coordination)?.workers?.map(elem => { return { value: elem, label: elem } })} />
             </div>
             <div className="col-span-6">
-              <TextareaNew name="description" label="descripcion" />
+              <TextareaNew name="description" label="descripción" />
             </div>
             {values?.execution === "periódica" &&
               <div className="col-span-3">
