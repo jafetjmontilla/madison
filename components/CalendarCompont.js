@@ -260,7 +260,7 @@ export const CalendarCompont = (props) => {
           <div id="task" className='bg-white flex flex-col h-full w-[800px] rounded-xl *border-gray-300 *border-[1px] py-2 px-3 text-gray-800 uppercase space-y-4 overflow-y-scroll'>
             <div className='flex flex-col'>
               <label className="capitalize text-xs font-semibold">descripción</label>
-              <span className=''>{calEvent?.task?.property?.description} lskdasjdjas lsdj asjldjlasj djasljd jasdjlasjdj asl dj</span>
+              <span className=''>{calEvent?.task?.property?.description}</span>
             </div>
             <div className='flex flex-col'>
               <label className="capitalize text-xs font-semibold">mediciones</label>

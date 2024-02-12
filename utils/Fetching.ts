@@ -130,6 +130,8 @@ type queries = {
   deleteElements: string
   getTasks: String
   updateTasks: String
+  createMeditions: String
+  deleteMedition: String
 };
 
 export const queries: queries = {
@@ -752,6 +754,26 @@ export const queries: queries = {
       updatedAt
     }
   }`,
+  createMeditions: `mutation ( $args:[inputMedition] )
+  {
+    createMeditions( args:$args ){
+      total
+      results{
+        _id
+        element{
+          _id
+          title
+        }
+        title
+        value
+        createdAt
+      }
+    }
+  }`,
+  deleteMedition: `mutation ( $args:inputMedition )
+  {
+    updateMedition( args:$args )
+  }`,
   getTasks: `query ( $args:inputTask, $sort:sortCriteriaTask, $skip:Int, $limit:Int )
   {
     getTasks(args:$args, sort:$sort, skip:$skip, limit:$limit){
@@ -768,6 +790,15 @@ export const queries: queries = {
           name
           createdAt
           updatedAt
+        }
+        meditions{
+          _id
+          element{
+            _id
+            title
+          }
+          title
+          value
         }
         states{
           state
@@ -803,6 +834,15 @@ export const queries: queries = {
           name
           createdAt
           updatedAt
+        }
+        meditions{
+          _id
+          element{
+            _id
+            title
+          }
+          title
+          value
         }
         states{
           state

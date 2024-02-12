@@ -1,6 +1,7 @@
 import { InputSelect } from "./InputSelect"
 import { meditions } from "../utils/schemaMeditions"
 import { useEffect, useState } from "react"
+import { fetchApi, queries } from "../utils/Fetching"
 
 export const InputMeditions = ({ calEvent, setCalEvent }) => {
   const [values, setValues] = useState({ title: "", value: "" })
@@ -16,9 +17,26 @@ export const InputMeditions = ({ calEvent, setCalEvent }) => {
 
 
   const handleSubmit = () => {
+    console.log(calEvent?.property?.father?._id)
     if (valir) {
+      fetchApi({
+        query: queries.createMeditions,
+        variables: {
+          args: [{
+            title: values?.title,
+            value: parseFloat(values?.value),
+            element: calEvent?.property?._id,
+            father: calEvent?.property?.father?._id,
+            taskID: calEvent.task._id
+          }]
+        },
+      }).then((result) => {
+        console.log(result)
+      })
       if (!calEvent?.task?.meditions) calEvent.task.meditions = []
-      calEvent.task.meditions.push({ ...values, createdAt: new Date() })
+      calEvent.task.meditions.push({
+        ...values, father: calEvent?.property?.father?._id, element: { _id: calEvent?.property?._id, title: calEvent?.property?.title }, createdAt: new Date()
+      })
       setCalEvent({ ...calEvent })
       setValues({ title: "", value: "" })
     }
