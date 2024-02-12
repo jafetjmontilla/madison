@@ -76,7 +76,7 @@ export const TableTag = () => {
   return (
     <div className="bg-[#0E356B] w-full h-full flex items-center justify-center relative">
 
-      <div className="flex flex-col h-[100%] w-[95%] overflow-auto">
+      <div className="flex flex-col h-[100%] w-[calc(100%-20px)] md:w-[calc(100%-60px)] overflow-auto">
         {subMenu &&
           <div className="flex w-full h-11 relative items-center md:items-start ">
             <div onClick={() => { setShowSelect(!showSelect) }} className="bg-white flex px-2 border-2 rounded-lg w-[60%] h-8 md:hidden justify-between items-center">

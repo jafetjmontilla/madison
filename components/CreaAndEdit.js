@@ -25,7 +25,7 @@ export const CreaAndEdit = () => {
   const [edition] = useState(!!stage?.payload)
   const [values, setValues] = useState()
   const [errors, setErrors] = useState()
-  const [confirmation, setConfirmation] = useState({ show: false, value: false })
+  const [confirmation, setConfirmation] = useState({ state: false, value: false })
   const { setLoading } = LoadingContextProvider()
   const [isMounted, setIsMounted] = useState(false)
   const [valir, setValir] = useState(false)
@@ -71,7 +71,6 @@ export const CreaAndEdit = () => {
               return { ...old }
             })
           })
-          // console.log("actualizazo registro en CreaAndEdit", dataValues)
           return
         }
         return
@@ -103,7 +102,6 @@ export const CreaAndEdit = () => {
             return { total: old.total + 1, results: old?.results }
           })
           setStage({ ...stage, payload: { ...resp?.results[0], characteristics: [], properties: [] }, dataIndex: 0 })
-          // console.log("*guardo nuevo registro", { ...requiredValues, _id: resp?.results[0]?._id })
         }
       }
     } catch (error) {
@@ -111,7 +109,7 @@ export const CreaAndEdit = () => {
     }
   }
 
-  const handlerDelete = async () => {
+  const handleDelete = async () => {
     try {
       // setLoading(true)
       await fetchApi({
@@ -167,7 +165,7 @@ export const CreaAndEdit = () => {
   return (
     <>
       {confirmation.state &&
-        <ConfirmationDelete confirmation={confirmation} handlerDelete={handlerDelete} setConfirmation={setConfirmation} email={stage?.payload?.email} tag={stage?.payload?.tag} />
+        <ConfirmationDelete confirmation={confirmation} handleDelete={handleDelete} setConfirmation={setConfirmation} email={stage?.payload?.email} tag={stage?.payload?.tag} />
       }
 
       {valir && <Formik
@@ -177,7 +175,7 @@ export const CreaAndEdit = () => {
       >
         {({ resetForm }) => {
           return (
-            <div className="bg-gray-800 bg-opacity-50 flex items-center justify-center w-[100%] h-[calc(90%-28px)] absolute z-10 ">
+            <div className="bg-gray-800 bg-opacity-50 flex items-center justify-center w-[calc(100%-30px)] h-[calc(90%-28px)] absolute z-10 ">
               <AutoSubmitToken setErrors={setErrors} setValues={setValues} />
               <div className="bg-white w-full h-[100%] md:w-[800px] md:h-[105%] md:translate-y-[-20px] rounded-lg shadow-lg">
                 <div className="bg-gray-300 flex w-[100%] h-10 rounded-t-lg">

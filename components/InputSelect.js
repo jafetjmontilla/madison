@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import Select from 'react-select'
 
-export const InputSelect = ({ options, defaultValue, onChange, value }) => {
-  const [isClearable, setIsClearable] = useState(true);
+export const InputSelect = ({ options, onChange, value, isClearable = true }) => {
   const [isSearchable, setIsSearchable] = useState(true);
   const [isDisabled, setIsDisabled] = useState(false);
   const [isLoading, setIsLoading] = useState(false)
@@ -21,6 +20,7 @@ export const InputSelect = ({ options, defaultValue, onChange, value }) => {
     <Select
       //ref={refSelet}
       onChange={(e) => {
+
         //setValue(options?.find(elem => elem?.value === value))
         onChange(options?.find(elem => elem?.value === e?.value))
         // setIdxOptions(options.findIndex(elem => elem.value === e?.value))

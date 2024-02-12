@@ -760,6 +760,22 @@ export const queries: queries = {
         _id
         start
         end
+        state
+        note
+        activities{
+          comment
+          user
+          name
+          createdAt
+          updatedAt
+        }
+        states{
+          state
+          user
+          name
+          createdAt
+          updatedAt
+        }
         property{
           _id
           title
@@ -779,6 +795,22 @@ export const queries: queries = {
            _id
         start
         end
+        state
+        note
+        activities{
+          comment
+          user
+          name
+          createdAt
+          updatedAt
+        }
+        states{
+          state
+          user
+          name
+          createdAt
+          updatedAt
+        }
         property{
           _id
           title

@@ -21,7 +21,7 @@ export const InputComponentsAndParts = ({ params }) => {
   const [dataComponentsAndParts, setDataComponentsAndParts] = useState([])
   const [dataComponentes, setDataComponenentes] = useState({ type: null, data: [] })
   const [isMounted, setIsMounted] = useState(false)
-  const [confirmation, setConfirmation] = useState({ show: false, value: false, elem: {} })
+  const [confirmation, setConfirmation] = useState({ state: false, value: false, elem: {} })
 
   useEffect(() => {
     if (!isMounted) {
@@ -76,7 +76,7 @@ export const InputComponentsAndParts = ({ params }) => {
     setDataComponentsAndParts(dataComponentes?.data)
   }, [dataComponentes])
 
-  const handlerDelete = () => {
+  const handleDelete = () => {
     try {
       fetchApi({
         query: queries.updateElements,
@@ -107,7 +107,7 @@ export const InputComponentsAndParts = ({ params }) => {
     <div className="w-full static -mt-1">
       <div id="child" className="w-full">
         {confirmation.state &&
-          <ConfirmationDelete confirmation={confirmation} handlerDelete={handlerDelete} setConfirmation={setConfirmation} email={null} tag={confirmation?.elem?.tag} />
+          <ConfirmationDelete confirmation={confirmation} handleDelete={handleDelete} setConfirmation={setConfirmation} email={null} tag={confirmation?.elem?.tag} />
         }
       </div>
 
