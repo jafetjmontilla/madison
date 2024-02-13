@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { AuthContextProvider } from "../context/AuthContext"
 import { goToTheTnd } from "./CalendarCompont"
 import { Textarea } from "./Textarea"
+import { fetchApi, queries } from "../utils/Fetching"
 export const InputActivities = ({ calEvent, setCalEvent }) => {
   const { user } = AuthContextProvider()
   const [values, setValues] = useState({ value: "" })
@@ -19,14 +20,24 @@ export const InputActivities = ({ calEvent, setCalEvent }) => {
 
   const handleSubmit = () => {
     if (values.value) {
-      calEvent.task.activities.push({
+      const activity = {
         comment: values.value,
         user: user?.uid,
         name: user?.name,
-        updatedAt: new Date()
+      }
+      fetchApi({
+        query: queries.updateTasks,
+        variables: {
+          args: {
+            _id: calEvent?.task?._id,
+            activity
+          }
+        }
+      }).then((result) => {
+        calEvent.task.activities.push(result?.activities.slice(- 1)[0])
+        setCalEvent({ ...calEvent })
+        setValues({ value: "" })
       })
-      setCalEvent({ ...calEvent })
-      setValues({ value: "" })
     }
   }
 

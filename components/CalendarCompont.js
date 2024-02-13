@@ -19,11 +19,11 @@ import { AiTwotoneDelete } from 'react-icons/ai'
 import { ConfirmationDelete } from './ConfirmationDelete'
 
 const options = [
-  { value: "pendiente", label: "pendiente" },
-  { value: "ejecución", label: "en ejecución" },
-  { value: "pausada", label: "pausada" },
-  { value: "realizada", label: "realizada" },
-  { value: "supervisada", label: "supervisada" },
+  { value: "pendiente", label: "pendiente", views: ["pendiente", "ejecución", "pausada",] },
+  { value: "ejecución", label: "en ejecución", views: ["pendiente", "ejecución", "pausada",] },
+  { value: "pausada", label: "pausada", views: ["pendiente", "ejecución", "pausada",] },
+  { value: "realizada", label: "realizada", views: ["pendiente", "ejecución", "pausada", "realizada"] },
+  { value: "supervisada", label: "supervisada", views: ["realizada", "supervisida"] },
 ]
 
 const getEvent = (elem) => {
@@ -52,6 +52,7 @@ export const CalendarCompont = (props) => {
   const toast = useToast()
   const [view, setView] = useState("pendientes")
   const [viewProperty, setViewProperty] = useState({ status: false })
+  const [changeNote, setChangeNote] = useState(false)
   const [confirmation, setConfirmation] = useState({ state: false, value: false, elem: {}, handleDelete: () => { } })
 
   useEffect(() => {
@@ -66,7 +67,7 @@ export const CalendarCompont = (props) => {
     fetchApi({
       query: queries.getTasks,
       variables: {
-        args: { executed: view === "pendientes" ? false : true }
+        args: { state: view }
       },
     }).then((result) => {
       setEvents(result?.results?.map(elem => getEvent(elem)))
@@ -134,30 +135,44 @@ export const CalendarCompont = (props) => {
     }, 250)
   }, [])
 
-  const handleExecuted = () => {
+  const handleExecuted = (value) => {
+    console.log(value)
     try {
       fetchApi({
         query: queries.updateTasks,
         variables: {
-          args: { _id: TaskID, userExecutor: user?.uid, executed: true }
+          args: {
+            _id: TaskID,
+            state: value?.value,
+            userExecutor: user?.uid,
+            nameExecutor: user?.name,
+            executed: value?.value === "realizada"
+          }
         }
       }).then((resp) => {
-        setEvents(old => {
-          const f1 = old?.findIndex(elem => elem.id === TaskID)
-          old.splice(f1, 1, resp ? getEvent(resp) : resp)
-          return [...old]
-        })
-        setViewProperty({ status: false })
-        setShowEditProperty({ status: false })
-        toast("success", "marcada como ejecutada")
+        calEvent.task.state = value?.value
+        calEvent?.task?.states?.push({ state: value?.value, user: user?.uid, name: user?.name })
+        setCalEvent({ ...calEvent })
+        toast("success", `marcada como ${value?.label}`)
       })
+
     } catch (error) {
       console.log(error)
     }
   }
 
-  const handleDelete = (elem) => {
-    const f1 = calEvent?.task?.meditions?.findIndex(el => el.title === elem.title)
+  const handleDelete = async (elem) => {
+    console.log(elem)
+    await fetchApi({
+      query: queries.deleteMedition,
+      variables: {
+        args: {
+          _id: elem._id,
+          father: calEvent.task._id
+        }
+      }
+    })
+    const f1 = calEvent?.task?.meditions?.findIndex(el => el._id === elem._id)
     calEvent?.task?.meditions?.splice(f1, 1)
     setCalEvent({ ...calEvent })
   }
@@ -175,24 +190,24 @@ export const CalendarCompont = (props) => {
       </div>
       <div className='absolute flex rounded-t-lg w-[690px] h-10 -translate-y-8 truncate'>
         <div className='bg-gray-100 w-10 h-10' />
-        <div className={`w-[140px] h-8 absolute flex justify-center items-center rounded-t-lg ${view === "pendientes" ? "z-10 font-semibold text-gray-700 bg-gray-100" : "bg-gray-300 hover:bg-gray-400"}  cursor-pointer left-[0px]`}
-          onClick={() => setView("pendientes")}>
+        <div className={`w-[140px] h-8 absolute flex justify-center items-center rounded-t-lg ${view === "pendiente" ? "z-10 font-semibold text-gray-700 bg-gray-100" : "bg-gray-300 hover:bg-gray-400"}  cursor-pointer left-[0px]`}
+          onClick={() => setView("pendiente")}>
           <span className='uppercase'>pendientes</span>
         </div>
         <div className={`w-[140px] h-8 absolute flex justify-center items-center rounded-t-lg ${view === "ejecución" ? "z-10 font-semibold text-gray-700 bg-gray-100" : "bg-gray-300 hover:bg-gray-400"}  cursor-pointer left-[138px]`}
           onClick={() => setView("ejecución")}>
           <span className='uppercase'>en ejecución</span>
         </div>
-        <div className={`w-[140px] h-8 absolute flex justify-center items-center rounded-t-lg ${view === "pausadas" ? "z-10 font-semibold text-gray-700 bg-gray-100" : "bg-gray-300 hover:bg-gray-400"}  cursor-pointer left-[276px]`}
-          onClick={() => setView("pausadas")}>
-          <span className='uppercase'>pausada</span>
+        <div className={`w-[140px] h-8 absolute flex justify-center items-center rounded-t-lg ${view === "pausada" ? "z-10 font-semibold text-gray-700 bg-gray-100" : "bg-gray-300 hover:bg-gray-400"}  cursor-pointer left-[276px]`}
+          onClick={() => setView("pausada")}>
+          <span className='uppercase'>pausadas</span>
         </div>
-        <div className={`w-[140px] h-8 absolute flex justify-center items-center rounded-t-lg ${view === "realizadas" ? "z-10 font-semibold text-gray-700 bg-gray-100" : "bg-gray-300 hover:bg-gray-400"}  cursor-pointer left-[414px]`}
-          onClick={() => setView("realizadas")}>
+        <div className={`w-[140px] h-8 absolute flex justify-center items-center rounded-t-lg ${view === "realizada" ? "z-10 font-semibold text-gray-700 bg-gray-100" : "bg-gray-300 hover:bg-gray-400"}  cursor-pointer left-[414px]`}
+          onClick={() => setView("realizada")}>
           <span className='uppercase'>realizadas</span>
         </div>
-        <div className={`w-[140px] h-8 absolute flex justify-center items-center rounded-t-lg ${view === "supervisadas" ? "z-10 font-semibold text-gray-700 bg-gray-100" : "bg-gray-300 hover:bg-gray-400"}  cursor-pointer left-[552px]`}
-          onClick={() => setView("supervisadas")}>
+        <div className={`w-[140px] h-8 absolute flex justify-center items-center rounded-t-lg ${view === "supervisada" ? "z-10 font-semibold text-gray-700 bg-gray-100" : "bg-gray-300 hover:bg-gray-400"}  cursor-pointer left-[552px]`}
+          onClick={() => setView("supervisada")}>
           <span className='uppercase'>supervisadas</span>
         </div>
       </div>
@@ -206,7 +221,7 @@ export const CalendarCompont = (props) => {
         events={events}
         //startAccessor="start" 
         //endAccessor="end"
-        onSelectEvent={view === "pendientes" && handleSelectEvent}
+        onSelectEvent={handleSelectEvent}
         onDoubleClickEvent={doubleClickEvent}
         // selectable
         className='border-[1px] border-gray-300 rounded-xl w-[100%] p-2 text-sm'
@@ -229,28 +244,32 @@ export const CalendarCompont = (props) => {
         <div className='bg-black w-full h-full opacity-50' />
         <div className='bg-gray-200 h-[calc(100vh-100px)] p-4 pt-2 absolute rounded-xl flex flex-col space-y-2 text-sm'>
 
-
-
           <div className='flex h-16'>
             <div className="*bg-white flex-1 h-[100%] p-2 flex flex-col justify-start">
               <span className='uppercase text-xs'>parte de: </span>
               <span className='uppercase font-semibold'>{property?.father?.title}</span>
             </div>
             <div className="w-64 h-[100%] mt-1 text-sm">
-              <label className='text-xs'>Marcar tarea como  </label>
+              <label className='text-xs'>Estado de la tarea</label>
               <InputSelect
-                options={options}
+                options={options.filter(elem => elem.views.includes(view))}
                 // defaultValue={undefined}
                 isClearable={false}
                 onChange={(value) => {
-                  calEvent.task.state = value?.value
-                  calEvent?.task?.states?.push({ state: value?.value, user: user?.uid, name: user?.name })
-                  setCalEvent({ ...calEvent })
+                  handleExecuted(value)
                 }}
                 value={options?.find(elem => elem.value === calEvent?.task?.state)} />
             </div>
             <div className="w-16 h-[100%] flex justify-end">
               <span className="hidden md:flex mr-5 mb-2 text-2xl text-gray-500 cursor-pointer hover:scale-110" onClick={() => {
+                if (view !== calEvent?.task?.state) {
+                  console.log(view, calEvent?.task?.state)
+                  setEvents(old => {
+                    const f1 = old?.findIndex(elem => elem.id === calEvent?.task?._id)
+                    old.splice(f1, 1)
+                    return [...old]
+                  })
+                }
                 setViewProperty({ status: false })
                 setShowEditProperty({ status: false })
               }}>X</span>
@@ -271,14 +290,16 @@ export const CalendarCompont = (props) => {
                     return (
                       <div key={idx} className={`grid grid-cols-12 pl-4 hover:bg-gray-200 px-2 *${idx % 2 !== 0 && "bg-gray-100"}`}>
                         <span className='col-span-3'>{elem?.title}</span>
-                        <div className='col-span-2 space-x-1 grid grid-cols-2'>
+                        <div className='col-span-1 space-x-1 grid grid-cols-2'>
                           <span className='w-full text-end'>{elem?.value}</span>
                           <span className='text-center' >{meditions?.find(el => el?.title === elem?.title)?.unit}</span>
                         </div>
-                        <span className='col-span-3'>{elem?.createdAt.toLocaleString()}</span>
-                        <AiTwotoneDelete
-                          onClick={() => setConfirmation({ state: true, handleDelete: () => handleDelete(elem) })}
-                          className="w-5 h-5 cursor-pointer" />
+                        <span className='ml-6 col-span-3'>{new Date(elem?.createdAt)?.toLocaleString()}</span>
+                        <div className='col-span-1'>
+                          <AiTwotoneDelete
+                            onClick={() => setConfirmation({ state: true, handleDelete: () => handleDelete(elem) })}
+                            className="w-5 h-5 cursor-pointer" />
+                        </div>
                       </div>
                     )
                   })}
@@ -286,12 +307,28 @@ export const CalendarCompont = (props) => {
               </div>
 
             </div>
-            <div className='flex flex-col'>
+            <div
+              onBlur={async () => {
+                if (changeNote) {
+                  await fetchApi({
+                    query: queries.updateTasks,
+                    variables: {
+                      args: {
+                        _id: calEvent?.task?._id,
+                        note: calEvent?.task?.note
+                      }
+                    }
+                  })
+                  setChangeNote(false)
+                }
+              }}
+              className='flex flex-col'>
               <label className="capitalize text-xs font-semibold">observaciones</label>
               <Textarea value={calEvent?.task?.note}
                 setValue={(value) => {
                   calEvent.task.note = value
                   setCalEvent({ ...calEvent })
+                  !changeNote && setChangeNote(true)
                 }} />
             </div>
             <div className='flex flex-col'>
@@ -307,41 +344,28 @@ export const CalendarCompont = (props) => {
                 </div>
               </div>
             </div>
-            <div className="flex items-center cursor-pointer space-x-2"
-              onClick={() => {
-                setViewProperty({ status: !viewProperty.status })
-                goToTheTnd()
-              }}>
-              <IoIosArrowDown className={`w-4 h-4 ${!viewProperty.status && "-rotate-90"}`} />
-              <span className="uppercase">editar propiedad</span>
-            </div>
+            {(() => {
+              const v1 = ["pendiente", "ejecución", "pausada"].includes(view)
+              return (
+                <div className={`flex items-center ${v1 ? "cursor-pointer" : "text-gray-300"} space-x-2`}
+                  onClick={() => {
+                    if (v1) {
+                      setViewProperty({ status: !viewProperty.status })
+                      goToTheTnd()
+                    }
+                  }}>
+                  <IoIosArrowDown className={`w-4 h-4 ${!viewProperty.status && "-rotate-90"}`} />
+                  <span className="uppercase">editar propiedad</span>
+                </div>
+              )
+            })()
+            }
             {viewProperty.status && <div className='rounded-xl border-gray-200 border-[1px]'>
               <CreaAndEditProperties params={property} setShowAdd={setViewProperty} />
             </div>}
           </div>
-
-
-          {/* <ButtonBasic
-            className={`m-4 bg-green-500 hover:bg-green-600 w-48 h-8 text-sm mx-auto`}
-            onClick={handleExecuted}
-            caption={
-              <div className="flex gap-2 text-sm">Marcar como ejecutada</div>
-            }
-          /> */}
         </div>
       </div>}
     </div>
   )
 }
-/*
-localizer = { localizer }
-events = { myEvents }
-dayLayoutAlgorithm = { dayLayoutAlgorithm }
-defaultDate = { defaultDate }
-defaultView = { Views.WEEK }
-onSelectEvent = { handleSelectEvent }
-onSelectSlot = { handleSelectSlot }
-selectable
-scrollToTime = { scrollToTime }
-*/
-

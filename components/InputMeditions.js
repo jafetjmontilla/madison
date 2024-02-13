@@ -25,20 +25,17 @@ export const InputMeditions = ({ calEvent, setCalEvent }) => {
           args: [{
             title: values?.title,
             value: parseFloat(values?.value),
-            element: calEvent?.property?._id,
-            father: calEvent?.property?.father?._id,
-            taskID: calEvent.task._id
+            element: calEvent?.property?.father?._id,
+            father: calEvent.task._id,
           }]
         },
       }).then((result) => {
-        console.log(result)
+        console.log(result.results)
+        if (!calEvent?.task?.meditions) calEvent.task.meditions = []
+        calEvent.task.meditions.push(result.results[0])
+        setCalEvent({ ...calEvent })
+        setValues({ title: "", value: "" })
       })
-      if (!calEvent?.task?.meditions) calEvent.task.meditions = []
-      calEvent.task.meditions.push({
-        ...values, father: calEvent?.property?.father?._id, element: { _id: calEvent?.property?._id, title: calEvent?.property?.title }, createdAt: new Date()
-      })
-      setCalEvent({ ...calEvent })
-      setValues({ title: "", value: "" })
     }
   }
 

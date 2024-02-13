@@ -5,6 +5,7 @@ import { AuthContextProvider } from "../context/AuthContext"
 import { goToTheTnd } from "./CalendarCompont"
 import { Textarea } from "./Textarea"
 import { AiTwotoneDelete } from "react-icons/ai"
+import { fetchApi, queries } from "../utils/Fetching"
 
 export const ListActivities = ({ calEvent, setCalEvent, item, setConfirmation }) => {
   const { user } = AuthContextProvider()
@@ -12,10 +13,21 @@ export const ListActivities = ({ calEvent, setCalEvent, item, setConfirmation })
   const [showUser, setShowUser] = useState(false)
 
 
+  console.log(item)
   const handleDelete = () => {
-    const f1 = calEvent.task.activities.findIndex(elem => elem.comment === item.comment)
-    calEvent?.task?.activities?.splice(f1, 1)
-    setCalEvent({ ...calEvent })
+    fetchApi({
+      query: queries.updateTasks,
+      variables: {
+        args: {
+          _id: calEvent?.task?._id,
+          activity: { _id: item._id }
+        }
+      }
+    }).then((result) => {
+      const f1 = calEvent.task.activities.findIndex(elem => elem._id === item._id)
+      calEvent?.task?.activities?.splice(f1, 1)
+      setCalEvent({ ...calEvent })
+    })
   }
 
   return (
@@ -29,15 +41,15 @@ export const ListActivities = ({ calEvent, setCalEvent, item, setConfirmation })
         </div>
         <div className="w-[calc(100%-50px)]">
           <div className="flex w-full flex-col text-[11px] -space-y-1.5">
-            <span className="truncate">{user?.name}dfgdgdf dfg dfgdfg sdf sdf </span>
+            <span className="truncate">{user?.name} </span>
             <span className="truncate">{user?.email}</span>
             <span className="truncate">{user?.position}</span>
           </div>
         </div>
       </div>}
-      <AiTwotoneDelete
+      {<AiTwotoneDelete
         onClick={() => setConfirmation({ state: true, handleDelete })}
-        className="absolute w-5 h-5 cursor-pointer right-2 bottom-5" />
+        className="absolute w-5 h-5 cursor-pointer right-2 bottom-5" />}
       <div className='flex space-x-2 items-start flex-1'>
         <div
           onMouseOver={() => setShowUser(true)}

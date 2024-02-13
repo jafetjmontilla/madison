@@ -772,7 +772,7 @@ export const queries: queries = {
   }`,
   deleteMedition: `mutation ( $args:inputMedition )
   {
-    updateMedition( args:$args )
+    deleteMedition( args:$args )
   }`,
   getTasks: `query ( $args:inputTask, $sort:sortCriteriaTask, $skip:Int, $limit:Int )
   {
@@ -785,6 +785,7 @@ export const queries: queries = {
         state
         note
         activities{
+          _id
           comment
           user
           name
@@ -799,6 +800,7 @@ export const queries: queries = {
           }
           title
           value
+          createdAt
         }
         states{
           state
