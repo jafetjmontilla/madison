@@ -53,7 +53,7 @@ export const ListActivities = ({ calEvent, setCalEvent, item, setConfirmation })
           onMouseOver={() => setShowUser(true)}
           onMouseOut={() => setShowUser(false)}
           className='bg-gray-300 w-8 h-8 rounded-full mt-1 flex items-center justify-center cursor-pointer'>
-          {item?.user.name.split(" ").map(e => e.slice(0, 1)).join("")}
+          {item?.user?.name?.split(" ")?.map(e => e.slice(0, 1))?.join("")}
         </div>
         <p className='bg-blue-100* p-2 flex-1 normal-case whitespace-pre-line'>{item?.comment}</p>
       </div>

@@ -28,6 +28,7 @@ export const InputMeditions = ({ calEvent, setCalEvent }) => {
             value: parseFloat(values?.value),
             element: calEvent?.property?.father?._id,
             father: calEvent.task._id,
+            property: calEvent?.property?._id
           }]
         },
       }).then((result) => {

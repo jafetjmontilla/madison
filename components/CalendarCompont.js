@@ -117,9 +117,10 @@ export const CalendarCompont = (props) => {
       fetchApi({
         query: queries.getProperties,
         variables: {
-          args: { _id: calEvent?.property?._id }
+          args: { _id: calEvent?.property?._id, status: false }
         }
       }).then((resp) => {
+        console.log(resp)
         calEvent.task.property = resp?.results[0]
         setCalEvent(calEvent)
         setProperty(resp?.results[0])
