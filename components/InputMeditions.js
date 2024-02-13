@@ -6,6 +6,7 @@ import { fetchApi, queries } from "../utils/Fetching"
 export const InputMeditions = ({ calEvent, setCalEvent }) => {
   const [values, setValues] = useState({ title: "", value: "" })
   const [valir, setValir] = useState(false)
+  const [meditionsFilter, setMeditionsFilter] = useState([])
 
   useEffect(() => {
     if (values?.title && values?.value) {
@@ -30,7 +31,6 @@ export const InputMeditions = ({ calEvent, setCalEvent }) => {
           }]
         },
       }).then((result) => {
-        console.log(result.results)
         if (!calEvent?.task?.meditions) calEvent.task.meditions = []
         calEvent.task.meditions.push(result.results[0])
         setCalEvent({ ...calEvent })
@@ -39,11 +39,21 @@ export const InputMeditions = ({ calEvent, setCalEvent }) => {
     }
   }
 
+  useEffect(() => {
+    console.log(153599, meditions)
+    const meditionsArr = calEvent?.task?.meditions?.map(elem => elem.title)
+    console.log(153600, meditionsArr)
+    const meditionsFilter = meditions.filter(elem => !meditionsArr.includes(elem.title))
+    setMeditionsFilter(meditionsFilter)
+    console.log(153601, meditionsFilter)
+  }, [calEvent])
+
+
   return (
     <div>
       <div className='grid grid-cols-3 space-x-2 px-2'>
         <InputSelect
-          options={meditions?.map(elem => { return { value: elem.title, label: elem.title } })}
+          options={meditionsFilter?.map(elem => { return { value: elem.title, label: elem.title } })}
           isClearable={true}
           onChange={(value) => {
             values.title = meditions?.find(elem => elem?.title === value?.value)?.title

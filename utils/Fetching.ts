@@ -787,8 +787,13 @@ export const queries: queries = {
         activities{
           _id
           comment
-          user
-          name
+          user{
+            _id
+            uid
+            name
+            email
+            position
+          }
           createdAt
           updatedAt
         }
@@ -832,8 +837,13 @@ export const queries: queries = {
         note
         activities{
           comment
-          user
-          name
+          user{
+            _id
+            uid
+            name
+            email
+            position
+          }
           createdAt
           updatedAt
         }

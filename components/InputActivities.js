@@ -22,8 +22,7 @@ export const InputActivities = ({ calEvent, setCalEvent }) => {
     if (values.value) {
       const activity = {
         comment: values.value,
-        user: user?.uid,
-        name: user?.name,
+        user: user?._id,
       }
       fetchApi({
         query: queries.updateTasks,

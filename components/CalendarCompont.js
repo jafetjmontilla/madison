@@ -50,7 +50,7 @@ export const CalendarCompont = (props) => {
   const [calEvent, setCalEvent] = useState()
   const clickRef = useRef(null)
   const toast = useToast()
-  const [view, setView] = useState("pendientes")
+  const [view, setView] = useState("pendiente")
   const [viewProperty, setViewProperty] = useState({ status: false })
   const [changeNote, setChangeNote] = useState(false)
   const [confirmation, setConfirmation] = useState({ state: false, value: false, elem: {}, handleDelete: () => { } })
@@ -64,6 +64,7 @@ export const CalendarCompont = (props) => {
   }, [])
 
   useEffect(() => {
+    console.log(view)
     fetchApi({
       query: queries.getTasks,
       variables: {
@@ -136,7 +137,6 @@ export const CalendarCompont = (props) => {
   }, [])
 
   const handleExecuted = (value) => {
-    console.log(value)
     try {
       fetchApi({
         query: queries.updateTasks,
@@ -155,14 +155,12 @@ export const CalendarCompont = (props) => {
         setCalEvent({ ...calEvent })
         toast("success", `marcada como ${value?.label}`)
       })
-
     } catch (error) {
       console.log(error)
     }
   }
 
   const handleDelete = async (elem) => {
-    console.log(elem)
     await fetchApi({
       query: queries.deleteMedition,
       variables: {
@@ -263,7 +261,6 @@ export const CalendarCompont = (props) => {
             <div className="w-16 h-[100%] flex justify-end">
               <span className="hidden md:flex mr-5 mb-2 text-2xl text-gray-500 cursor-pointer hover:scale-110" onClick={() => {
                 if (view !== calEvent?.task?.state) {
-                  console.log(view, calEvent?.task?.state)
                   setEvents(old => {
                     const f1 = old?.findIndex(elem => elem.id === calEvent?.task?._id)
                     old.splice(f1, 1)
