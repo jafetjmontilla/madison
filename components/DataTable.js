@@ -86,29 +86,33 @@ export const DataTable = ({ data }) => {
 
 
   const handleonRowClick = async (values, dataIndex) => {
-    const result = await fetchApi({
-      query: queries.getElements,
-      variables: {
-        args: {
-          _id: values?._id
+    if (values?.typeElement) {
+      const result = await fetchApi({
+        query: queries.getElements,
+        variables: {
+          args: {
+            _id: values?._id
+          },
+          sort: {},
+          limit: 0,
+          skip: 0,
         },
-        sort: {},
-        limit: 0,
-        skip: 0,
-      },
-      type: "json"
-    })
-    setData(old => {
-      const f1 = old.results.findIndex(elem => elem._id === values?._id)
-      old.results.splice(f1, 1, result?.results[0])
-      return { ...old }
-    })
-    if (isAllowed("actualizar")) {
-      setStage({ action: "creaAndEdit", payload: result?.results[0], dataIndex })
-      barNav.push(`${result.results[0]?.title}`)
-      setBarNav([...barNav])
+        type: "json"
+      })
+      console.log(100025, result)
+      setData(old => {
+        const f1 = old.results.findIndex(elem => elem._id === values?._id)
+        old.results.splice(f1, 1, result?.results[0])
+        return { ...old }
+      })
+      if (isAllowed("actualizar")) {
+        setStage({ action: "creaAndEdit", payload: result?.results[0], dataIndex })
+        barNav.push(`${result.results[0]?.title}`)
+        setBarNav([...barNav])
+      }
+      return
     }
-
+    isAllowed("actualizar") && setStage({ action: "creaAndEdit", payload: values, dataIndex })
   }
 
   const options = {
