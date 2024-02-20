@@ -19,6 +19,7 @@ import { tagsGroups } from "./schemaCoordinations.js"
 import { VscTools } from "react-icons/vsc"
 import { InDevelopment } from "../components/InDevelopment";
 import { CalendarCompont } from "../components/CalendarCompont";
+import { ChangePasssword } from "../components/ChangePassword";
 
 
 export const defaultVisibleColumns = [
@@ -724,16 +725,7 @@ export const BodyStaticAPP = [
         title: "cambiar contraseña",
         groups: ["all"],
         slug: "/profile/passwords",
-        component: <InDevelopment />,
-        schema: [
-          {
-            Header: "nombre",
-            accessor: "name",
-            type: "text",
-            required: true,
-            size: 2
-          },
-        ]
+        component: <ChangePasssword />,
       },
       {
         icon: <FiLogOut className="w-8 h-8 text-gray-500" />,

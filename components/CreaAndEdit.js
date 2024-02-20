@@ -13,6 +13,7 @@ import * as yup from 'yup'
 import { fetchApi } from "../utils/Fetching";
 import { ConfirmationDelete } from "./ConfirmationDelete";
 import { nanoid } from "nanoid";
+import { ChangePasssword } from "./ChangePassword";
 
 
 export const CreaAndEdit = () => {
@@ -83,15 +84,17 @@ export const CreaAndEdit = () => {
       });
       if (valir) {
         ///////guarda nuevo registro
-        const tag = ["component", "part"].includes(itemSchema?.dataVariables?.typeElement) ?
-          (itemSchema?.dataVariables?.typeElement?.slice(0, 3) + nanoid(8)).replace(/-/g, "a").replace(/_/g, "b") : null
+        let args = {}
+        if (["component", "part"].includes(itemSchema?.dataVariables?.typeElement)) {
+          args.tag = (itemSchema?.dataVariables?.typeElement?.slice(0, 3) + nanoid(8)).replace(/-/g, "a").replace(/_/g, "b")
+        }
         const resp = await fetchApi({
           query: itemSchema.createEntry,
           variables: {
             args: {
+              ...args,
               ...requiredValues,
               ...itemSchema?.dataVariables,
-              tag
             },
           },
           type: "json"
@@ -206,7 +209,7 @@ export const CreaAndEdit = () => {
 
                           <InputField elem={elem} name={elem.accessor} isSelect={elem?.ref} onBlur={() => { handleOnBlur(elem.accessor) }} />
                         </div>
-                      ) : <></>
+                      ) : <ChangePasssword dataValues={dataValues} />
                     })}
                   </div>
                 </div>
