@@ -1,11 +1,11 @@
 import * as Icons from "../icons";
 import { BsIntersect } from 'react-icons/bs';
 
-import { queries } from "./Fetching";
+import { fetchApi, queries } from "./Fetching";
 
 import { ImOffice, ImInsertTemplate } from 'react-icons/im';
 
-export const optionsComponentsAndParts = [
+export const optionsComponents = [
   { title: "motor" },
   { title: "sistema de transmisión" },
   { title: "estructura" },
@@ -77,12 +77,21 @@ export const elements = schemaElement.map(elem => {
         required: true,
         size: 1
       },
-      ["component", "part"].includes(elem.typeElement) &&
+      ["component"].includes(elem.typeElement) &&
       {
         Header: "tipo",
         accessor: "tipo",
         type: "select",
-        options: optionsComponentsAndParts.map((elem) => { return { value: elem.title, label: elem.title } }),
+        options: optionsComponents.map((elem) => { return { value: elem.title, label: elem.title } }),
+        required: true,
+        size: 1,
+      },
+      ["part"].includes(elem.typeElement) &&
+      {
+        Header: "tipo",
+        accessor: "tipo",
+        type: "select",
+        options: [],
         required: true,
         size: 1,
       },

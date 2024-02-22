@@ -12,7 +12,7 @@ import { useToast } from '../hooks/useToast';
 import { TextareaNew } from "./InputsProperty/TextareaNew";
 import { InputProperties } from "./InputProperties";
 import { InputCharacteristics } from "./InputCharacteristics";
-import { optionsComponentsAndParts } from "../utils/schemaElements"
+import { optionsComponents } from "../utils/schemaElements"
 import { nanoid } from "nanoid"
 import { IconDelete, IconScrewdriverWrench, IconStateMachine, PlusIcon } from "../icons";
 import { CSSTransition } from "react-transition-group";
@@ -31,7 +31,7 @@ export const CreaAndEditComponentsAndParts = ({ params, showAdd, setShowAdd, dat
   const { stage, setStage, data, setData, barNav, setBarNav } = AppContextProvider()
   const [values, setValues] = useState()
   const [errors, setErrors] = useState()
-  const [optionsComponentsAndPartsNew, setOptionsComponentsAndPartsNew] = useState()
+  const [optionsParts, setOptionsParts] = useState([])
   const [isMounted, setIsMounted] = useState(false)
 
   useEffect(() => {
@@ -60,6 +60,20 @@ export const CreaAndEditComponentsAndParts = ({ params, showAdd, setShowAdd, dat
   //   })
   // }, [])
 
+  useEffect(() => {
+    if (isMounted && dataComponentes?.type?.slice(0, -2) === "part") {
+      fetchApi({
+        query: queries.getVariables,
+        variables: {
+          args: { type: "parte" }
+        }
+      }).then(result => {
+        const asd = result?.results?.map(elem => { return { value: elem._id, label: elem.title } })
+        console.log(asd)
+        setOptionsParts(asd)
+      })
+    }
+  }, [isMounted])
 
 
   const [initialValues, setInitialValues] = useState({
@@ -183,7 +197,11 @@ export const CreaAndEditComponentsAndParts = ({ params, showAdd, setShowAdd, dat
                     <InputNew name="title" label="nombre" />
                   </div>
                   <div className="col-span-2" onBlur={() => { handleOnBlur() }}>
-                    <InputSelectNew name={"tipo"} label="tipo" options={optionsComponentsAndParts?.map((elem) => { return { value: elem.title, label: elem.title } })} />
+                    <InputSelectNew name={"tipo"} label="tipo" options={
+                      dataComponentes?.type?.slice(0, -2) !== "part"
+                        ? optionsComponents?.map((elem) => { return { value: elem.title, label: elem.title } })
+                        : optionsParts
+                    } />
                   </div>
                   <div className="col-span-6">
                     <div>

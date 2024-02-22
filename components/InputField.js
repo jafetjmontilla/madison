@@ -18,10 +18,10 @@ export const InputField = ({ elem: params, isSelect, ...props }) => {
   const [rowT, setRowT] = useState()
   const { stage, setData, itemSchema } = AppContextProvider()
   const [field, meta, helpers] = useField(props);
-
   const [isMounted, setIsMounted] = useState(false)
   const [options, setOptions] = useState()
   const [value, setValue] = useState()
+  const [optionsParts, setOptionsParts] = useState([])
 
   useEffect(() => {
     if (!isMounted) {
@@ -30,6 +30,24 @@ export const InputField = ({ elem: params, isSelect, ...props }) => {
     return () => {
       if (isMounted) {
         setIsMounted(false)
+      }
+    }
+  }, [isMounted])
+
+  useEffect(() => {
+    if (isMounted) {
+      if (itemSchema?.slug === "/setup/part" && params?.type == "select") {
+        console.log("---------------------------->", { options })
+        fetchApi({
+          query: queries.getVariables,
+          variables: {
+            args: { type: "parte" }
+          }
+        }).then(result => {
+          const asd = result?.results?.map(elem => { return { value: elem._id, label: elem.title } })
+          console.log(1000004, asd)
+          setOptionsParts(asd)
+        })
       }
     }
   }, [isMounted])
@@ -182,7 +200,7 @@ export const InputField = ({ elem: params, isSelect, ...props }) => {
             if (params?.type == "select") {
               return (
                 <InputSelect
-                  options={options}
+                  options={optionsParts.length ? optionsParts : options}
                   // defaultValue={undefined}
                   onChange={(value) => {
                     setValue(value)
