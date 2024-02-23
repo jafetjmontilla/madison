@@ -37,7 +37,6 @@ export const InputField = ({ elem: params, isSelect, ...props }) => {
   useEffect(() => {
     if (isMounted) {
       if (itemSchema?.slug === "/setup/part" && params?.type == "select") {
-        console.log("---------------------------->", { options })
         fetchApi({
           query: queries.getVariables,
           variables: {
@@ -45,8 +44,8 @@ export const InputField = ({ elem: params, isSelect, ...props }) => {
           }
         }).then(result => {
           const asd = result?.results?.map(elem => { return { value: elem._id, label: elem.title } })
-          console.log(1000004, asd)
           setOptionsParts(asd)
+          params.options = asd
         })
       }
     }

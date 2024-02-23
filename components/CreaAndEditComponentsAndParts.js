@@ -69,7 +69,6 @@ export const CreaAndEditComponentsAndParts = ({ params, showAdd, setShowAdd, dat
         }
       }).then(result => {
         const asd = result?.results?.map(elem => { return { value: elem._id, label: elem.title } })
-        console.log(asd)
         setOptionsParts(asd)
       })
     }
@@ -83,6 +82,7 @@ export const CreaAndEditComponentsAndParts = ({ params, showAdd, setShowAdd, dat
   })
 
   const validationSchema = yup.object().shape({
+    tag: yup.string().test((value) => !!value),
     title: yup.string().test((value) => !!value),
     tipo: yup.string().test((value) => !!value),
   });
@@ -125,7 +125,7 @@ export const CreaAndEditComponentsAndParts = ({ params, showAdd, setShowAdd, dat
             args: {
               title: values?.title,
               tipo: values?.tipo,
-              tag: (params?.accessor.slice(0, 3) + nanoid(8)).replace("-", "a").replace("_", "b"),
+              tag: values?.tag ? values?.tag : (params?.accessor.slice(0, 3) + nanoid(8)).replace("-", "a").replace("_", "b"),
               typeElement: params?.accessor,
               father: dataComponentes?.father,
             }
@@ -193,8 +193,8 @@ export const CreaAndEditComponentsAndParts = ({ params, showAdd, setShowAdd, dat
               <div className="flex-1 overflow-scroll">
                 <div className='w-full grid grid-cols-6 gap-2 *border-[1px] *border-gray-300 *rounded-lg px-4'>
                   <AutoSubmitToken setErrors={setErrors} setValues={setValues} setDataComponenentes={setDataComponenentes} />
-                  <div className="col-span-4" onBlur={() => { handleOnBlur() }}>
-                    <InputNew name="title" label="nombre" />
+                  <div className="col-span-2" onBlur={() => { handleOnBlur() }}>
+                    <InputNew name="tag" label="tag" />
                   </div>
                   <div className="col-span-2" onBlur={() => { handleOnBlur() }}>
                     <InputSelectNew name={"tipo"} label="tipo" options={
@@ -202,6 +202,9 @@ export const CreaAndEditComponentsAndParts = ({ params, showAdd, setShowAdd, dat
                         ? optionsComponents?.map((elem) => { return { value: elem.title, label: elem.title } })
                         : optionsParts
                     } />
+                  </div>
+                  <div className="col-span-6" onBlur={() => { handleOnBlur() }}>
+                    <InputNew name="title" label="nombre" />
                   </div>
                   <div className="col-span-6">
                     <div>

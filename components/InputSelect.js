@@ -4,8 +4,6 @@ import { AppContextProvider } from '../context/AppContext';
 import { fetchApi, queries } from '../utils/Fetching';
 
 export const InputSelect = ({ options, onChange, value, isClearable = true }) => {
-
-
   const [isSearchable, setIsSearchable] = useState(true);
   const [isDisabled, setIsDisabled] = useState(false);
   const [isLoading, setIsLoading] = useState(false)

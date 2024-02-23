@@ -70,7 +70,7 @@ export const elements = schemaElement.map(elem => {
     updateEntry: queries.updateElements,
     deleteEntry: queries.deleteElements,
     schema: [
-      ["company", "area", "section", "equipment"].includes(elem.typeElement) && {
+      ["company", "area", "section", "equipment", "part"].includes(elem.typeElement) && {
         Header: "tag",
         accessor: "tag",
         type: "text",
