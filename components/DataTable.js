@@ -13,7 +13,7 @@ import { fetchApi, queries } from "../utils/Fetching";
 export const DataTable = ({ data }) => {
   const { setStage, itemSchema, variables, setData, barNav, setBarNav } = AppContextProvider()
   const [isAllowed] = useAllowed()
-
+  const [searchText, setSearchText] = useState("")
   const refDataTable = useRef(null)
   const refDivTable = useRef(null)
   const [columns, setColumns] = useState([])
@@ -55,6 +55,10 @@ export const DataTable = ({ data }) => {
           root: {
             fontSize: 12,
             fontFamily: 'Arial, sans-serif',
+          },
+          caption: {
+            padding: "5px 0px 0px 10px",
+            textTransform: "capitalize",
           }
         }
       },
@@ -135,6 +139,7 @@ export const DataTable = ({ data }) => {
       }
       setColumns(columns)
     }
+    setSearchText("")
   }, [data])
 
 
@@ -181,7 +186,8 @@ export const DataTable = ({ data }) => {
       name: 'name',
       direction: 'asc'
     },
-
+    searchAlwaysOpen: true,
+    searchText: searchText,
     responsive: "standard",
     //tableBodyHeight: "400px",
     //tableBodyMaxHeight: "400px",
