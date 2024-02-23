@@ -46,7 +46,7 @@ export const schemaElement = [
   {
     title: "componentes",
     typeElement: "component",
-    father: ["equipment", "component"],
+    father: ["section", "area", "equipment", "component"],
     children: ["component", "part"],
     icon: <Icons.IconStateMachine className="w-8 h-8 text-gray-500" />,
   },
@@ -70,7 +70,7 @@ export const elements = schemaElement.map(elem => {
     updateEntry: queries.updateElements,
     deleteEntry: queries.deleteElements,
     schema: [
-      ["company", "area", "section", "equipment", "part"].includes(elem.typeElement) && {
+      ["company", "area", "section", "equipment", "component", "part"].includes(elem.typeElement) && {
         Header: "tag",
         accessor: "tag",
         type: "text",
