@@ -691,13 +691,13 @@ export const queries: queries = {
         _id
         tag
         typeElement
+        title
         father{
           _id
           tag
           title
           typeElement
         }
-        title
         tipo
         properties{
           _id

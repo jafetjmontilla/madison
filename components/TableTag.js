@@ -74,8 +74,7 @@ export const TableTag = () => {
   }
 
   return (
-    <div className="bg-[#0E356B] w-full h-full flex items-center justify-center relative">
-
+    <div className="bg-[#0E356B] w-full h-full flex items-center justify-center relative overflow-y-hidden">
       <div className="flex flex-col h-[100%] w-[calc(100%-20px)] md:w-[calc(100%-60px)] overflow-auto">
         {subMenu &&
           <div className="flex w-full h-11 relative items-center md:items-start ">

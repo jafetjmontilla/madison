@@ -1,6 +1,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import MUIDataTable from "mui-datatables";
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
 import { LoadingContextProvider } from "../context/LoadingContext";
 import { AppContextProvider } from "../context/AppContext"
 import { defaultVisibleColumns } from "../utils/schemas"
@@ -15,13 +17,64 @@ export const DataTable = ({ data }) => {
   const refDataTable = useRef(null)
   const refDivTable = useRef(null)
   const [columns, setColumns] = useState([])
+
+  const getMuiTheme = () => createTheme({
+    components: {
+      MuiToolbar: {
+        styleOverrides: {
+          root: {
+            minHeight: "40px" + '!important'
+          }
+        }
+      },
+      MuiButtonBase: {
+        styleOverrides: {
+          root: {
+            fontSize: "13px" + '!important',
+            fontWeight: "bold" + '!important'
+          }
+        }
+      },
+      MUIDataTableBodyCell: {
+        styleOverrides: {
+          root: {
+            backgroundColor: "#00000"
+          }
+        }
+      },
+      MuiFormGroup: {
+        styleOverrides: {
+          root: {
+            padding: "5px 16px 2px 16px",
+            textTransform: "capitalize",
+          }
+        }
+      },
+      MuiTypography: {
+        styleOverrides: {
+          root: {
+            fontSize: 12,
+            fontFamily: 'Arial, sans-serif',
+          }
+        }
+      },
+      MuiInputBase: {
+        styleOverrides: {
+          root: {
+            fontSize: 12,
+          }
+        }
+      }
+    }
+  })
+
   useEffect(() => {
     if (data?.results?.length > 0) {
-      const colummnas = []
+      const columns = []
       for (const property in data?.results[0]) {
         const key = `${property}`
         const p = variables?.find(elem => elem.tag === key)
-        let options = {
+        let optionsColumns = {
           display: defaultVisibleColumns.includes(p?.tag),
           filter: true,
           sort: true,
@@ -35,7 +88,7 @@ export const DataTable = ({ data }) => {
             return {
               style: {
                 fontSize: '12px',
-                padding: "0px",
+                padding: "5px 16px 2px 16px",
                 textTransform: "uppercase",
               },
             };
@@ -43,11 +96,11 @@ export const DataTable = ({ data }) => {
           setCellHeaderProps: (value) => {
             return {
               style: {
-                padding: "0px",
+                padding: "0px 16px 0px 16px",
                 textTransform: "uppercase",
               },
             };
-          }
+          },
         }
         if (p?.type == "arraystring") {
 
@@ -56,7 +109,7 @@ export const DataTable = ({ data }) => {
               <p className="uppercase">{value?.map((elem, idx) => <li key={idx}>{elem}</li>)}</p>
             )
           }
-          options = { ...options, customBodyRender }
+          optionsColumns = { ...optionsColumns, customBodyRender }
         }
         if (p?.type == "object") {
           const customBodyRender = (value) => {
@@ -64,7 +117,7 @@ export const DataTable = ({ data }) => {
               <p className="uppercase">{value?.title}</p>
             )
           }
-          options = { ...options, customBodyRender }
+          optionsColumns = { ...optionsColumns, customBodyRender }
         }
         if (p?.type == "arrayobject") {
           const customBodyRender = (value) => {
@@ -72,15 +125,15 @@ export const DataTable = ({ data }) => {
               <p className="uppercase">{value?.length > 0 && value?.map((elem, idx) => <li key={idx}>{elem?.title ? elem?.title : ""}</li>)}</p>
             )
           }
-          options = { ...options, customBodyRender }
+          optionsColumns = { ...optionsColumns, customBodyRender }
         }
-        colummnas.push({
+        columns.push({
           name: `${p?.tag}`,
           label: `${p?.title}`,
-          options
+          options: optionsColumns
         },)
       }
-      setColumns(colummnas)
+      setColumns(columns)
     }
   }, [data])
 
@@ -99,7 +152,6 @@ export const DataTable = ({ data }) => {
         },
         type: "json"
       })
-      console.log(100025, result)
       setData(old => {
         const f1 = old.results.findIndex(elem => elem._id === values?._id)
         old.results.splice(f1, 1, result?.results[0])
@@ -119,8 +171,8 @@ export const DataTable = ({ data }) => {
     filter: false,
     filterType: 'checkbox',
     selectableRows: "single",
-    selectableRowsHideCheckboxes: false,
-    selectableRowsOnClick: false,
+    selectableRowsHideCheckboxes: true,
+    //selectableRowsOnClick: false,
     selectToolbarPlacement: "replace",
     rowsPerPage: 100,
     rowsPerPageOptions: [25, 50, 100, 200],
@@ -168,6 +220,40 @@ export const DataTable = ({ data }) => {
         //      size: this.state.denseTable ? 'small' : 'medium',
       };
     },
+    textLabels: {
+      body: {
+        noMatch: "No hay registros",
+        toolTip: "Ordenar",
+        // columnHeaderTooltip: column => `Sort for ${column.label}`
+      },
+      pagination: {
+        next: "Siguiente página",
+        previous: "Página anterior",
+        rowsPerPage: "Filas por página:",
+        displayRows: "de",
+      },
+      toolbar: {
+        search: "Buscar",
+        downloadCsv: "Download CSV",
+        print: "Imprimir",
+        viewColumns: "Columnas",
+        filterTable: "Filter Table",
+      },
+      filter: {
+        all: "All",
+        title: "FILTERS",
+        reset: "RESET",
+      },
+      viewColumns: {
+        title: "Columnas visibles",
+        titleAria: "Show/Hide Table Columns",
+      },
+      selectedRows: {
+        text: "row(s) selected",
+        delete: "Delete",
+        deleteAria: "Delete Selected Rows",
+      },
+    }
   };
 
   // useEffect(() => {
@@ -181,16 +267,19 @@ export const DataTable = ({ data }) => {
   // }, [])
   return (
 
-    <div ref={refDivTable} className={``} >
+    <div ref={refDivTable} className={`overflow-x-hidden`} >
       {itemSchema?.getData &&
-        <MUIDataTable
-          ref={refDataTable}
-          // title={<span className={"uppercase font-bold text-gray-700"}>{`${itemSchema?.title}`}</span>}
-          data={data?.results}
-          columns={columns}
-          options={options}
-          className={"*h-[80%] overflow-auto"}
-        />}
+        <ThemeProvider theme={getMuiTheme()} >
+          <MUIDataTable
+            ref={refDataTable}
+            // title={<span className={"uppercase font-bold text-gray-700"}>{`${itemSchema?.title}`}</span>}
+            data={data?.results}
+            columns={columns}
+            options={options}
+            className={"*h-[80%] overflow-auto"}
+          />
+        </ThemeProvider>
+      }
     </div>
   );
 };
