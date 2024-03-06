@@ -671,12 +671,36 @@ export const queries: queries = {
         tag
         typeElement
         title
-        tipo
+        tipo{
+          _id
+          type
+          title
+        }
         father{
           _id
           tag
           title
           typeElement
+        }
+        codigo
+        componentsMasters{
+          _id
+          title
+          tipo{
+            _id
+            type
+            title
+          }
+        }
+        partsMasters{
+          _id
+          codigo
+          title
+          tipo{
+            _id
+            type
+            title
+          }
         }
         createdAt
         updatedAt
@@ -698,7 +722,31 @@ export const queries: queries = {
           title
           typeElement
         }
-        tipo
+        codigo
+        componentsMasters{
+          _id
+          title
+          tipo{
+            _id
+            type
+            title
+          }
+        }
+        partsMasters{
+          _id
+          codigo
+          title
+          tipo{
+            _id
+            type
+            title
+          }
+        }
+        tipo{
+            _id
+            type
+            title
+          }
         properties{
           _id
           execution
@@ -729,7 +777,11 @@ export const queries: queries = {
       _id
       tag
       title
-      tipo
+      tipo{
+            _id
+            type
+            title
+          }
       typeElement
       father{
         _id
@@ -737,6 +789,26 @@ export const queries: queries = {
         title
         typeElement
       }
+      codigo
+        componentsMasters{
+          _id
+          title
+          tipo{
+            _id
+            type
+            title
+          }
+        }
+        partsMasters{
+          _id
+          codigo
+          title
+          tipo{
+            _id
+            type
+            title
+          }
+        }
       createdAt
       updatedAt
     }
@@ -748,7 +820,11 @@ export const queries: queries = {
       tag
       typeElement
       title
-      tipo
+      tipo{
+            _id
+            type
+            title
+          }
       permissions
       createdAt
       updatedAt

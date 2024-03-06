@@ -78,7 +78,7 @@ const AppProvider: FC<any> = ({ children }): JSX.Element => {
         query: queries.getVariables,
         variables: {
           args: {},
-          sort: {},
+          sort: { tag: 1 },
           limit: 0,
           skip: 0,
         },

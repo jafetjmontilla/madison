@@ -49,7 +49,7 @@ export const TableTag = () => {
         query: itemSchema?.getData,
         variables: {
           args: { ...itemSchema?.dataVariables },
-          sort: {},
+          sort: { tag: 1 },
           limit: 0,
           skip: 0,
         },

@@ -49,6 +49,9 @@ export const CreaAndEdit = () => {
   }
   const handleOnBlur = async (accesor) => {
     try {
+      console.log("--------------||||--->", requiredValues)
+
+
       const keysErrors = Object.keys(errors)
       if (!keysErrors.length && stage?.payload) {
         if (`${dataValues[accesor]}` != values[accesor]) {
@@ -78,6 +81,7 @@ export const CreaAndEdit = () => {
       }
 
       let valir = true
+      // if (!!requiredValues) {
       Object.entries(requiredValues).forEach(([key, value]) => {
         if (key == accesor && values[accesor] != "") requiredValues[`${key}`] = values[accesor]
         if (!requiredValues[`${key}`]) return valir = false
@@ -102,11 +106,12 @@ export const CreaAndEdit = () => {
         if (resp) {
           setData((old) => {
             old?.results?.splice(0, 0, { ...resp?.results[0], characteristics: [], properties: [] })
-            return { total: old.total + 1, results: old?.results }
+            return { total: old?.total + 1, results: old?.results }
           })
           setStage({ ...stage, payload: { ...resp?.results[0], characteristics: [], properties: [] }, dataIndex: 0 })
         }
       }
+      // }
     } catch (error) {
       console.log(error)
     }
@@ -259,7 +264,6 @@ export const CreaAndEdit = () => {
 
 const AutoSubmitToken = ({ setErrors, setValues }) => {
   const { values, errors } = useFormikContext();
-
   useEffect(() => {
     setErrors(errors)
   }, [errors]);

@@ -12,7 +12,7 @@ export const optionsComponents = [
   { title: "elementos de sujeción" },
   { title: "sensores" },
   { title: "controlador" },
-  { title: "actuadores" },
+  { title: "actuador" },
 ]
 
 export const schemaElement = [
@@ -70,7 +70,8 @@ export const elements = schemaElement.map(elem => {
     updateEntry: queries.updateElements,
     deleteEntry: queries.deleteElements,
     schema: [
-      ["company", "area", "section", "equipment", "component", "part"].includes(elem.typeElement) && {
+      ["company", "area", "section", "equipment"].includes(elem.typeElement) &&
+      {
         Header: "tag",
         accessor: "tag",
         type: "text",
@@ -82,10 +83,11 @@ export const elements = schemaElement.map(elem => {
         Header: "tipo",
         accessor: "tipo",
         type: "select",
-        options: optionsComponents.map((elem) => { return { value: elem.title, label: elem.title } }),
+        options: [],//optionsComponents.map((elem) => { return { value: elem.title, label: elem.title } }),
         required: true,
         size: 1,
       },
+
       ["part"].includes(elem.typeElement) &&
       {
         Header: "tipo",
@@ -95,6 +97,14 @@ export const elements = schemaElement.map(elem => {
         required: true,
         size: 1,
       },
+      ["part"].includes(elem.typeElement) &&
+      {
+        Header: "código",
+        accessor: "codigo",
+        type: "text",
+        required: true,
+        size: 1
+      },
       {
         Header: "nombre",
         accessor: "title",
@@ -102,6 +112,7 @@ export const elements = schemaElement.map(elem => {
         required: true,
         size: 3
       },
+      ["company", "area", "section", "equipment"].includes(elem.typeElement) &&
       {
         Header: "parte de",
         accessor: "father",
@@ -115,6 +126,7 @@ export const elements = schemaElement.map(elem => {
         }),
         size: 3
       },
+      ["company", "area", "section", "equipment"].includes(elem.typeElement) &&
       {
         Header: "propiedades",
         accessor: "properties",
@@ -141,17 +153,33 @@ export const elements = schemaElement.map(elem => {
         // }),
         size: 3
       },
-      ["equipment", "component"].includes(elem.typeElement) && {
+      [].includes(elem.typeElement) && {
         Header: "componentes",
         accessor: "component",
         type: "componentsAndParts",
         size: 3,
         icon: <Icons.IconStateMachine className="w-5 h-5 text-gray-500" />,
       },
-      ["equipment", "component"].includes(elem.typeElement) && {
+      [].includes(elem.typeElement) && {
         Header: "partes",
         accessor: "part",
         type: "componentsAndParts",
+        size: 3,
+        icon: <Icons.IconScrewdriverWrench className="w-5 h-5 text-gray-500" />,
+      },
+      ["equipment"].includes(elem.typeElement) && {
+        Header: "componentes",
+        accessor: "componentsMasters",
+        type: "select",
+        options: optionsComponents.map((elem) => { return { value: elem.title, label: elem.title } }),
+        size: 1,
+        icon: <Icons.IconStateMachine className="w-5 h-5 text-gray-500" />,
+      },
+      ["equipment", "component"].includes(elem.typeElement) && {
+        Header: "partes",
+        accessor: "partsMasters",
+        type: "parts",
+        //options: optionsComponents.map((elem) => { return { value: elem.title, label: elem.title } }),
         size: 3,
         icon: <Icons.IconScrewdriverWrench className="w-5 h-5 text-gray-500" />,
       },

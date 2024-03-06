@@ -65,7 +65,8 @@ export const CreaAndEditComponentsAndParts = ({ params, showAdd, setShowAdd, dat
       fetchApi({
         query: queries.getVariables,
         variables: {
-          args: { type: "parte" }
+          args: { type: "parte" },
+          sort: { tag: 1 }
         }
       }).then(result => {
         const asd = result?.results?.map(elem => { return { value: elem._id, label: elem.title } })

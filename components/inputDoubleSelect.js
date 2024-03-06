@@ -38,7 +38,7 @@ export const InputDoubleSelect = ({ params, props }) => {
           query: queries.getElements,
           variables: {
             args: { typeElement: value?.value },
-            sort: {},
+            sort: { tag: 1 },
             limit: 0,
             skip: 0,
           },

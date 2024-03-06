@@ -52,7 +52,7 @@ export const InputComponentsAndParts = ({ params }) => {
               typeElement: params?.accessor,
               father: params?.payload?._id ? params?.payload?._id : stage?.payload?._id,
             },
-            sort: {},
+            sort: { tag: 1 },
             limit: 0,
             skip: 0,
           },

@@ -11,6 +11,7 @@ import { InputDoubleSelect } from './inputDoubleSelect';
 import { MdExpandLess } from 'react-icons/md'
 import { InputProperties } from './InputProperties'
 import { InputCharacteristics } from './InputCharacteristics'
+import { InputParts } from './InputParts'
 import { InputComponentsAndParts } from './InputComponentsAndParts'
 
 export const InputField = ({ elem: params, isSelect, ...props }) => {
@@ -20,8 +21,8 @@ export const InputField = ({ elem: params, isSelect, ...props }) => {
   const [field, meta, helpers] = useField(props);
   const [isMounted, setIsMounted] = useState(false)
   const [options, setOptions] = useState()
-  const [value, setValue] = useState()
-  const [optionsParts, setOptionsParts] = useState([])
+  const [value, setValue] = useState({ value: field?.value?._id, label: field?.value?.title })
+  const [optionsForFetching, setOptionsForFetching] = useState([])
 
   useEffect(() => {
     if (!isMounted) {
@@ -36,15 +37,16 @@ export const InputField = ({ elem: params, isSelect, ...props }) => {
 
   useEffect(() => {
     if (isMounted) {
-      if (itemSchema?.slug === "/setup/part" && params?.type == "select") {
+      if (["/setup/part", "/setup/component"].includes(itemSchema?.slug) && params?.type == "select") {
         fetchApi({
           query: queries.getVariables,
           variables: {
-            args: { type: "parte" }
+            args: { type: itemSchema?.slug === "/setup/part" ? "parte" : "componente" },
+            sort: { tag: 1 }
           }
         }).then(result => {
           const asd = result?.results?.map(elem => { return { value: elem._id, label: elem.title } })
-          setOptionsParts(asd)
+          setOptionsForFetching(asd)
           params.options = asd
         })
       }
@@ -62,7 +64,7 @@ export const InputField = ({ elem: params, isSelect, ...props }) => {
             query: params?.getOptions,
             variables: {
               args: {},
-              sort: {},
+              sort: { tag: 1 },
               limit: 0,
               skip: 0,
             },
@@ -93,7 +95,7 @@ export const InputField = ({ elem: params, isSelect, ...props }) => {
         query: BodyStaticAPP.find(elem => elem.slug == `/${isSelect?.table}`).getData,
         variables: {
           args: {},
-          sort: {},
+          sort: { tag: 1 },
           limit: 0,
           skip: 0,
         },
@@ -199,12 +201,13 @@ export const InputField = ({ elem: params, isSelect, ...props }) => {
             if (params?.type == "select") {
               return (
                 <InputSelect
-                  options={optionsParts.length ? optionsParts : options}
+                  options={optionsForFetching.length ? optionsForFetching : options}
                   // defaultValue={undefined}
                   onChange={(value) => {
                     setValue(value)
                     helpers.setValue(value?.value)
-                  }}
+                  }
+                  }
                   value={value} />
               )
             }
@@ -222,6 +225,11 @@ export const InputField = ({ elem: params, isSelect, ...props }) => {
             if (params?.type == "characteristics") {
               return (
                 <InputCharacteristics props={props} />
+              )
+            }
+            if (params?.type == "parts") {
+              return (
+                <InputParts props={props} params={params} />
               )
             }
             if (params?.type == "componentsAndParts") {
