@@ -32,23 +32,15 @@ export const InputParts = ({ params, props }) => {
   }, [])
 
   useEffect(() => {
-    console.log({ parts })
-  }, [parts])
-
-  useEffect(() => {
     if (parts.length) {
-      console.log(10024, parts,)
-      console.log(10025, field?.value)
-      const partsOptions = parts.filter(elem => !field.value?.map(elem => elem._id).includes(elem._id))
+      const partsOptions = field.value ? parts.filter(elem => !field.value?.map(elem => elem._id).includes(elem._id)) : parts
       setPartsOptions(partsOptions)
-      console.log(100040, partsOptions)
     }
   }, [parts, field?.value])
 
 
   const handleAdd = async (value) => {
     try {
-      console.log(10004, value)
       const partsMasters = [...field.value, parts.find(elem => elem._id === value.value)]
       helpers.setValue(partsMasters)
       await fetchApi({
@@ -87,8 +79,6 @@ export const InputParts = ({ params, props }) => {
     }
   }
 
-
-
   return (
     <div className="w-full -mt-1">
       <div className="w-full text-gray-700 capitalize grid grid-cols-12 items-center text-left font-semibold border-b-2 text-xs *py-1">
@@ -113,11 +103,6 @@ export const InputParts = ({ params, props }) => {
                   className="w-5 h-5 cursor-pointer" />
               </div>
             </div>
-            {(showAdd.status && showAdd?.payload?._id === elem._id) &&
-              <div className="border-2 border-t-0 rounded-b-xl pb-4 mb-4">
-                algo
-              </div>
-            }
           </div>
         )
       })}

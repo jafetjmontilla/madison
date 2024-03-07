@@ -19,7 +19,7 @@ export const TableTag = () => {
   const router = useRouter()
   const { setUser, user } = AuthContextProvider()
   const { setLoading } = LoadingContextProvider()
-  const { slug, itemSchema, setItemSchema, stage, setStage, data, setData, barNav, setBarNav } = AppContextProvider()
+  const { slug, itemSchema, setItemSchema, stage, setStage, data, setData, barNav, setBarNav, } = AppContextProvider()
   const [showSelect, setShowSelect] = useState(false)
   const [isAllowed] = useAllowed()
   const hasRole = useHasRole()
@@ -54,7 +54,19 @@ export const TableTag = () => {
           skip: 0,
         },
         type: "json"
-      }).then(result => setData(result))
+      }).then(result => {
+        // if (["/setup/component", "/setup/part"].includes(itemSchema?.slug)) {
+        //   console.log("aqui0", itemSchema?.slug)
+        //   const results = result?.results.map(elem => { return { ...elem, tipo: elem?.tipo?.title } })
+        //   console.log(1004, { ...result, results })
+        //   setData({ ...result, results })
+
+        // } else {
+        //   console.log("aqui1", itemSchema?.slug)
+        setData(result)
+        // }
+
+      })
     }
   }, [itemSchema, isMounted]);
 

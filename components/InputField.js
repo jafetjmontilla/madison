@@ -21,8 +21,7 @@ export const InputField = ({ elem: params, isSelect, ...props }) => {
   const [field, meta, helpers] = useField(props);
   const [isMounted, setIsMounted] = useState(false)
   const [options, setOptions] = useState()
-  const [value, setValue] = useState({ value: field?.value?._id, label: field?.value?.title })
-  const [optionsForFetching, setOptionsForFetching] = useState([])
+  const [value, setValue] = useState()
 
   useEffect(() => {
     if (!isMounted) {
@@ -46,7 +45,9 @@ export const InputField = ({ elem: params, isSelect, ...props }) => {
           }
         }).then(result => {
           const asd = result?.results?.map(elem => { return { value: elem._id, label: elem.title } })
-          setOptionsForFetching(asd)
+          setOptions(asd)
+          const qwe = result?.results?.find(elem => elem._id === field.value)
+          setValue({ value: qwe?._id, label: qwe?.title })
           params.options = asd
         })
       }
@@ -89,6 +90,7 @@ export const InputField = ({ elem: params, isSelect, ...props }) => {
 
     // para revisar probanlemnte eliminar
     if (!!isSelect && isMounted) {
+      console.log("para revisar probanlemnte eliminar")
       //table, accessor
       const query = BodyStaticAPP.find(elem => elem.slug == `/${isSelect?.table}`).getData
       fetchApi({
@@ -201,7 +203,7 @@ export const InputField = ({ elem: params, isSelect, ...props }) => {
             if (params?.type == "select") {
               return (
                 <InputSelect
-                  options={optionsForFetching.length ? optionsForFetching : options}
+                  options={options}
                   // defaultValue={undefined}
                   onChange={(value) => {
                     setValue(value)

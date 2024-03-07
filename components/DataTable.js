@@ -72,14 +72,27 @@ export const DataTable = ({ data }) => {
     }
   })
 
+
   useEffect(() => {
+    const except = [
+      // los excluye
+      ["/setup/component", "/setup/part"].includes(itemSchema?.slug) && "father",
+      ["/setup/component", "/setup/part"].includes(itemSchema?.slug) && "tag",
+      ["/setup/company", "/setup/part"].includes(itemSchema?.slug) && "father",
+      //los incluye 
+      !["/setup/component", "/setup/part"].includes(itemSchema?.slug) && "tipo",
+      !["/setup/part"].includes(itemSchema?.slug) && "codigo"
+    ]
+
+    const visibleColumns = defaultVisibleColumns.filter(elem => !except.includes(elem))
+
     if (data?.results?.length > 0) {
       const columns = []
       for (const property in data?.results[0]) {
         const key = `${property}`
         const p = variables?.find(elem => elem.tag === key)
         let optionsColumns = {
-          display: defaultVisibleColumns.includes(p?.tag),
+          display: visibleColumns.includes(p?.tag),
           filter: true,
           sort: true,
           customToolbarSelect: selectedRows => (

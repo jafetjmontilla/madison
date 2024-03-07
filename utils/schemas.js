@@ -23,7 +23,7 @@ import { ChangePasssword } from "../components/ChangePassword";
 
 
 export const defaultVisibleColumns = [
-  "tag", "title", "cod", "tag_cod", "descripcion", "funcion", "name", "email", "phone", "roles", "permissions", "type", "groups", "phone", "position", "father"
+  "codigo", "tag", "tipo", "title", "cod", "tag_cod", "descripcion", "funcion", "name", "email", "phone", "roles", "permissions", "type", "groups", "phone", "position", "father"
 ]
 
 export const BodyStaticAPP = [

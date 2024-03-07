@@ -60,6 +60,7 @@ export const CreaAndEdit = () => {
             old.results.splice(stage.dataIndex, 1, { ...old.results[stage.dataIndex], [accesor]: values[accesor] })
             return { ...old, results: old.results }
           })
+          console.log("--------------||||--->")
           await fetchApi({
             query: itemSchema.updateEntry,
             variables: {
@@ -143,7 +144,11 @@ export const CreaAndEdit = () => {
       const varSchema = itemSchema
       setSchema(varSchema?.schema)
       if (stage?.payload) {
-        setDataValues(stage?.payload)
+        let dataValues = { ...stage?.payload }
+        if (["/setup/component", "/setup/part"].includes(itemSchema?.slug)) {
+          dataValues.tipo = dataValues.tipo._id
+        }
+        setDataValues({ ...dataValues })
         setValir(true)
       } else {
         const values = varSchema?.schema?.reduce((acc, item) => {
@@ -265,6 +270,7 @@ export const CreaAndEdit = () => {
 const AutoSubmitToken = ({ setErrors, setValues }) => {
   const { values, errors } = useFormikContext();
   useEffect(() => {
+    //console.log("errors", errors)
     setErrors(errors)
   }, [errors]);
 
