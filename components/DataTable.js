@@ -83,7 +83,6 @@ export const DataTable = ({ data }) => {
       !["/setup/component", "/setup/part"].includes(itemSchema?.slug) && "tipo",
       !["/setup/part"].includes(itemSchema?.slug) && "codigo"
     ]
-
     const visibleColumns = defaultVisibleColumns.filter(elem => !except.includes(elem))
 
     if (data?.results?.length > 0) {

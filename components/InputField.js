@@ -12,6 +12,7 @@ import { MdExpandLess } from 'react-icons/md'
 import { InputProperties } from './InputProperties'
 import { InputCharacteristics } from './InputCharacteristics'
 import { InputParts } from './InputParts'
+import { InputComponents } from './InputComponents'
 import { InputComponentsAndParts } from './InputComponentsAndParts'
 
 export const InputField = ({ elem: params, isSelect, ...props }) => {
@@ -227,6 +228,11 @@ export const InputField = ({ elem: params, isSelect, ...props }) => {
             if (params?.type == "characteristics") {
               return (
                 <InputCharacteristics props={props} />
+              )
+            }
+            if (params?.type == "components") {
+              return (
+                <InputComponents props={props} params={params} />
               )
             }
             if (params?.type == "parts") {

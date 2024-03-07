@@ -170,9 +170,9 @@ export const elements = schemaElement.map(elem => {
       ["equipment"].includes(elem.typeElement) && {
         Header: "componentes",
         accessor: "componentsMasters",
-        type: "select",
+        type: "components",
         options: optionsComponents.map((elem) => { return { value: elem.title, label: elem.title } }),
-        size: 1,
+        size: 3,
         icon: <Icons.IconStateMachine className="w-5 h-5 text-gray-500" />,
       },
       ["equipment", "component"].includes(elem.typeElement) && {
