@@ -207,7 +207,7 @@ export const CreaAndEdit = () => {
                   / {barNav.toString().replace(/,/g, " / ")} /
                 </div>
                 <div className="h-[calc(100%-128px)] overflow-y-scroll">
-                  <div className="gap-2 grid grid-cols-3 p-4 pb-32">
+                  <div className="gap-2 grid grid-cols-3 p-4 pb-72">
                     {schema?.map((elem, idx) => {
 
                       return (elem.accessor !== "password" && stage.payload) || (!stage.payload) ? (

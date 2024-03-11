@@ -139,11 +139,15 @@ export const CreaAndEditCharacteristics = ({ father, params, setShowAdd, setData
   }
   useEffect(() => {
     if (!optionsCharacteristicsNew && values?.title !== undefined) {
+      console.log(stage?.payload?.characteristics?.length)
       if (stage?.payload?.characteristics?.length) {
         const options = stage.payload.characteristics.map(elem => elem.title)
         const optionsCharacteristicsOld = options.filter(elem => elem !== values?.title)
         const optionsDiferent = variations(optionsCharacteristics.map(elem => elem.title), optionsCharacteristicsOld)
         setOptionsCharacteristicsNew(optionsDiferent)
+      }
+      else {
+        setOptionsCharacteristicsNew(optionsCharacteristics.map(elem => elem.title))
       }
     }
   }, [values?.title])
