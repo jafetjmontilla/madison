@@ -206,8 +206,8 @@ export const CreaAndEdit = () => {
                 <div className="bg-gray-300 flex w-[100%] h-6 px-4 uppercase text-xs">
                   / {barNav.toString().replace(/,/g, " / ")} /
                 </div>
-                <div className="h-[calc(100%-128px)] overflow-y-scroll">
-                  <div className="gap-2 grid grid-cols-3 p-4 pb-72">
+                <div id="root-scroll" className="h-[calc(100%-128px)] overflow-y-scroll">
+                  <div className="gap-2 grid grid-cols-3 p-4 pb-[600px]">
                     {schema?.map((elem, idx) => {
 
                       return (elem.accessor !== "password" && stage.payload) || (!stage.payload) ? (

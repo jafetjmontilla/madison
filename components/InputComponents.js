@@ -107,7 +107,11 @@ export const InputComponents = ({ params, props }) => {
       })}
       <div className="w-full text-gray-700 uppercase grid grid-cols-12 gap-4 items-center border-t-2 py-1">
         <div className="col-span-12 gap-2 flex items-center cursor-pointer ml-10"
-          onClick={() => {
+          onClick={(e) => {
+            const rootScroll = document.getElementById("root-scroll")
+            const positionScroll = rootScroll.scrollTop
+            const desplazar = Math.trunc((e.clientY - 260) / 10) * 10
+            rootScroll.scrollTop = positionScroll + desplazar
             if (barNav[barNav.length - 1] !== "...") {
               setShowAdd({ status: showAdd?.payload ? true : !showAdd?.status })
             }
