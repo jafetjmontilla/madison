@@ -44,6 +44,7 @@ export const BodyStaticAPP = [
     title: "secciones de la planta",
     groups: ["development"],
     slug: "/plantSections",
+    sortData: { tag: 1 },
     getData: queries.getSections,
     //getByID: FetchGraphQL.business.getOneBusiness,
     createEntry: queries.createSections,
@@ -76,6 +77,7 @@ export const BodyStaticAPP = [
     title: "equipos de proceso",
     groups: ["development"],
     slug: "/processEquipment",
+    sortData: { tag: 1 },
     getData: queries.getEquipments,
     createEntry: queries.createEquipments,
     schema: [
@@ -105,6 +107,7 @@ export const BodyStaticAPP = [
     title: "maestro de repuestos",
     groups: ["development"],
     slug: "/replacementsMasters",
+    sortData: { tag: 1 },
     getData: queries.getReplacementsMasters,
     createEntry: queries.createReplacementsMasters,
     schema: [
@@ -162,6 +165,7 @@ export const BodyStaticAPP = [
     title: "maestro de equipos",
     groups: ["development"],
     slug: "/equipmentsMasters",
+    sortData: { tag: 1 },
     getData: queries.getEquipmentsMasters,
     createEntry: queries.createEquipmentsMasters,
     schema: [
@@ -480,6 +484,7 @@ export const BodyStaticAPP = [
         title: "propiedades",
         groups: ["development", "admin"],
         slug: "/setup/properties",
+        sortData: { title: 1 },
         getData: queries.getProperties,
         schema: [
           {
@@ -501,6 +506,7 @@ export const BodyStaticAPP = [
         title: "características",
         groups: ["development", "admin"],
         slug: "/setup/characteristics",
+        sortData: {},
         getData: queries.getCharacteristics,
         schema: [
           {
@@ -522,6 +528,7 @@ export const BodyStaticAPP = [
         title: "variables",
         groups: ["development"],
         slug: "/setup/variables",
+        sortData: { tag: 1 },
         getData: queries.getVariables,
         createEntry: queries.createVariables,
         updateEntry: queries.updateVariable,
@@ -569,6 +576,7 @@ export const BodyStaticAPP = [
         title: "usuarios",
         groups: ["development", "admin"],
         slug: "/security/users",
+        sortData: { name: 1 },
         getData: queries.getUser,
         createEntry: queries.createUsers,
         updateEntry: queries.updateUser,
@@ -630,6 +638,7 @@ export const BodyStaticAPP = [
         title: "grupos",
         groups: ["development", "admin"],
         slug: "/security/group",
+        sortData: { title: 1 },
         getData: queries.getGroups,
         createEntry: queries.createGroups,
         updateEntry: queries.updateGroups,
@@ -732,10 +741,6 @@ export const BodyStaticAPP = [
         title: "desconectar",
         groups: ["all"],
         logout: true,
-        // slug: "/security/users",
-        // getData: queries.getUser,
-        // createEntry: queries.createUsers,
-        // updateEntry: queries.updateUser,
         schema: [
           {
             Header: "nombre",

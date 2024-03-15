@@ -64,7 +64,6 @@ export const CalendarCompont = (props) => {
   }, [])
 
   useEffect(() => {
-    console.log(view)
     fetchApi({
       query: queries.getTasks,
       variables: {
@@ -120,7 +119,6 @@ export const CalendarCompont = (props) => {
           args: { _id: calEvent?.property?._id, status: false }
         }
       }).then((resp) => {
-        console.log(resp)
         calEvent.task.property = resp?.results[0]
         setCalEvent(calEvent)
         setProperty(resp?.results[0])

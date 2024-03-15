@@ -65,6 +65,7 @@ export const elements = schemaElement.map(elem => {
     groups: ["admin", "development", "coordinador de mantenimiento", "supervisor de mantenimiento", "supervisor de servicios generales"],
     slug: `/setup/${elem.typeElement}`,
     dataVariables: { typeElement: elem.typeElement },
+    sortData: { tag: 1 },
     getData: queries.getElements,
     createEntry: queries.createElements,
     updateEntry: queries.updateElements,

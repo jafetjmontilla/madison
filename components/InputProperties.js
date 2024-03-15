@@ -10,7 +10,7 @@ import { CreaAndEditProperties } from "./CreaAndEditProperties"
 import { useToast } from "../hooks/useToast";
 
 
-export const InputProperties = ({ params, props, setDataComponenentes }) => {
+export const InputProperties = ({ params, props, setDataComponenentes, setConfirmation }) => {
   const toast = useToast();
   const { stage, setStage, barNav } = AppContextProvider()
   const [field, meta, helpers] = useField(props);
@@ -25,7 +25,6 @@ export const InputProperties = ({ params, props, setDataComponenentes }) => {
   }, [stage?.payload])
 
   const handleDelete = async (elem) => {
-    console.log("elimino propiedad")
     try {
       await fetchApi({
         query: queries.updateProperties,
@@ -82,7 +81,7 @@ export const InputProperties = ({ params, props, setDataComponenentes }) => {
                   }}
                   className="w-5 h-5 cursor-pointer" />
                 <AiTwotoneDelete
-                  onClick={() => { handleDelete(elem) }}
+                  onClick={() => { setConfirmation({ state: true, handleDelete: () => handleDelete(elem) }) }}
                   className="w-5 h-5 cursor-pointer" />
               </div>
             </div>

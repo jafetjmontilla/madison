@@ -14,6 +14,7 @@ import { InputCharacteristics } from './InputCharacteristics'
 import { InputParts } from './InputParts'
 import { InputComponents } from './InputComponents'
 import { InputComponentsAndParts } from './InputComponentsAndParts'
+import { ConfirmationDelete } from './ConfirmationDelete';
 
 export const InputField = ({ elem: params, isSelect, ...props }) => {
   const refInput = useRef()
@@ -23,6 +24,7 @@ export const InputField = ({ elem: params, isSelect, ...props }) => {
   const [isMounted, setIsMounted] = useState(false)
   const [options, setOptions] = useState()
   const [value, setValue] = useState()
+  const [confirmation, setConfirmation] = useState({ state: false, value: false, elem: {}, handleDelete: () => { } })
 
   useEffect(() => {
     if (!isMounted) {
@@ -30,10 +32,19 @@ export const InputField = ({ elem: params, isSelect, ...props }) => {
     }
     return () => {
       if (isMounted) {
+        document.getElementById(`child-${params?.type}`).remove()
         setIsMounted(false)
       }
     }
   }, [isMounted])
+
+  useEffect(() => {
+    const rootelement = document.getElementById("rootelement")
+    const child = document.getElementById(`child-${params?.type}`)
+    if (rootelement) {
+      rootelement?.appendChild(child)
+    }
+  }, [])
 
   useEffect(() => {
     if (isMounted) {
@@ -144,6 +155,11 @@ export const InputField = ({ elem: params, isSelect, ...props }) => {
 
   return (
     <div className='w-full h-full'>
+      <div id={`child-${params?.type}`} className="w-full">
+        {confirmation.state &&
+          <ConfirmationDelete confirmation={confirmation} setConfirmation={setConfirmation} />
+        }
+      </div>
       {params.accessor !== "_id" &&
         <div>
           <label className="uppercase text-xs">{params.Header}</label>
@@ -222,22 +238,22 @@ export const InputField = ({ elem: params, isSelect, ...props }) => {
             }
             if (params?.type == "properties") {
               return (
-                <InputProperties props={props} />
+                <InputProperties props={props} setConfirmation={setConfirmation} />
               )
             }
             if (params?.type == "characteristics") {
               return (
-                <InputCharacteristics props={props} />
+                <InputCharacteristics props={props} setConfirmation={setConfirmation} />
               )
             }
             if (params?.type == "components") {
               return (
-                <InputComponents props={props} params={params} />
+                <InputComponents props={props} params={params} setConfirmation={setConfirmation} />
               )
             }
             if (params?.type == "parts") {
               return (
-                <InputParts props={props} params={params} />
+                <InputParts props={props} params={params} setConfirmation={setConfirmation} />
               )
             }
             if (params?.type == "componentsAndParts") {

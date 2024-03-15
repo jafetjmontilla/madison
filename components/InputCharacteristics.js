@@ -10,7 +10,7 @@ import { CreaAndEditCharacteristics } from "./CreaAndEditCharacteristics"
 import { useToast } from "../hooks/useToast";
 
 
-export const InputCharacteristics = ({ params, props, setDataComponenentes }) => {
+export const InputCharacteristics = ({ params, props, setDataComponenentes, setConfirmation }) => {
   const toast = useToast();
   const { stage, setStage, barNav } = AppContextProvider()
   const [field, meta, helpers] = useField(props);
@@ -81,7 +81,7 @@ export const InputCharacteristics = ({ params, props, setDataComponenentes }) =>
                   }}
                   className="w-5 h-5 cursor-pointer" />
                 <AiTwotoneDelete
-                  onClick={() => { handleDelete(elem) }}
+                  onClick={() => { setConfirmation({ state: true, handleDelete: () => handleDelete(elem) }) }}
                   className="w-5 h-5 cursor-pointer" />
               </div>
             </div>

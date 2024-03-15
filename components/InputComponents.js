@@ -11,7 +11,7 @@ import { InputSelect } from "./InputSelect";
 import { IconStateMachine } from "../icons";
 
 
-export const InputComponents = ({ params, props }) => {
+export const InputComponents = ({ params, props, setConfirmation }) => {
   const toast = useToast();
   const { stage, setStage, barNav } = AppContextProvider()
   const [field, meta, helpers] = useField(props);
@@ -98,7 +98,7 @@ export const InputComponents = ({ params, props }) => {
               <div className="col-span-1 gap-2 flex justify-end">
 
                 <AiTwotoneDelete
-                  onClick={() => { handleDelete(elem) }}
+                  onClick={() => { setConfirmation({ state: true, handleDelete: () => handleDelete(elem) }) }}
                   className="w-5 h-5 cursor-pointer" />
               </div>
             </div>

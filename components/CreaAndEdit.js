@@ -31,6 +31,7 @@ export const CreaAndEdit = () => {
   const [isMounted, setIsMounted] = useState(false)
   const [valir, setValir] = useState(false)
 
+
   useMounted()
   useEffect(() => {
     if (!isMounted) {
@@ -49,9 +50,6 @@ export const CreaAndEdit = () => {
   }
   const handleOnBlur = async (accesor) => {
     try {
-      console.log("--------------||||--->", requiredValues)
-
-
       const keysErrors = Object.keys(errors)
       if (!keysErrors.length && stage?.payload) {
         if (`${dataValues[accesor]}` != values[accesor]) {
@@ -60,7 +58,6 @@ export const CreaAndEdit = () => {
             old.results.splice(stage.dataIndex, 1, { ...old.results[stage.dataIndex], [accesor]: values[accesor] })
             return { ...old, results: old.results }
           })
-          console.log("--------------||||--->")
           await fetchApi({
             query: itemSchema.updateEntry,
             variables: {
@@ -177,6 +174,7 @@ export const CreaAndEdit = () => {
 
   return (
     <>
+
       {confirmation.state &&
         <ConfirmationDelete confirmation={confirmation} handleDelete={handleDelete} setConfirmation={setConfirmation} email={stage?.payload?.email} tag={stage?.payload?.tag} />
       }

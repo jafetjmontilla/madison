@@ -44,12 +44,13 @@ export const TableTag = () => {
 
   useEffect(() => {
     if (isMounted && !!itemSchema?.getData && hasRole(itemSchema?.groups)) {
+      console.log("itemSchema?.getData")
       setStage({ action: "viewTable" })
       fetchApi({
         query: itemSchema?.getData,
         variables: {
           args: { ...itemSchema?.dataVariables },
-          sort: { tag: 1 },
+          sort: itemSchema?.sortData,
           limit: 0,
           skip: 0,
         },
