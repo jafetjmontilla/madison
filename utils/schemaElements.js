@@ -103,7 +103,7 @@ export const elements = schemaElement.map(elem => {
         Header: "código",
         accessor: "codigo",
         type: "text",
-        required: true,
+        required: false,
         size: 1
       },
       {

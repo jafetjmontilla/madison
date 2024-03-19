@@ -102,6 +102,8 @@ export const CreaAndEdit = () => {
           type: "json"
         })
         if (resp) {
+          barNav.splice(-1, 1, resp?.results[0]?.title)
+          setBarNav([...barNav])
           setData((old) => {
             old?.results?.splice(0, 0, { ...resp?.results[0], characteristics: [], properties: [] })
             return { total: old?.total + 1, results: old?.results }

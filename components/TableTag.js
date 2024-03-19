@@ -44,7 +44,6 @@ export const TableTag = () => {
 
   useEffect(() => {
     if (isMounted && !!itemSchema?.getData && hasRole(itemSchema?.groups)) {
-      console.log("itemSchema?.getData")
       setStage({ action: "viewTable" })
       fetchApi({
         query: itemSchema?.getData,
@@ -104,7 +103,7 @@ export const TableTag = () => {
               {subMenu?.map((elem, idx) => {
                 if (hasRole(elem?.groups)) {
                   return (
-                    <div key={idx} onClick={() => { handleClick(elem) }} className={`${itemSchema?.slug === elem.slug ? "bg-gray-100" : "bg-gray-300"} flex h-8 md:h-10 items-center md:justify-center cursor-pointer`}>
+                    <div key={idx} onClick={() => { itemSchema?.slug !== elem.slug && handleClick(elem) }} className={`${itemSchema?.slug === elem.slug ? "bg-gray-100" : "bg-gray-300"} flex h-8 md:h-10 items-center md:justify-center cursor-pointer`}>
                       <div className="flex items-center mx-3 my-2">
                         <div className="w-4 h-4">
                           {cloneElement(elem?.icon, { className: "w-full h-full text-gray-700" })}
