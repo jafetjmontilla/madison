@@ -26,6 +26,7 @@ const optionsCharacteristics = [
   { title: "conexion" },
   { title: "corriente nominal (a) rpm" },
   { title: "datos adjuntos" },
+  { title: "diametro" },
   { title: "espesor de lamina" },
   { title: "estopera" },
   { title: "factor de potencia" },

@@ -534,7 +534,7 @@ export const BodyStaticAPP = [
         updateEntry: queries.updateVariable,
         schema: [
           {
-            Header: "tag",
+            Header: "código",
             accessor: "tag",
             type: "text",
             required: true,

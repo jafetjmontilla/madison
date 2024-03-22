@@ -1,8 +1,7 @@
 import * as Icons from "../icons";
 import { BsIntersect } from 'react-icons/bs';
-
-import { fetchApi, queries } from "./Fetching";
-
+import { SiGooglesearchconsole } from "react-icons/si";
+import { queries } from "./Fetching";
 import { ImOffice, ImInsertTemplate } from 'react-icons/im';
 
 export const optionsComponents = [
@@ -56,6 +55,12 @@ export const schemaElement = [
     father: ["equipment", "component"],
     icon: <Icons.IconScrewdriverWrench className="w-8 h-8 text-gray-500" />,
   },
+  {
+    title: "consumibles",
+    typeElement: "consumable",
+    father: ["equipment"],
+    icon: <SiGooglesearchconsole className="w-8 h-8 text-gray-500" />,
+  },
 ]
 
 export const elements = schemaElement.map(elem => {
@@ -89,7 +94,7 @@ export const elements = schemaElement.map(elem => {
         size: 1,
       },
 
-      ["part"].includes(elem.typeElement) &&
+      ["part", "consumable"].includes(elem.typeElement) &&
       {
         Header: "tipo",
         accessor: "tipo",
@@ -98,7 +103,7 @@ export const elements = schemaElement.map(elem => {
         required: true,
         size: 1,
       },
-      ["part"].includes(elem.typeElement) &&
+      ["part", "consumable"].includes(elem.typeElement) &&
       {
         Header: "código",
         accessor: "codigo",
@@ -180,6 +185,14 @@ export const elements = schemaElement.map(elem => {
         Header: "partes",
         accessor: "partsMasters",
         type: "parts",
+        //options: optionsComponents.map((elem) => { return { value: elem.title, label: elem.title } }),
+        size: 3,
+        icon: <Icons.IconScrewdriverWrench className="w-5 h-5 text-gray-500" />,
+      },
+      ["equipment"].includes(elem.typeElement) && {
+        Header: "consumibles",
+        accessor: "consumablessMasters",
+        type: "consumables",
         //options: optionsComponents.map((elem) => { return { value: elem.title, label: elem.title } }),
         size: 3,
         icon: <Icons.IconScrewdriverWrench className="w-5 h-5 text-gray-500" />,

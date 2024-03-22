@@ -89,7 +89,11 @@ export const DataTable = ({ data }) => {
       const columns = []
       for (const property in data?.results[0]) {
         const key = `${property}`
-        const p = variables?.find(elem => elem.tag === key)
+        let p = variables?.find(elem => elem.tag === key)
+        const item = itemSchema?.schema?.find(elem => elem?.accessor === key)
+        if (item && !!p?.title) {
+          p.title = item?.Header
+        }
         let optionsColumns = {
           display: visibleColumns.includes(p?.tag),
           filter: true,

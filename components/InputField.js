@@ -12,6 +12,7 @@ import { MdExpandLess } from 'react-icons/md'
 import { InputProperties } from './InputProperties'
 import { InputCharacteristics } from './InputCharacteristics'
 import { InputParts } from './InputParts'
+import { InputConsumables } from './InputConsumables'
 import { InputComponents } from './InputComponents'
 import { InputComponentsAndParts } from './InputComponentsAndParts'
 import { ConfirmationDelete } from './ConfirmationDelete';
@@ -48,18 +49,20 @@ export const InputField = ({ elem: params, isSelect, ...props }) => {
 
   useEffect(() => {
     if (isMounted) {
-      if (["/setup/part", "/setup/component"].includes(itemSchema?.slug) && params?.type == "select") {
+      if (["/setup/part", "/setup/consumable", "/setup/component"].includes(itemSchema?.slug) && params?.type == "select") {
         fetchApi({
           query: queries.getVariables,
           variables: {
-            args: { type: itemSchema?.slug === "/setup/part" ? "parte" : "componente" },
+            args: { type: itemSchema?.slug === "/setup/component" ? "componente" : "parte" },
             sort: { tag: 1 }
           }
         }).then(result => {
           const asd = result?.results?.map(elem => { return { value: elem._id, label: elem.title } })
           setOptions(asd)
           const qwe = result?.results?.find(elem => elem._id === field.value)
-          setValue({ value: qwe?._id, label: qwe?.title })
+          if (qwe?.length) {
+            setValue({ value: qwe?._id, label: qwe?.title })
+          }
           params.options = asd
         })
       }
@@ -254,6 +257,11 @@ export const InputField = ({ elem: params, isSelect, ...props }) => {
             if (params?.type == "parts") {
               return (
                 <InputParts props={props} params={params} setConfirmation={setConfirmation} />
+              )
+            }
+            if (params?.type == "consumables") {
+              return (
+                <InputConsumables props={props} params={params} setConfirmation={setConfirmation} />
               )
             }
             if (params?.type == "componentsAndParts") {

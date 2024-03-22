@@ -17,7 +17,7 @@ import { ChangePasssword } from "./ChangePassword";
 
 
 export const CreaAndEdit = () => {
-  const { stage, setStage, setData, itemSchema, barNav, setBarNav } = AppContextProvider()
+  const { stage, setStage, data, setData, itemSchema, barNav, setBarNav } = AppContextProvider()
   const toast = useToast()
   const [schema, setSchema] = useState()
   const [dataValues, setDataValues] = useState()
@@ -87,7 +87,7 @@ export const CreaAndEdit = () => {
       if (valir) {
         ///////guarda nuevo registro
         let args = {}
-        if (["component", "part"].includes(itemSchema?.dataVariables?.typeElement)) {
+        if (["component", "part", "consumable"].includes(itemSchema?.dataVariables?.typeElement)) {
           args.tag = (itemSchema?.dataVariables?.typeElement?.slice(0, 3) + nanoid(8)).replace(/-/g, "a").replace(/_/g, "b")
         }
         const resp = await fetchApi({
@@ -104,10 +104,9 @@ export const CreaAndEdit = () => {
         if (resp) {
           barNav.splice(-1, 1, resp?.results[0]?.title)
           setBarNav([...barNav])
-          setData((old) => {
-            old?.results?.splice(0, 0, { ...resp?.results[0], characteristics: [], properties: [] })
-            return { total: old?.total + 1, results: old?.results }
-          })
+          data.results?.splice(0, 0, { ...resp?.results[0], characteristics: [], properties: [] })
+          data.total = old?.total + 1
+          setData({ ...data })
           setStage({ ...stage, payload: { ...resp?.results[0], characteristics: [], properties: [] }, dataIndex: 0 })
         }
       }
@@ -144,7 +143,7 @@ export const CreaAndEdit = () => {
       setSchema(varSchema?.schema)
       if (stage?.payload) {
         let dataValues = { ...stage?.payload }
-        if (["/setup/component", "/setup/part"].includes(itemSchema?.slug)) {
+        if (["/setup/component", "/setup/part", "/setup/consumable"].includes(itemSchema?.slug)) {
           dataValues.tipo = dataValues.tipo._id
         }
         setDataValues({ ...dataValues })
