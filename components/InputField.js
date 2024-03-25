@@ -50,10 +50,18 @@ export const InputField = ({ elem: params, isSelect, ...props }) => {
   useEffect(() => {
     if (isMounted) {
       if (["/setup/part", "/setup/consumable", "/setup/component"].includes(itemSchema?.slug) && params?.type == "select") {
+        const getTipo = (slug)=> {
+          console.log(4500000,slug)
+          if (slug === "/setup/component" ) return "componente"
+          if (slug === "/setup/part")  return "parte"
+          if (slug === "/setup/consumable")  return "consumible"
+        }
+        const tipo = getTipo(itemSchema?.slug)
+        console.log(4500000,tipo)
         fetchApi({
           query: queries.getVariables,
           variables: {
-            args: { type: itemSchema?.slug === "/setup/component" ? "componente" : "parte" },
+            args: { type: tipo },
             sort: { tag: 1 }
           }
         }).then(result => {
