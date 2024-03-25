@@ -76,12 +76,12 @@ export const DataTable = ({ data }) => {
   useEffect(() => {
     const except = [
       // los excluye
-      ["/setup/component", "/setup/part"].includes(itemSchema?.slug) && "father",
-      ["/setup/component", "/setup/part"].includes(itemSchema?.slug) && "tag",
-      ["/setup/company", "/setup/part"].includes(itemSchema?.slug) && "father",
+      ["/setup/component", "/setup/part", "/setup/consumable"].includes(itemSchema?.slug) && "father",
+      ["/setup/component", "/setup/part", "/setup/consumable"].includes(itemSchema?.slug) && "tag",
+      ["/setup/company", "/setup/part", "/setup/consumable"].includes(itemSchema?.slug) && "father",
       //los incluye 
-      !["/setup/component", "/setup/part"].includes(itemSchema?.slug) && "tipo",
-      !["/setup/part"].includes(itemSchema?.slug) && "codigo"
+      !["/setup/component", "/setup/part", "/setup/consumable"].includes(itemSchema?.slug) && "tipo",
+      !["/setup/part", "/setup/consumable"].includes(itemSchema?.slug) && "codigo"
     ]
     const visibleColumns = defaultVisibleColumns.filter(elem => !except.includes(elem))
 
