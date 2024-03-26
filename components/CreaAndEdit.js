@@ -105,7 +105,7 @@ export const CreaAndEdit = () => {
           barNav.splice(-1, 1, resp?.results[0]?.title)
           setBarNav([...barNav])
           data.results?.splice(0, 0, { ...resp?.results[0], characteristics: [], properties: [] })
-          data.total = old?.total + 1
+          data.total = data?.total + 1
           setData({ ...data })
           setStage({ ...stage, payload: { ...resp?.results[0], characteristics: [], properties: [] }, dataIndex: 0 })
         }
