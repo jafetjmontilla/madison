@@ -702,6 +702,16 @@ export const queries: queries = {
             title
           }
         }
+        consumablesMasters{
+          _id
+          codigo
+          title
+          tipo{
+            _id
+            type
+            title
+          }
+        }
         createdAt
         updatedAt
       }
@@ -733,6 +743,16 @@ export const queries: queries = {
           }
         }
         partsMasters{
+          _id
+          codigo
+          title
+          tipo{
+            _id
+            type
+            title
+          }
+        }
+        consumablesMasters{
           _id
           codigo
           title
@@ -800,6 +820,16 @@ export const queries: queries = {
           }
         }
         partsMasters{
+          _id
+          codigo
+          title
+          tipo{
+            _id
+            type
+            title
+          }
+        }
+        consumablesMasters{
           _id
           codigo
           title

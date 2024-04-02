@@ -191,7 +191,7 @@ export const elements = schemaElement.map(elem => {
       },
       ["equipment"].includes(elem.typeElement) && {
         Header: "consumibles",
-        accessor: "consumablessMasters",
+        accessor: "consumablesMasters",
         type: "consumables",
         //options: optionsComponents.map((elem) => { return { value: elem.title, label: elem.title } }),
         size: 3,

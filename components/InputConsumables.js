@@ -42,6 +42,7 @@ export const InputConsumables = ({ params, props, setConfirmation }) => {
 
   const handleAdd = async (value) => {
     try {
+      console.log(51515152, field.value, props)
       const consumablesMasters = [...field.value, consumables.find(elem => elem._id === value.value)]
       helpers.setValue(consumablesMasters)
       await fetchApi({
@@ -83,20 +84,20 @@ export const InputConsumables = ({ params, props, setConfirmation }) => {
   return (
     <div className="w-full -mt-1">
       <div className="w-full text-gray-700 capitalize grid grid-cols-12 items-center text-left font-semibold border-b-2 text-xs *py-1">
-        <span className="col-span-4">Tipo</span>
-        <span className="col-span-4">Código</span>
-        <span className="col-span-3">Nonbre</span>
+        <span className="col-span-2">Tipo</span>
+        <span className="col-span-2">Código</span>
+        <span className="col-span-7">Nonbre</span>
       </div>
       {typeof field?.value === "object" && field?.value?.map((elem, idx) => {
         return (
           <div key={idx} className="w-full">
             < div className={`w-full ${(showAdd.status && showAdd?.payload?._id === elem._id) && "bg-gray-200"} text-gray-700 uppercase grid grid-cols-12 gap-4 items-center py-1`}>
-              <div className="col-span-4 gap-2 flex items-center">
+              <div className="col-span-2 gap-2 flex items-center">
                 <IconScrewdriverWrench className="w-5 h-5" />
                 <span className="truncate flex-1">{elem?.tipo?.title}</span>
               </div>
-              <span className="col-span-4 truncate">{elem?.codigo}</span>
-              <span className="col-span-3 truncate">{elem?.title}</span>
+              <span className="col-span-2 truncate">{elem?.codigo}</span>
+              <span className="col-span-7 truncate">{elem?.title}</span>
               <div className="col-span-1 gap-2 flex justify-end">
 
                 <AiTwotoneDelete
@@ -119,7 +120,7 @@ export const InputConsumables = ({ params, props, setConfirmation }) => {
             }
           }}>
           {showAdd?.status && !showAdd?.payload ? <IoIosArrowUp className="w-4 h-4" /> : <IoIosArrowDown className="w-4 h-4" />}
-          <span className="">agregar consumables</span>
+          <span className="">agregar consumibles</span>
           <MdOutlineAddCircleOutline className="w-5 h-5" />
         </div>
       </div>
@@ -130,7 +131,7 @@ export const InputConsumables = ({ params, props, setConfirmation }) => {
             {meta.error && <span className="text-red-500 text-xs ml-2">!requerido</span>}
           </div>
           <InputSelect
-            options={consumablesOptions.map(elem => { return { value: elem?._id, label: `${elem.codigo} ${elem.title}` } })}
+            options={consumablesOptions.map(elem => { return { value: elem?._id, label: `${elem.title} ( ${elem.codigo} )` } })}
             onChange={(value) => { handleAdd(value) }}
           />
         </div>
