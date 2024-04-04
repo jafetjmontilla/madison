@@ -9,7 +9,7 @@ import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io"
 import { useToast } from "../hooks/useToast";
 import { InputSelect } from "./InputSelect";
 import { IconStateMachine } from "../icons";
-
+import { BiSpreadsheet } from "react-icons/bi";
 
 export const InputComponents = ({ params, props, setConfirmation }) => {
   const toast = useToast();
@@ -80,11 +80,17 @@ export const InputComponents = ({ params, props, setConfirmation }) => {
     }
   }
 
+
+  useEffect(() => {
+    console.log(showAdd?.payload)
+  }, [showAdd])
+
+
   return (
     <div className="w-full -mt-1">
       <div className="w-full text-gray-700 capitalize grid grid-cols-12 items-center text-left font-semibold border-b-2 text-xs *py-1">
         <span className="col-span-4">Tipo</span>
-        <span className="col-span-7">Nonbre</span>
+        <span className="col-span-7">nombre</span>
       </div>
       {typeof field?.value === "object" && field?.value?.map((elem, idx) => {
         return (
@@ -95,11 +101,18 @@ export const InputComponents = ({ params, props, setConfirmation }) => {
                 <span className="truncate flex-1">{elem?.tipo?.title}</span>
               </div>
               <span className="col-span-7 truncate">{elem?.title}</span>
-              <div className="col-span-1 gap-2 flex justify-end">
+              <div className="col-span-1 w-full h-full relative flex justify-end">
+                <div className="flex items-center justify-end gap-1 absolute">
+                  <BiSpreadsheet onClick={() => {
+                    (showAdd.status && showAdd?.payload?._id === elem._id && showAdd.action !== "edit")
+                      ? setShowAdd({ status: false })
+                      : setShowAdd({ status: true, payload: elem, action: "view" })
+                  }} className={`w-5 h-5 cursor-pointer ${(showAdd.action === "view" && showAdd?.payload?._id === elem._id) && "text-blue-600"}`} />
 
-                <AiTwotoneDelete
-                  onClick={() => { setConfirmation({ state: true, handleDelete: () => handleDelete(elem) }) }}
-                  className="w-5 h-5 cursor-pointer" />
+                  <AiTwotoneDelete
+                    onClick={() => { setConfirmation({ state: true, handleDelete: () => handleDelete(elem) }) }}
+                    className="w-5 h-5 cursor-pointer" />
+                </div>
               </div>
             </div>
           </div>

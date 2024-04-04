@@ -1,15 +1,9 @@
 import { useEffect, useState } from "react"
 import { InputSelectNew } from "./InputsProperty/InputSelectNew"
 import { fetchApi, queries } from "../utils/Fetching"
-import { Formik, useField, useFormikContext } from "formik";
+import { Formik, useFormikContext } from "formik";
 import { AppContextProvider } from "../context/AppContext";
-import { InputField } from "./InputField";
-import { RiBarChart2Fill } from "react-icons/ri"
-import { AiTwotoneEdit, AiTwotoneDelete } from "react-icons/ai"
-import { MdOutlineAddCircleOutline } from "react-icons/md"
-import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io"
 import { InputRadioGroup } from "./InputsProperty/InputRadioGroup"
-import { InputCron } from "./InputsProperty/InputCron"
 import { InputDateTime } from "./InputsProperty/InputDateTime"
 import { schemaCoordinations } from "../utils/schemaCoordinations.js"
 import * as yup from 'yup'
@@ -20,14 +14,27 @@ import { FaCheck } from "react-icons/fa"
 import { useToast } from '../hooks/useToast';
 import { InputSwitch } from "./InputsProperty/InputSwitch"
 import { optionsIntervals } from '../utils/dictionaries.js'
+import { FormControl } from "@mui/material";
 
 
-export const CreaAndEditProperties = ({ father, params, setShowAdd, setDataComponenentes }) => {
+export const CreaAndEditProperties = ({ father, params, showAdd, setShowAdd, setDataComponenentes }) => {
   const toast = useToast()
   const d = new Date()
-  const { stage, setStage, setData } = AppContextProvider()
+  const { stage, setStage } = AppContextProvider()
   const [values, setValues] = useState()
   const [errors, setErrors] = useState()
+  const [isMounted, setIsMounted] = useState(false)
+
+  useEffect(() => {
+    if (!isMounted) {
+      setIsMounted(true)
+    }
+    return () => {
+      if (isMounted) {
+
+      }
+    }
+  }, [isMounted])
 
   const [initialValues, setInitialValues] = useState({
     execution: "periódica",
@@ -117,6 +124,21 @@ export const CreaAndEditProperties = ({ father, params, setShowAdd, setDataCompo
     }
   }
 
+
+  useEffect(() => {
+    if (isMounted) {
+      const div = document.getElementById('formIdProperties')
+      if (div) {
+        const elements = div.querySelectorAll('input, textarea, span, label')
+        elements.forEach((el) => {
+          el.readOnly = showAdd?.action === "view"; // Para campos de entrada
+          el.disabled = showAdd?.action === "view"; // Para select y botón
+          el.style.cursor = showAdd?.action === "view" ? "default" : ""
+        });
+      }
+    }
+  }, [showAdd?.action, isMounted])
+
   const meditionOptions = [
     {
       value: "cualitativa", label: "Cualitativa",
@@ -139,22 +161,31 @@ export const CreaAndEditProperties = ({ father, params, setShowAdd, setDataCompo
       {({ resetForm }) => {
 
         return (
-          <div className='w-full grid grid-cols-6 gap-2 *border-[1px] *border-gray-300 *rounded-lg px-4'>
+          <div id="formIdProperties" className='w-full grid grid-cols-6 gap-2 *border-[1px] *border-gray-300 *rounded-lg px-4'>
             <AutoSubmitToken setErrors={setErrors} setValues={setValues} />
             <div className="col-span-2">
               <InputRadioGroup name={"execution"} label="ejecución" />
             </div>
             <div className="col-span-2">
-              <InputSelectNew name={"medition"} label="medición" options={meditionOptions} />
+              {showAdd?.action === "view"
+                ? <InputNew name="medition" label="medición" />
+                : <InputSelectNew disabled={showAdd?.action === "view"} name={"medition"} label="medición" options={meditionOptions} />
+              }
             </div>
             <div className="col-span-2">
-              <InputSelectNew name={"coordination"} label="coordinacion" options={schemaCoordinations?.map((elem) => { return { value: elem.title, label: elem.title } })} />
+              {showAdd?.action === "view"
+                ? <InputNew name="coordination" label="coordinacion" />
+                : <InputSelectNew disabled={showAdd?.action === "view"} name={"coordination"} label="coordinacion" options={schemaCoordinations?.map((elem) => { return { value: elem.title, label: elem.title } })} />
+              }
             </div>
             <div className="col-span-4">
               <InputNew name="title" label="nombre" />
             </div>
             <div className="col-span-2">
-              <InputSelectNew name={"executor"} label="responsable" options={schemaCoordinations?.find((elem) => elem?.title == values?.coordination)?.workers?.map(elem => { return { value: elem, label: elem } })} />
+              {showAdd?.action === "view"
+                ? <InputNew name="executor" label="responsable" />
+                : <InputSelectNew disabled={showAdd?.action === "view"} name={"executor"} label="responsable" options={schemaCoordinations?.find((elem) => elem?.title == values?.coordination)?.workers?.map(elem => { return { value: elem, label: elem } })} />
+              }
             </div>
             <div className="col-span-6">
               <TextareaNew name="description" label="descripción" />
@@ -166,13 +197,17 @@ export const CreaAndEditProperties = ({ father, params, setShowAdd, setDataCompo
             }
             <div className={`${values?.execution === "periódica" ? "col-span-2" : "col-span-5"}`}>
               {values?.execution === "periódica"
-                ? <InputSelectNew name={"periodic"} label="intérvalo ejecución" options={optionsIntervals} />
+                ? showAdd?.action === "view"
+                  ? <InputNew name="periodic" label="intérvalo ejecución" />
+                  : <InputSelectNew disabled={showAdd?.action === "view"} name={"periodic"} label="intérvalo ejecución" options={optionsIntervals} />
                 : <InputDateTime name="unique" label="ejecución única" />}
             </div>
             <div className="col-span-1">
-              <InputSwitch name="active" label="activo" />
+              <FormControl disabled={showAdd?.action === "view"} >
+                <InputSwitch name="active" label="activo" />
+              </FormControl>
             </div>
-            <div className="col-span-6 flex justify-end items-end">
+            <div className={`${showAdd?.action === "view" ? "hidden" : "flex"} col-span-6 justify-end items-end`}>
               <ButtonBasic
                 className={`m-4 bg-green-500 hover:bg-green-600 w-48 h-8 text-sm`}
                 onClick={handleSubmit}
@@ -184,7 +219,7 @@ export const CreaAndEditProperties = ({ father, params, setShowAdd, setDataCompo
           </div>
         )
       }}
-    </Formik>
+    </Formik >
   )
 }
 

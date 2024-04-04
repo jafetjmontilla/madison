@@ -1,6 +1,6 @@
 import { useField } from "formik";
 import { FormControlLabel, Switch } from "@mui/material";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 export const InputSwitch = (props) => {
   const [field, meta, helpers] = useField(props);
@@ -22,7 +22,7 @@ export const InputSwitch = (props) => {
       <div className={`w-full h-[38px] rounded-lg border-[1px] border-gray-300 text-sm p-0 flex justify-center`} >
         <FormControlLabel
           control={
-            <Switch defaultChecked={!valirDefaultChecked && field.value}
+            <Switch defaultChecked={true} value={!valirDefaultChecked && field.value}
               onClick={(e) => { helpers.setValue(e.target._valueTracker.getValue() === "true") }}
             />
           }

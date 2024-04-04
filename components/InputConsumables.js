@@ -2,18 +2,18 @@ import { useEffect, useState } from "react"
 import { fetchApi, queries } from "../utils/Fetching"
 import { useField } from "formik";
 import { AppContextProvider } from "../context/AppContext";
-import { GiBookPile } from "react-icons/gi"
 import { AiTwotoneDelete } from "react-icons/ai"
 import { MdOutlineAddCircleOutline } from "react-icons/md"
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io"
 import { useToast } from "../hooks/useToast";
 import { InputSelect } from "./InputSelect";
 import { IconScrewdriverWrench } from "../icons";
+import { RiSearchEyeLine } from "react-icons/ri";
 
 
 export const InputConsumables = ({ params, props, setConfirmation }) => {
   const toast = useToast();
-  const { stage, setStage, barNav } = AppContextProvider()
+  const { stage, barNav } = AppContextProvider()
   const [field, meta, helpers] = useField(props);
   const [showAdd, setShowAdd] = useState({ status: false, payload: {} })
   const [consumables, setConsumables] = useState([])
@@ -42,7 +42,6 @@ export const InputConsumables = ({ params, props, setConfirmation }) => {
 
   const handleAdd = async (value) => {
     try {
-      console.log(51515152, field.value, props)
       const consumablesMasters = [...field.value, consumables.find(elem => elem._id === value.value)]
       helpers.setValue(consumablesMasters)
       await fetchApi({
@@ -86,7 +85,7 @@ export const InputConsumables = ({ params, props, setConfirmation }) => {
       <div className="w-full text-gray-700 capitalize grid grid-cols-12 items-center text-left font-semibold border-b-2 text-xs *py-1">
         <span className="col-span-2">Tipo</span>
         <span className="col-span-2">Código</span>
-        <span className="col-span-7">Nonbre</span>
+        <span className="col-span-7">nombre</span>
       </div>
       {typeof field?.value === "object" && field?.value?.map((elem, idx) => {
         return (
@@ -99,6 +98,7 @@ export const InputConsumables = ({ params, props, setConfirmation }) => {
               <span className="col-span-2 truncate">{elem?.codigo}</span>
               <span className="col-span-7 truncate">{elem?.title}</span>
               <div className="col-span-1 gap-2 flex justify-end">
+                <RiSearchEyeLine className="w-5 h-5" />
 
                 <AiTwotoneDelete
                   onClick={() => { setConfirmation({ state: true, handleDelete: () => handleDelete(elem) }) }}

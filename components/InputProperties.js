@@ -8,7 +8,7 @@ import { MdOutlineAddCircleOutline } from "react-icons/md"
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io"
 import { CreaAndEditProperties } from "./CreaAndEditProperties"
 import { useToast } from "../hooks/useToast";
-
+import { BiSpreadsheet } from "react-icons/bi";
 
 export const InputProperties = ({ params, props, setDataComponenentes, setConfirmation }) => {
   const toast = useToast();
@@ -72,22 +72,29 @@ export const InputProperties = ({ params, props, setDataComponenentes, setConfir
               <span className="col-span-2 truncate">{elem?.execution}</span>
               <span className="col-span-2 truncate">{elem?.medition}</span>
               <span className="col-span-3 truncate">{elem?.coordination}</span>
-              <div className="col-span-1 gap-2 flex items-center">
-                <AiTwotoneEdit
-                  onClick={() => {
-                    (showAdd.status && showAdd?.payload?._id === elem._id)
+              <div className="col-span-1 w-full h-full relative flex justify-end">
+                <div className="flex items-center justify-end gap-1 absolute">
+                  <BiSpreadsheet onClick={() => {
+                    (showAdd.status && showAdd?.payload?._id === elem._id && showAdd.action !== "edit")
                       ? setShowAdd({ status: false })
-                      : setShowAdd({ status: true, payload: elem })
-                  }}
-                  className="w-5 h-5 cursor-pointer" />
-                <AiTwotoneDelete
-                  onClick={() => { setConfirmation({ state: true, handleDelete: () => handleDelete(elem) }) }}
-                  className="w-5 h-5 cursor-pointer" />
+                      : setShowAdd({ status: true, payload: elem, action: "view" })
+                  }} className={`w-5 h-5 cursor-pointer ${(showAdd.action === "view" && showAdd?.payload?._id === elem._id) && "text-blue-600"}`} />
+                  <AiTwotoneEdit
+                    onClick={() => {
+                      (showAdd.status && showAdd?.payload?._id === elem._id && showAdd.action !== "view")
+                        ? setShowAdd({ status: false })
+                        : setShowAdd({ status: true, payload: elem, action: "edit" })
+                    }}
+                    className={`w-5 h-5 cursor-pointer ${(showAdd.action === "edit" && showAdd?.payload?._id === elem._id) && "text-blue-600"}`} />
+                  <AiTwotoneDelete
+                    onClick={() => { setConfirmation({ state: true, handleDelete: () => handleDelete(elem) }) }}
+                    className="w-5 h-5 cursor-pointer" />
+                </div>
               </div>
             </div>
             {(showAdd.status && showAdd?.payload?._id === elem._id) &&
               <div className="border-2 border-t-0 rounded-b-xl pb-4 mb-4">
-                <CreaAndEditProperties father={params} params={elem} setShowAdd={setShowAdd} setDataComponenentes={setDataComponenentes} />
+                <CreaAndEditProperties father={params} params={elem} showAdd={showAdd} setShowAdd={setShowAdd} setDataComponenentes={setDataComponenentes} />
               </div>
             }
           </div>

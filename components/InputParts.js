@@ -86,7 +86,7 @@ export const InputParts = ({ params, props, setConfirmation }) => {
       <div className="w-full text-gray-700 capitalize grid grid-cols-12 items-center text-left font-semibold border-b-2 text-xs *py-1">
         <span className="col-span-2">Tipo</span>
         <span className="col-span-2">Código</span>
-        <span className="col-span-7">Nonbre</span>
+        <span className="col-span-7">nombre</span>
       </div>
       {typeof field?.value === "object" && field?.value?.map((elem, idx) => {
         return (

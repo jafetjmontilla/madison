@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { InputSelectNew } from "./InputsProperty/InputSelectNew"
 import { fetchApi, queries } from "../utils/Fetching"
-import { Formik, useField, useFormikContext } from "formik";
+import { Formik, useFormikContext } from "formik";
 import { AppContextProvider } from "../context/AppContext";
 import { schemaCoordinations } from "../utils/schemaCoordinations.js"
 import * as yup from 'yup'
@@ -52,12 +52,24 @@ const optionsCharacteristics = [
   { title: "voltaje nominal (v)" },
 ]
 
-export const CreaAndEditCharacteristics = ({ father, params, setShowAdd, setDataComponenentes }) => {
+export const CreaAndEditCharacteristics = ({ father, params, showAdd, setShowAdd, setDataComponenentes }) => {
   const toast = useToast()
   const { stage, setStage } = AppContextProvider()
   const [values, setValues] = useState()
   const [errors, setErrors] = useState()
   const [optionsCharacteristicsNew, setOptionsCharacteristicsNew] = useState()
+  const [isMounted, setIsMounted] = useState(false)
+
+  useEffect(() => {
+    if (!isMounted) {
+      setIsMounted(true)
+    }
+    return () => {
+      if (isMounted) {
+
+      }
+    }
+  }, [isMounted])
 
   const [initialValues, setInitialValues] = useState({
     coordination: "",
@@ -152,6 +164,20 @@ export const CreaAndEditCharacteristics = ({ father, params, setShowAdd, setData
     }
   }, [values?.title])
 
+  useEffect(() => {
+    if (isMounted) {
+      const div = document.getElementById('formIdCharacteristics')
+      if (div) {
+        const elements = div.querySelectorAll('input, textarea, span, label')
+        elements.forEach((el) => {
+          el.readOnly = showAdd?.action === "view"; // Para campos de entrada
+          el.disabled = showAdd?.action === "view"; // Para select y botón
+          el.style.cursor = showAdd?.action === "view" ? "default" : ""
+        });
+      }
+    }
+  }, [showAdd?.action, isMounted])
+
   return (
     <Formik
       initialValues={params ? params : initialValues}
@@ -159,20 +185,25 @@ export const CreaAndEditCharacteristics = ({ father, params, setShowAdd, setData
     >
       {({ resetForm }) => {
         return (
-          <div className='w-full grid grid-cols-6 gap-2 *border-[1px] *border-gray-300 *rounded-lg px-4'>
+          <div id="formIdCharacteristics" className='w-full grid grid-cols-6 gap-2 *border-[1px] *border-gray-300 *rounded-lg px-4'>
             <AutoSubmitToken setErrors={setErrors} setValues={setValues} />
             <div className="col-span-4">
               {["equipment", "component", "part"].includes(stage?.payload?.typeElement)
-                ? <InputSelectNew name={"title"} label="nombre" options={optionsCharacteristicsNew?.map((elem) => { return { value: elem, label: elem } })} />
+                ? showAdd?.action === "view"
+                  ? <InputNew name="title" label="nombre" />
+                  : <InputSelectNew name="title" label="nombre" options={optionsCharacteristicsNew?.map((elem) => { return { value: elem, label: elem } })} />
                 : <InputNew name="title" label="nombre" />}
             </div>
             <div className="col-span-2">
-              <InputSelectNew name={"coordination"} label="coordinacion" options={schemaCoordinations?.map((elem) => { return { value: elem.title, label: elem.title } })} />
+              {showAdd?.action === "view"
+                ? <InputNew name="coordination" label="coordinacion" />
+                : <InputSelectNew name="coordination" label="coordinacion" options={schemaCoordinations?.map((elem) => { return { value: elem.title, label: elem.title } })} />
+              }
             </div>
             <div className="col-span-6">
               <TextareaNew name="description" label="descripción" />
             </div>
-            <div className="col-span-6 flex justify-end items-end">
+            <div className={`${showAdd?.action === "view" ? "hidden" : "flex"} col-span-6 justify-end items-end`}>
               <ButtonBasic
                 className={`m-4 bg-green-500 hover:bg-green-600 w-48 h-8 text-sm`}
                 onClick={handleSubmit}
