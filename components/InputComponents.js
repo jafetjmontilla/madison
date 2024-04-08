@@ -9,7 +9,8 @@ import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io"
 import { useToast } from "../hooks/useToast";
 import { InputSelect } from "./InputSelect";
 import { IconStateMachine } from "../icons";
-import { BiSpreadsheet } from "react-icons/bi";
+import { TiEye } from "react-icons/ti";
+import { ViewComponentsPartsAndConsumables } from "./ViewComponentsPartsAndConsumables";
 
 export const InputComponents = ({ params, props, setConfirmation }) => {
   const toast = useToast();
@@ -80,12 +81,6 @@ export const InputComponents = ({ params, props, setConfirmation }) => {
     }
   }
 
-
-  useEffect(() => {
-    console.log(showAdd?.payload)
-  }, [showAdd])
-
-
   return (
     <div className="w-full -mt-1">
       <div className="w-full text-gray-700 capitalize grid grid-cols-12 items-center text-left font-semibold border-b-2 text-xs *py-1">
@@ -103,18 +98,23 @@ export const InputComponents = ({ params, props, setConfirmation }) => {
               <span className="col-span-7 truncate">{elem?.title}</span>
               <div className="col-span-1 w-full h-full relative flex justify-end">
                 <div className="flex items-center justify-end gap-1 absolute">
-                  <BiSpreadsheet onClick={() => {
+                  <TiEye onClick={() => {
                     (showAdd.status && showAdd?.payload?._id === elem._id && showAdd.action !== "edit")
                       ? setShowAdd({ status: false })
                       : setShowAdd({ status: true, payload: elem, action: "view" })
                   }} className={`w-5 h-5 cursor-pointer ${(showAdd.action === "view" && showAdd?.payload?._id === elem._id) && "text-blue-600"}`} />
-
                   <AiTwotoneDelete
                     onClick={() => { setConfirmation({ state: true, handleDelete: () => handleDelete(elem) }) }}
                     className="w-5 h-5 cursor-pointer" />
                 </div>
               </div>
             </div>
+            {(showAdd.status && showAdd?.payload?._id === elem._id && showAdd.action === "view")
+              ? < div className='border-2 border-t-0 rounded-b-xl pb-4 mb-4 bg-blue-50'>
+                <ViewComponentsPartsAndConsumables _id={showAdd?.payload?._id} />
+              </div>
+              : <></>
+            }
           </div>
         )
       })}
@@ -134,18 +134,16 @@ export const InputComponents = ({ params, props, setConfirmation }) => {
           <MdOutlineAddCircleOutline className="w-5 h-5" />
         </div>
       </div>
-      {(showAdd?.status && !showAdd?.payload) &&
-        <div className='h-24 flex flex-col w-full px-4'>
-          <div>
-            <label className="capitalize text-xs">Nombre</label>
-            {meta.error && <span className="text-red-500 text-xs ml-2">!requerido</span>}
-          </div>
-          <InputSelect
-            options={componentsOptions.map(elem => { return { value: elem?._id, label: `${elem.title}` } })}
-            onChange={(value) => { handleAdd(value) }}
-          />
+      {(showAdd?.status && !showAdd?.payload) && <div className='h-24 flex flex-col w-full px0-4'>
+        <div>
+          <label className="capitalize text-xs">Nombre</label>
+          {meta.error && <span className="text-red-500 text-xs ml-2">!requerido</span>}
         </div>
-
+        <InputSelect
+          options={componentsOptions.map(elem => { return { value: elem?._id, label: `${elem.title}` } })}
+          onChange={(value) => { handleAdd(value) }}
+        />
+      </div>
       }
     </div>
   )

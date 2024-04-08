@@ -8,7 +8,7 @@ import { MdOutlineAddCircleOutline } from "react-icons/md"
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io"
 import { CreaAndEditProperties } from "./CreaAndEditProperties"
 import { useToast } from "../hooks/useToast";
-import { BiSpreadsheet } from "react-icons/bi";
+import { TiEye } from "react-icons/ti";
 
 export const InputProperties = ({ params, props, setDataComponenentes, setConfirmation }) => {
   const toast = useToast();
@@ -74,7 +74,7 @@ export const InputProperties = ({ params, props, setDataComponenentes, setConfir
               <span className="col-span-3 truncate">{elem?.coordination}</span>
               <div className="col-span-1 w-full h-full relative flex justify-end">
                 <div className="flex items-center justify-end gap-1 absolute">
-                  <BiSpreadsheet onClick={() => {
+                  <TiEye onClick={() => {
                     (showAdd.status && showAdd?.payload?._id === elem._id && showAdd.action !== "edit")
                       ? setShowAdd({ status: false })
                       : setShowAdd({ status: true, payload: elem, action: "view" })
@@ -93,7 +93,7 @@ export const InputProperties = ({ params, props, setDataComponenentes, setConfir
               </div>
             </div>
             {(showAdd.status && showAdd?.payload?._id === elem._id) &&
-              <div className="border-2 border-t-0 rounded-b-xl pb-4 mb-4">
+              <div className={`border-2 border-t-0 rounded-b-xl pb-4 mb-4 ${showAdd?.action === "view" && "bg-blue-50"}`}>
                 <CreaAndEditProperties father={params} params={elem} showAdd={showAdd} setShowAdd={setShowAdd} setDataComponenentes={setDataComponenentes} />
               </div>
             }

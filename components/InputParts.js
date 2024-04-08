@@ -9,6 +9,8 @@ import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io"
 import { useToast } from "../hooks/useToast";
 import { InputSelect } from "./InputSelect";
 import { IconScrewdriverWrench } from "../icons";
+import { TiEye } from "react-icons/ti";
+import { ViewComponentsPartsAndConsumables } from "./ViewComponentsPartsAndConsumables";
 
 
 export const InputParts = ({ params, props, setConfirmation }) => {
@@ -42,7 +44,6 @@ export const InputParts = ({ params, props, setConfirmation }) => {
 
   const handleAdd = async (value) => {
     try {
-      console.log(51515152, field.value, props)
       const partsMasters = [...field.value, parts.find(elem => elem._id === value.value)]
       helpers.setValue(partsMasters)
       await fetchApi({
@@ -98,13 +99,25 @@ export const InputParts = ({ params, props, setConfirmation }) => {
               </div>
               <span className="col-span-2 truncate">{elem?.codigo}</span>
               <span className="col-span-7 truncate">{elem?.title}</span>
-              <div className="col-span-1 gap-2 flex justify-end">
-
-                <AiTwotoneDelete
-                  onClick={() => { setConfirmation({ state: true, handleDelete: () => handleDelete(elem) }) }}
-                  className="w-5 h-5 cursor-pointer" />
+              <div className="col-span-1 w-full h-full relative flex justify-end">
+                <div className="flex items-center justify-end gap-1 absolute">
+                  <TiEye onClick={() => {
+                    (showAdd.status && showAdd?.payload?._id === elem._id && showAdd.action !== "edit")
+                      ? setShowAdd({ status: false })
+                      : setShowAdd({ status: true, payload: elem, action: "view" })
+                  }} className={`w-5 h-5 cursor-pointer ${(showAdd.action === "view" && showAdd?.payload?._id === elem._id) && "text-blue-600"}`} />
+                  <AiTwotoneDelete
+                    onClick={() => { setConfirmation({ state: true, handleDelete: () => handleDelete(elem) }) }}
+                    className="w-5 h-5 cursor-pointer" />
+                </div>
               </div>
             </div>
+            {(showAdd.status && showAdd?.payload?._id === elem._id && showAdd.action === "view")
+              ? < div className='border-2 border-t-0 rounded-b-xl pb-4 mb-4 bg-blue-50'>
+                <ViewComponentsPartsAndConsumables _id={showAdd?.payload?._id} />
+              </div>
+              : <></>
+            }
           </div>
         )
       })}

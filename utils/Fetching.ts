@@ -696,6 +696,12 @@ export const queries: queries = {
           _id
           codigo
           title
+          characteristics{
+            _id
+            coordination
+            title
+            description
+          }          
           tipo{
             _id
             type
@@ -746,6 +752,12 @@ export const queries: queries = {
           _id
           codigo
           title
+          characteristics{
+            _id
+            coordination
+            title
+            description
+          }
           tipo{
             _id
             type
@@ -823,6 +835,12 @@ export const queries: queries = {
           _id
           codigo
           title
+          characteristics{
+            _id
+            coordination
+            title
+            description
+          }          
           tipo{
             _id
             type
