@@ -17,12 +17,14 @@ import { ListActivities } from './ListActivities'
 import { meditions } from '../utils/schemaMeditions'
 import { AiTwotoneDelete } from 'react-icons/ai'
 import { ConfirmationDelete } from './ConfirmationDelete'
+import { ModalReprogramar } from './ModalReprogramar'
 
 const options = [
-  { value: "pendiente", label: "pendiente", views: ["pendiente", "ejecución", "pausada",] },
-  { value: "ejecución", label: "en ejecución", views: ["pendiente", "ejecución", "pausada",] },
-  { value: "pausada", label: "pausada", views: ["pendiente", "ejecución", "pausada",] },
-  { value: "realizada", label: "realizada", views: ["pendiente", "ejecución", "pausada", "realizada"] },
+  { value: "pendiente", label: "pendiente", views: ["pendiente", "reprogramada", "ejecución", "pausada",] },
+  { value: "reprogramada", label: "reprogramada", views: ["pendiente", "reprogramada", "ejecución", "pausada",] },
+  { value: "ejecución", label: "en ejecución", views: ["pendiente", "reprogramada", "ejecución", "pausada",] },
+  { value: "pausada", label: "pausada", views: ["pendiente", "reprogramada", "ejecución", "pausada",] },
+  { value: "realizada", label: "realizada", views: ["pendiente", "reprogramada", "ejecución", "pausada", "realizada"] },
   { value: "supervisada", label: "supervisada", views: ["realizada", "supervisida"] },
 ]
 
@@ -45,6 +47,7 @@ export const CalendarCompont = (props) => {
   const { user } = AuthContextProvider()
   const [events, setEvents] = useState()
   const [showEditProperty, setShowEditProperty] = useState({ status: false, payload: null })
+  const [showModal, setShowModal] = useState({ status: false, payload: null })
   const [property, setProperty] = useState({})
   const [TaskID, setTaskID] = useState()
   const [calEvent, setCalEvent] = useState()
@@ -135,8 +138,37 @@ export const CalendarCompont = (props) => {
     }, 250)
   }, [])
 
-  const handleExecuted = (value) => {
+  useEffect(() => {
+    if (!showModal?.state) {
+      if (showModal?.payload?.start) {
+        fetchApi({
+          query: queries.updateTasks,
+          variables: {
+            args: {
+              _id: TaskID,
+              state: "reprogramada",
+              start: showModal?.payload?.start,
+              userExecutor: user?.uid,
+              nameExecutor: user?.name,
+              executed: false
+            }
+          }
+        }).then((resp) => {
+          calEvent.task.state = "reprogramada"
+          calEvent?.task?.states?.push({ state: "reprogramada", user: user?.uid, name: user?.name })
+          setCalEvent({ ...calEvent })
+          toast("success", `marcada como reprogramada`)
+        })
+      }
+    }
+  }, [showModal])
+
+  const handleChangeState = (value) => {
     try {
+      if (value.value === "reprogramada") {
+        setShowModal({ state: true, payload: { start: calEvent?.start } })
+        return
+      }
       fetchApi({
         query: queries.updateTasks,
         variables: {
@@ -174,36 +206,39 @@ export const CalendarCompont = (props) => {
     setCalEvent({ ...calEvent })
   }
 
-  useEffect(() => {
-    console.log(10005, calEvent?.task)
-  }, [calEvent])
-
   return (
     <div className="w-[calc(100%-0px)] h-[calc(100%-0px)] overflow-auto flex gap-4">
       <div id="child" className="w-full">
         {confirmation.state &&
           <ConfirmationDelete confirmation={confirmation} setConfirmation={setConfirmation} />
         }
+        {showModal.state &&
+          <ModalReprogramar setShowModal={setShowModal} showModal={showModal} />
+        }
       </div>
-      <div className='absolute flex rounded-t-lg w-[690px] h-10 -translate-y-8 truncate'>
+      <div className='absolute flex rounded-t-lg w-[828px] h-10 -translate-y-8 truncate text-sm'>
         <div className='bg-gray-100 w-10 h-10' />
         <div className={`w-[140px] h-8 absolute flex justify-center items-center rounded-t-lg ${view === "pendiente" ? "z-10 font-semibold text-gray-700 bg-gray-100" : "bg-gray-300 hover:bg-gray-400"}  cursor-pointer left-[0px]`}
           onClick={() => setView("pendiente")}>
           <span className='uppercase'>pendientes</span>
         </div>
-        <div className={`w-[140px] h-8 absolute flex justify-center items-center rounded-t-lg ${view === "ejecución" ? "z-10 font-semibold text-gray-700 bg-gray-100" : "bg-gray-300 hover:bg-gray-400"}  cursor-pointer left-[138px]`}
+        <div className={`w-[140px] h-8 absolute flex justify-center items-center rounded-t-lg ${view === "reprogramada" ? "z-10 font-semibold text-gray-700 bg-gray-100" : "bg-gray-300 hover:bg-gray-400"}  cursor-pointer left-[138px]`}
+          onClick={() => { setView("reprogramada") }}>
+          <span className='uppercase'>reprogramadas</span>
+        </div>
+        <div className={`w-[140px] h-8 absolute flex justify-center items-center rounded-t-lg ${view === "ejecución" ? "z-10 font-semibold text-gray-700 bg-gray-100" : "bg-gray-300 hover:bg-gray-400"}  cursor-pointer left-[276px]`}
           onClick={() => setView("ejecución")}>
           <span className='uppercase'>en ejecución</span>
         </div>
-        <div className={`w-[140px] h-8 absolute flex justify-center items-center rounded-t-lg ${view === "pausada" ? "z-10 font-semibold text-gray-700 bg-gray-100" : "bg-gray-300 hover:bg-gray-400"}  cursor-pointer left-[276px]`}
+        <div className={`w-[140px] h-8 absolute flex justify-center items-center rounded-t-lg ${view === "pausada" ? "z-10 font-semibold text-gray-700 bg-gray-100" : "bg-gray-300 hover:bg-gray-400"}  cursor-pointer left-[414px]`}
           onClick={() => setView("pausada")}>
           <span className='uppercase'>pausadas</span>
         </div>
-        <div className={`w-[140px] h-8 absolute flex justify-center items-center rounded-t-lg ${view === "realizada" ? "z-10 font-semibold text-gray-700 bg-gray-100" : "bg-gray-300 hover:bg-gray-400"}  cursor-pointer left-[414px]`}
+        <div className={`w-[140px] h-8 absolute flex justify-center items-center rounded-t-lg ${view === "realizada" ? "z-10 font-semibold text-gray-700 bg-gray-100" : "bg-gray-300 hover:bg-gray-400"}  cursor-pointer left-[552px]`}
           onClick={() => setView("realizada")}>
           <span className='uppercase'>realizadas</span>
         </div>
-        <div className={`w-[140px] h-8 absolute flex justify-center items-center rounded-t-lg ${view === "supervisada" ? "z-10 font-semibold text-gray-700 bg-gray-100" : "bg-gray-300 hover:bg-gray-400"}  cursor-pointer left-[552px]`}
+        <div className={`w-[140px] h-8 absolute flex justify-center items-center rounded-t-lg ${view === "supervisada" ? "z-10 font-semibold text-gray-700 bg-gray-100" : "bg-gray-300 hover:bg-gray-400"}  cursor-pointer left-[690px]`}
           onClick={() => setView("supervisada")}>
           <span className='uppercase'>supervisadas</span>
         </div>
@@ -253,7 +288,7 @@ export const CalendarCompont = (props) => {
                 // defaultValue={undefined}
                 isClearable={false}
                 onChange={(value) => {
-                  handleExecuted(value)
+                  handleChangeState(value)
                 }}
                 value={options?.find(elem => elem.value === calEvent?.task?.state)} />
             </div>
@@ -341,7 +376,7 @@ export const CalendarCompont = (props) => {
               </div>
             </div>
             {(() => {
-              const v1 = ["pendiente", "ejecución", "pausada"].includes(view)
+              const v1 = ["pendiente", "reprogramada", "ejecución", "pausada"].includes(view)
               return (
                 <div className={`flex items-center ${v1 ? "cursor-pointer" : "text-gray-300"} space-x-2`}
                   onClick={() => {
