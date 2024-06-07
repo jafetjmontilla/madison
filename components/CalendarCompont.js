@@ -32,7 +32,7 @@ const getEvent = (elem) => {
   const ds = elem?.start?.split("T")[0].split("-").map(elem => parseInt(elem))
   return {
     id: elem?._id,
-    title: elem?.property?.title,
+    title: `(${elem?.property?.father?.tag}) ${elem?.property?.title}`.toUpperCase(),
     start: new Date(ds[0], ds[1] - 1, ds[2]),
     end: new Date(ds[0], ds[1] - 1, ds[2] + 1),
     property: elem?.property,
@@ -65,6 +65,11 @@ export const CalendarCompont = (props) => {
       rootelement?.appendChild(child)
     }
   }, [])
+
+  useEffect(() => {
+    console.log(584, events)
+  }, [events])
+
 
   useEffect(() => {
     fetchApi({

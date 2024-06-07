@@ -943,6 +943,7 @@ export const queries: queries = {
           title
           father{
             _id
+            tag
           }
         }
         status
