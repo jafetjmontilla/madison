@@ -260,9 +260,15 @@ export const CalendarCompont = (props) => {
       <Calendar
         //formats={formats}
         localizer={localizer}
+        onView={(asd) => console.log(145, asd)}
+        eventPropGetter={(event, start, end, isSelected) => {
+          return {
+            style: { fontSize: 12 }
+          }
+        }}
         events={events?.map(elem => {
           if (elem.task.state === "reprogramada") {
-            elem.title = <div className='bg-green-600 text-violet-200 rounded-sm'>{elem.title}</div>
+            elem.title = <div className='bg-green-600 w-full h-full rounded-sm'>{elem.title}</div>
             return elem
           }
           return elem
