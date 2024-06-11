@@ -211,6 +211,11 @@ export const CalendarCompont = (props) => {
     setCalEvent({ ...calEvent })
   }
 
+  useEffect(() => {
+    console.log(events)
+  }, [events])
+
+
   return (
     <div className="w-[calc(100%-0px)] h-[calc(100%-0px)] overflow-auto flex gap-4">
       <div id="child" className="w-full">
@@ -255,7 +260,14 @@ export const CalendarCompont = (props) => {
       <Calendar
         //formats={formats}
         localizer={localizer}
-        events={events}
+        events={events?.map(elem => {
+          if (elem.task.state === "reprogramada") {
+            elem.title = <div className='bg-green-600 text-violet-200 rounded-sm'>{elem.title}</div>
+            return elem
+          }
+          return elem
+
+        })}
         //startAccessor="start" 
         //endAccessor="end"
         onSelectEvent={handleSelectEvent}
