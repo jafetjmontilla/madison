@@ -5,7 +5,17 @@ export const meditions = [
     unit: "m/s²"
   },
   {
-    title: "amperaje",
+    title: "amperaje l1",
+    description: "Amperios (A)",
+    unit: "A"
+  },
+  {
+    title: "amperaje l2",
+    description: "Amperios (A)",
+    unit: "A"
+  },
+  {
+    title: "amperaje l3",
     description: "Amperios (A)",
     unit: "A"
   },
@@ -85,7 +95,17 @@ export const meditions = [
     unit: "dB"
   },
   {
-    title: "temperatura",
+    title: "temperatura T1",
+    description: "Grados Celsius (°C)",
+    unit: "°C"
+  },
+  {
+    title: "temperatura T2",
+    description: "Grados Celsius (°C)",
+    unit: "°C"
+  },
+  {
+    title: "temperatura T3",
     description: "Grados Celsius (°C)",
     unit: "°C"
   },
@@ -100,7 +120,17 @@ export const meditions = [
     unit: "m/s"
   },
   {
-    title: "voltaje",
+    title: "voltaje l1",
+    description: "Voltios (V)",
+    unit: "V"
+  },
+  {
+    title: "voltaje l2",
+    description: "Voltios (V)",
+    unit: "V"
+  },
+  {
+    title: "voltaje l3",
     description: "Voltios (V)",
     unit: "V"
   },
