@@ -38,7 +38,7 @@ export const ModalReprogramar = ({ confirmation, setConfirmation, showModal, set
             />
             <ButtonBasic
               className={` ${confirmation?.value || (!tag && !email) ? "bg-green-500 hover:bg-green-600" : "bg-green-100 cursor-not-allowed"} w-20 h-[26px] text-sm`}
-              onClick={() => { setShowModal({ state: false, payload: { start: new Date(`${values.date}:${values.time}`) } }) }}
+              onClick={() => { setShowModal({ state: false, payload: { ...showModal?.payload, start: new Date(`${values.date}:${values.time}`) } }) }}
               caption={
                 <div className="flex gap-2 text-sm"> Guardar</div>
               }

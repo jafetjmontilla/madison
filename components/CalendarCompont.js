@@ -151,18 +151,18 @@ export const CalendarCompont = (props) => {
           variables: {
             args: {
               _id: TaskID,
-              state: "reprogramada",
+              state: showModal?.payload?.action,
               start: showModal?.payload?.start,
               userExecutor: user?.uid,
               nameExecutor: user?.name,
-              executed: false
+              executed: showModal?.payload?.action === "realizada"
             }
           }
         }).then((resp) => {
           calEvent.task.state = "reprogramada"
           calEvent?.task?.states?.push({ state: "reprogramada", user: user?.uid, name: user?.name })
           setCalEvent({ ...calEvent })
-          toast("success", `marcada como reprogramada`)
+          toast("success", `marcada como ${showModal?.payload?.label}`)
         })
       }
     }
@@ -170,8 +170,8 @@ export const CalendarCompont = (props) => {
 
   const handleChangeState = (value) => {
     try {
-      if (value.value === "reprogramada") {
-        setShowModal({ state: true, payload: { start: calEvent?.start } })
+      if (["realizada", "reprogramada",].includes(value.value)) {
+        setShowModal({ state: true, payload: { start: calEvent?.start, action: value.value, label: value?.label } })
         return
       }
       fetchApi({
@@ -246,7 +246,7 @@ export const CalendarCompont = (props) => {
         </div>
         <div className={`w-[140px] h-8 absolute flex justify-center items-center rounded-t-lg ${view === "realizada" ? "z-10 font-semibold text-gray-700 bg-gray-100" : "bg-gray-300 hover:bg-gray-400"}  cursor-pointer left-[552px]`}
           onClick={() => setView("realizada")}>
-          <span className='uppercase'>realizadas</span>
+          <span className='uppercase'>ejecutadas</span>
         </div>
         <div className={`w-[140px] h-8 absolute flex justify-center items-center rounded-t-lg ${view === "supervisada" ? "z-10 font-semibold text-gray-700 bg-gray-100" : "bg-gray-300 hover:bg-gray-400"}  cursor-pointer left-[690px]`}
           onClick={() => setView("supervisada")}>
