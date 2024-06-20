@@ -24,9 +24,9 @@ const options = [
   { value: "reprogramada", label: "reprogramada", views: ["pendiente", "reprogramada", "ejecución", "pausada", "realizada"] },
   { value: "ejecución", label: "en ejecución", views: ["pendiente", "reprogramada", "ejecución", "pausada", "realizada"] },
   { value: "pausada", label: "pausada", views: ["pendiente", "reprogramada", "ejecución", "pausada", "realizada"] },
-  { value: "realizada", label: "ejecutada", views: ["pendiente", "reprogramada", "ejecución", "pausada", "realizada"] },
-  { value: "supervisada", label: "supervisada", views: ["realizada", "supervisida"] },
-  { value: "eliminada", label: "eliminada", views: ["pendiente", "reprogramada", "ejecución", "pausada", "realizada", "supervisida"] },
+  { value: "realizada", label: "ejecutada", views: ["pendiente", "reprogramada", "ejecución", "pausada", "realizada", "supervisada"] },
+  { value: "supervisada", label: "supervisada", views: ["realizada", "supervisada"] },
+  { value: "eliminada", label: "eliminada", views: ["pendiente", "reprogramada", "ejecución", "pausada", "realizada", "supervisada"] },
 ]
 
 const getEvent = (elem) => {
