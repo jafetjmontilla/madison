@@ -26,7 +26,7 @@ const options = [
   { value: "pausada", label: "pausada", views: ["pendiente", "reprogramada", "ejecución", "pausada", "realizada"] },
   { value: "realizada", label: "ejecutada", views: ["pendiente", "reprogramada", "ejecución", "pausada", "realizada"] },
   { value: "supervisada", label: "supervisada", views: ["realizada", "supervisida"] },
-  { value: "eliminada", label: "eliminada", views: ["pendiente", "reprogramada", "ejecución", "pausada", "realizada"] },
+  { value: "eliminada", label: "eliminada", views: ["pendiente", "reprogramada", "ejecución", "pausada", "realizada", "supervisida"] },
 ]
 
 const getEvent = (elem) => {
