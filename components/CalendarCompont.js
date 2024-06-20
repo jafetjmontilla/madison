@@ -20,12 +20,13 @@ import { ConfirmationDelete } from './ConfirmationDelete'
 import { ModalReprogramar } from './ModalReprogramar'
 
 const options = [
-  { value: "pendiente", label: "pendiente", views: ["pendiente", "reprogramada", "ejecución", "pausada",] },
-  { value: "reprogramada", label: "reprogramada", views: ["pendiente", "reprogramada", "ejecución", "pausada",] },
-  { value: "ejecución", label: "en ejecución", views: ["pendiente", "reprogramada", "ejecución", "pausada",] },
-  { value: "pausada", label: "pausada", views: ["pendiente", "reprogramada", "ejecución", "pausada",] },
-  { value: "realizada", label: "realizada", views: ["pendiente", "reprogramada", "ejecución", "pausada", "realizada"] },
+  { value: "pendiente", label: "pendiente", views: ["pendiente", "reprogramada", "ejecución", "pausada", "realizada"] },
+  { value: "reprogramada", label: "reprogramada", views: ["pendiente", "reprogramada", "ejecución", "pausada", "realizada"] },
+  { value: "ejecución", label: "en ejecución", views: ["pendiente", "reprogramada", "ejecución", "pausada", "realizada"] },
+  { value: "pausada", label: "pausada", views: ["pendiente", "reprogramada", "ejecución", "pausada", "realizada"] },
+  { value: "realizada", label: "ejecutada", views: ["pendiente", "reprogramada", "ejecución", "pausada", "realizada"] },
   { value: "supervisada", label: "supervisada", views: ["realizada", "supervisida"] },
+  { value: "eliminada", label: "eliminada", views: ["pendiente", "reprogramada", "ejecución", "pausada", "realizada"] },
 ]
 
 const getEvent = (elem) => {
