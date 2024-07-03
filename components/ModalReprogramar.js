@@ -19,7 +19,7 @@ export const ModalReprogramar = ({ confirmation, setConfirmation, showModal, set
       <div className="w-full h-full top-0 left-0 opacity-50 bg-gray-900 absolute z-20" />
       <div className="w-[calc(100%-30px)] absolute z-30 flex justify-center top-40">
         <div className="bg-white w-[400px] *h-[280px] rounded-2xl p-8">
-          <span className="text-xl">{showModal.payload.action === "realizada" ? "Ingrese fecha y hora de Ejecución" : "Ingrese la nueva fecha"}</span>
+          <span className="text-xl">{showModal.payload.action === "realizada" ? "Ingrese fecha y hora de Ejecución" : "Ingrese la nueva fecha y hora"}</span>
           <div className={`mx-6 my-6 grid gap-2 grid-cols-6`}>
             <input type="date"
               onChange={(e) => {
@@ -27,7 +27,7 @@ export const ModalReprogramar = ({ confirmation, setConfirmation, showModal, set
                 setValues({ ...values, date: e.target.value })
               }}
               value={values?.date ? values?.date : ""} className={`col-span-3 h-[38px] rounded-lg border-[1px] border-gray-300 text-sm`} />
-            {showModal.payload.action === "realizada"
+            {["realizada", "reprogramada"].includes(showModal.payload.action)
               && <input type="time"
                 onChange={(e) => {
                   const payload = { ...showModal?.payload, time: e.target.value }

@@ -36,7 +36,7 @@ const getEvent = (elem, view, viewCalendar) => {
   let ds = null
   let de = null
   let allDay = true
-  if (view === "realizada") {
+  if (["pendiente", "reprogramada", "realizada", "supervisada"].includes(view)) {
     const d = new Date(elem.start).getTime()
     ds = new Date(elem.start)
     de = new Date(elem.start)
