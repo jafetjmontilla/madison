@@ -18,6 +18,7 @@ import { meditions } from '../utils/schemaMeditions'
 import { AiTwotoneDelete } from 'react-icons/ai'
 import { ConfirmationDelete } from './ConfirmationDelete'
 import { ModalReprogramar } from './ModalReprogramar'
+import { title } from 'process'
 
 const options = [
   { value: "pendiente", label: "pendiente", views: ["pendiente", "reprogramada", "ejecución", "pausada", "realizada"] },
@@ -29,15 +30,31 @@ const options = [
   { value: "eliminada", label: "eliminada", views: ["pendiente", "reprogramada", "ejecución", "pausada", "realizada", "supervisada"] },
 ]
 
-const getEvent = (elem) => {
-  const ds = elem?.start?.split("T")[0].split("-").map(elem => parseInt(elem))
+const getEvent = (elem, view, viewCalendar) => {
+  // const ds = elem?.start?.split("T")[0].split("-").map(elem => parseInt(elem))
+  // const ts = elem?.start?.split("T")[1].split(":").map(elem => parseInt(elem))
+  let ds = null
+  let de = null
+  let allDay = true
+  if (view === "realizada") {
+    const d = new Date(elem.start).getTime()
+    ds = new Date(elem.start)
+    de = new Date(elem.start)
+    allDay = viewCalendar?.state !== "agenda"
+  } else {
+    ds = new Date(elem.start)
+    de = new Date(elem.start)
+  }
+  //console.log(ds, de)
   return {
     id: elem?._id,
     title: `(${elem?.property?.father?.tag}) ${elem?.property?.title}`.toUpperCase(),
-    start: new Date(ds[0], ds[1] - 1, ds[2]),
-    end: new Date(ds[0], ds[1] - 1, ds[2] + 1),
+    // start: new Date(ds[0], ds[1] - 1, ds[2]),
+    // end: new Date(ds[0], ds[1] - 1, ds[2] + 1),
+    start: ds,
+    end: de,
     property: elem?.property,
-    allDay: true,
+    allDay,
     task: elem
   }
 }
@@ -55,6 +72,7 @@ export const CalendarCompont = (props) => {
   const clickRef = useRef(null)
   const toast = useToast()
   const [view, setView] = useState("pendiente")
+  const [viewCalendar, setViewCalendar] = useState({ oldState: "", state: "" })
   const [viewProperty, setViewProperty] = useState({ status: false })
   const [changeNote, setChangeNote] = useState(false)
   const [confirmation, setConfirmation] = useState({ state: false, value: false, elem: {}, handleDelete: () => { } })
@@ -68,9 +86,18 @@ export const CalendarCompont = (props) => {
   }, [])
 
   useEffect(() => {
-    console.log(584, events)
-  }, [events])
-
+    if (viewCalendar.state === "agenda" || viewCalendar.oldState === "agenda") {
+      fetchApi({
+        query: queries.getTasks,
+        variables: {
+          args: { state: view }
+        },
+      }).then((result) => {
+        console.log(viewCalendar)
+        setEvents(result?.results?.map(elem => getEvent(elem, view, viewCalendar)))
+      })
+    }
+  }, [viewCalendar.state])
 
   useEffect(() => {
     fetchApi({
@@ -79,7 +106,7 @@ export const CalendarCompont = (props) => {
         args: { state: view }
       },
     }).then((result) => {
-      setEvents(result?.results?.map(elem => getEvent(elem)))
+      setEvents(result?.results?.map(elem => getEvent(elem, view, viewCalendar)))
     })
   }, [view])
 
@@ -212,11 +239,6 @@ export const CalendarCompont = (props) => {
     setCalEvent({ ...calEvent })
   }
 
-  useEffect(() => {
-    console.log(events)
-  }, [events])
-
-
   return (
     <div className="w-[calc(100%-0px)] h-[calc(100%-0px)] overflow-auto flex gap-4">
       <div id="child" className="w-full">
@@ -261,7 +283,31 @@ export const CalendarCompont = (props) => {
       <Calendar
         //formats={formats}
         localizer={localizer}
-        onView={(asd) => console.log(145, asd)}
+        onView={(view) => {
+          console.log(145, view)
+          setViewCalendar(old => {
+            const asd = { oldState: old.state, state: view }
+            return { ...asd }
+          })
+          if (["day", "week"].includes(view)) {
+            setTimeout(() => {
+              const element = document.getElementsByClassName("rbc-time-content")[0]
+              element.remove()
+            }, 1);
+            setTimeout(() => {
+              const elementHeader = document.getElementsByClassName("rbc-time-header")[0]
+              elementHeader.setAttribute("class", "rbc-time-header rbc-overflowing flex-1 overflow-auto")
+              console.log(145, elementHeader)
+            }, 100);
+          }
+          //day
+          //rbc-time-header rbc-overflowing > flex-1 overflow-auto
+          //rbc-time-content
+          //week
+          //rbc-time-header rbc-overflowing > flex-1 overflow-auto
+          //rbc-time-content > hidden
+
+        }}
         eventPropGetter={(event, start, end, isSelected) => {
           return {
             style: { fontSize: 12 }

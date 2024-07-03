@@ -947,6 +947,7 @@ export const queries: queries = {
           }
         }
         status
+        executedAt
         createdAt
         updatedAt
       }

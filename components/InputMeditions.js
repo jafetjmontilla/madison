@@ -44,7 +44,7 @@ export const InputMeditions = ({ calEvent, setCalEvent }) => {
     console.log(153599, meditions)
     const meditionsArr = calEvent?.task?.meditions?.map(elem => elem.title)
     console.log(153600, meditionsArr)
-    const meditionsFilter = meditions.filter(elem => !meditionsArr.includes(elem.title))
+    const meditionsFilter = meditions.filter(elem => !meditionsArr?.includes(elem.title))
     setMeditionsFilter(meditionsFilter)
     console.log(153601, meditionsFilter)
   }, [calEvent])
